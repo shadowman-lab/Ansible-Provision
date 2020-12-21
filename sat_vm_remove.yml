@@ -1,0 +1,21 @@
+---
+- name: Remove VM from Satellite
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - redhat.satellite
+
+  vars:
+    vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+     
+    - name: Remove VM from Satellite
+      host:
+        username: "{{ username }}"
+        password: "{{ password }}"
+        server_url: "{{ server_url }}"
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ vm_names }}"

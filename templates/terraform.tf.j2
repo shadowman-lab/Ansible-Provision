@@ -1,0 +1,8 @@
+{% for item in vm_names %}
+module "vm_{{ item }}"{
+  source = "../modules/vms"
+  vm_name = "{{ item }}"
+  vm_memory = "{{ vm_memory }}"
+  vm_template_id = "{{ vm_template }}"
+}
+{% endfor %}

@@ -1,0 +1,57 @@
+---
+- name: Pull Snapshots for a VM and create a restore job template
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+    
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+
+  tasks:
+    - name: Pull snapshot ID for a VM
+      ovirt_snapshot_info:
+        auth: "{{ ovirt_auth }}"
+        vm: "{{ vm_name }}"
+        description: "{{ snapshot_desc }}"
+      register: snapshot
+
+    - name: Stop VM
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ vm_name }}"
+        state: stopped
+        wait: yes
+
+    - name: Restore from Snapshot
+      ovirt_snapshot:
+        auth: "{{ ovirt_auth }}"
+        vm_name: "{{ vm_name }}"
+        snapshot_id: "{{ snapshot.ovirt_snapshots[0].id }}"
+        state: restore
+        wait: yes
+
+    - name: Start VM
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ vm_name }}"
+        state: running
+        wait: yes
+
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always

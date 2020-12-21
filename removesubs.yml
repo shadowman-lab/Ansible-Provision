@@ -1,0 +1,26 @@
+---
+- name: Perform VM removal pre-steps
+  hosts: "{{ vm_name }}"
+  gather_facts: false
+  collections:
+    - redhat.satellite
+
+  tasks:
+
+  - name: See if host has IP before trying to unregister
+    block:
+      - name: Unregister system
+        redhat_subscription:
+          state: absent
+          org_id: Shadow_Man
+        when: ansible_host != ''
+
+      - name: "Delete hosts from Sat if RHEL"
+        host:
+          name: "{{ inventory_hostname }}"
+          username: "{{ username }}"
+          password: "{{ password }}"
+          server_url: "{{ server_url }}"
+          state: absent
+        delegate_to: localhost
+    when: os_type is match("rhel.*")

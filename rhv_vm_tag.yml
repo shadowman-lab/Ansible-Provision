@@ -1,0 +1,10 @@
+---
+         
+- name: Tag a VM
+  ovirt_tag:
+    auth: "{{ ovirt_auth }}"
+    name: "{{ vm_tag }}"
+    state: attached
+    vms: 
+      - "{{ item }}"
+  loop: "{{ vm_names }}"

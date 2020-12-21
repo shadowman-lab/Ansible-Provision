@@ -1,0 +1,56 @@
+---
+- name: Create VM on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+    
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+  vars:
+    datacenter: Default
+    cluster: Default
+    template: "{{ operating_system }}_ShadowMan"
+    vm_memory: 4GiB
+    vm_names: "{{ vm_name.split(',') }}"
+    vm_tag: RHEL
+    
+  tasks:
+    - name: Change facts if running Windows
+      set_fact:
+        vm_memory: 8GiB
+        vm_tag: Windows
+      when: operating_system == "Win2016"
+     
+    - name: Create and run VM from template
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ item }}"
+        template: "{{ template }}"
+        cluster: "{{ cluster }}"
+        memory: "{{vm_memory}}"
+        high_availability: true
+        state: "{{ vm_state }}"
+        wait: yes
+      loop: "{{ vm_names }}"
+      
+    - name: Apply tags using RHV tag playbook
+      include_tasks: rhv_vm_tag.yml
+      
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always

@@ -1,0 +1,23 @@
+{
+  "name": "Restore Survey",
+  "description": "Choose Description you want to use to restore",
+  "spec": [
+    {
+      "type": "multiplechoice",
+      "question_name": "Use which snapshot?",
+      "question_description": "Choose the snapshot description",
+      "variable": "snapshot_desc",
+      "choices": [
+{% for snap in snapshot.ovirt_snapshots %}
+{% if loop.last %}
+        "{{snap.description}}"
+{% else %}
+        "{{snap.description}}",
+{% endif %}
+{% endfor %}
+      ],
+      "required": true,
+      "default": "{{snapshot.ovirt_snapshots[0].description}}"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+---
+- name: Pull Snapshots for a VM and create a restore job template
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+
+  vars:
+    extra_var:
+      vm_name: "{{ vm_name }}"
+    
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+
+  tasks:
+    - name: Pull snapshot for a VM
+      ovirt_snapshot_info:
+        auth: "{{ ovirt_auth }}"
+        vm: "{{ vm_name }}"
+      register: snapshot
+
+    - name: Create Snapshot Restore Job Template
+      ansible.tower.tower_job_template:
+        name: "Snapshot Restore"
+        job_type: "run"
+        inventory: "RHV Inventory"
+        project: "SSP Provision and DeProvision"
+        playbook: "rhv_snapshot_restore.yml"
+        custom_virtualenv: "/opt/my-envs/python3/"
+        credentials: 
+          - "RHV Credentials" 
+        survey_enabled: true
+        survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
+        extra_vars: "{{ extra_var }}"
+        validate_certs: no
+        tower_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
+        tower_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
+        tower_host: "{{ lookup('env', 'TOWER_HOST') }}"
+
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always

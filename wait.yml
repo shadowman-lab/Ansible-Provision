@@ -1,0 +1,63 @@
+---
+- name: Wait for host to generate IP
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+
+  vars:
+    - vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+
+    - name: Check if VM has agent installed for Linux
+      ovirt_vm_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: name={{ item }}
+      register: result
+      until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
+      retries: 60
+      delay: 10
+      loop: "{{ vm_names }}"
+      when: operating_system is match("RHEL.*")
+
+    - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
+      ovirt_vm_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: name={{ item }}
+      until:  tester.ovirt_vms[0].fqdn is defined
+      register: tester
+      retries: 30
+      delay: 5
+      loop: "{{ vm_names }}"
+      when: operating_system == "Win2016"
+
+    - name: Check if Windows VM has completed reboot and created fqdn
+      ovirt_vm_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: name={{ item }}
+      register: result
+      until:  result.ovirt_vms[0].fqdn == item ~ ".shadowman.dev"
+      retries: 60
+      delay: 10
+      loop: "{{ vm_names }}"
+      when: operating_system == "Win2016"
+
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always
