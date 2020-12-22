@@ -1,9 +1,6 @@
-- name: Playbook to configure IPA clients with username/password
+- name: Playbook to configure IPA clients
   hosts: all
   gather_facts: false
-
-  collections:
-    - community.general
 
   tasks:
 
