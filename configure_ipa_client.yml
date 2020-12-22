@@ -20,4 +20,4 @@
     when: ansible_distribution_version is match("8.*")
 
   - name: run ipa client script
-    command: "ipa-client-install --password '{{ ipa_pass }}' --enable-dns-updates --unattended"
+    command: "ipa-client-install --password '{{ IPA_PASS }}' --enable-dns-updates --unattended"
