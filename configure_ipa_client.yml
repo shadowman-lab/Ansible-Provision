@@ -1,0 +1,17 @@
+- name: Playbook to configure IPA clients with username/password
+  hosts: all
+  gather_facts: false
+
+  collections:
+    - community.general
+
+  tasks:
+
+    ipa_host:
+      name: "{{ fqdn }}"
+      description: Example host
+      ip_address: "{{ ansible_host }}"
+      state: present
+      ipa_host: "{{ ipa_host }}"
+      ipa_user: "{{ ipa_user }}"
+      ipa_pass: "{{ ipa_pass }}"
