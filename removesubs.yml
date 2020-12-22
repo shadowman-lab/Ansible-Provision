@@ -26,6 +26,9 @@
         ipa_host:
           name: "{{ fqdn }}"
           state: absent
+          ipa_pass: "{{ IPA_PASS }}"
+          ipa_host: "{{ IPA_HOST }}"
+          ipa_user: "{{ IPA_USER }}"
           update_dns: True
         when: ansible_host != ''
 
@@ -43,5 +46,8 @@
     ipa_host:
       name: "{{ fqdn }}"
       state: absent
+      ipa_pass: "{{ IPA_PASS }}"
+      ipa_host: "{{ IPA_HOST }}"
+      ipa_user: "{{ IPA_USER }}"
       update_dns: True
     when: os_type is match("windows.*")
