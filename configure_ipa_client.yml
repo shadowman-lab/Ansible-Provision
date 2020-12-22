@@ -12,6 +12,3 @@
       description: Example host
       ip_address: "{{ ansible_host }}"
       state: present
-      ipa_host: "{{ ipa_host }}"
-      ipa_user: "{{ ipa_user }}"
-      ipa_pass: "{{ ipa_pass }}"
