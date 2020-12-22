@@ -19,6 +19,7 @@
       - name: Remove from IDM
         command: "ipa-client-install --uninstall --unattended"
         when: ansible_host != ''
+        ignore_errors: true
 
       - name: Ensure host and its DNS record is absent for RHEL
         ipa_host:
