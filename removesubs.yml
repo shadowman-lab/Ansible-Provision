@@ -50,4 +50,5 @@
       ipa_host: "{{ IPA_HOST }}"
       ipa_user: "{{ IPA_USER }}"
       update_dns: True
+    delegate_to: localhost
     when: os_type is match("windows.*")
