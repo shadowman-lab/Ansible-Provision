@@ -20,8 +20,8 @@
         command: "ipa-client-install --uninstall --unattended"
         when: ansible_host != ''
         register: output
-        failed_when: "'IPA client is not configured on this system' not in output.stderr or 'command not found' not in output.stdout"
-        
+        ignore_errors: true
+
       - name: Ensure host and its DNS record is absent for RHEL
         ipa_host:
           name: "{{ fqdn }}"
