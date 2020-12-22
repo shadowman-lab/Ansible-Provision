@@ -15,6 +15,10 @@
           org_id: Shadow_Man
         when: ansible_host != ''
 
+      - name: Remove from IDM
+        command: ipa-client-install --uninstall
+        when: ansible_host != ''
+
       - name: "Delete hosts from Sat if RHEL"
         host:
           name: "{{ inventory_hostname }}"
