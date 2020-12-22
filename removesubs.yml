@@ -4,6 +4,7 @@
   gather_facts: false
   collections:
     - redhat.satellite
+    - community.general
 
   tasks:
 
@@ -16,10 +17,17 @@
         when: ansible_host != ''
 
       - name: Remove from IDM
-        command: ipa-client-install --uninstall
+        command: "ipa-client-install --uninstall --unattended"
         when: ansible_host != ''
 
-      - name: "Delete hosts from Sat if RHEL"
+      - name: Ensure host and its DNS record is absent for RHEL
+        ipa_host:
+          name: "{{ fqdn }}"
+          state: absent
+          update_dns: True
+        when: ansible_host != ''
+
+      - name: Delete hosts from Sat if RHEL
         host:
           name: "{{ inventory_hostname }}"
           username: "{{ username }}"
@@ -28,3 +36,10 @@
           state: absent
         delegate_to: localhost
     when: os_type is match("rhel.*")
+
+  - name: Ensure host and its DNS record is absent for Windows
+    ipa_host:
+      name: "{{ fqdn }}"
+      state: absent
+      update_dns: True
+    when: os_type is match("windows.*")
