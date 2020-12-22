@@ -7,8 +7,17 @@
 
   tasks:
 
-    ipa_host:
-      name: "{{ fqdn }}"
-      description: Example host
-      ip_address: "{{ ansible_host }}"
+  - name: Install IPA Client for RHEL 7
+    yum:
+      name: ipa-client
       state: present
+    when: ansible_distribution_version is match("7.*")
+
+  - name: Install IPA Client for RHEL 8
+    dnf:
+      name: ipa-client
+      state: present
+    when: ansible_distribution_version is match("8.*")
+
+  - name: run ipa client script
+    command: "ipa-client-install --password '{{ ipa_pass }}' --enable-dns-updates --unattended"
