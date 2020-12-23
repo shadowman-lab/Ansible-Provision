@@ -32,14 +32,6 @@
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
 
-    - name: Reboot VM if Linux
-      ovirt_host:
-        auth: "{{ ovirt_auth }}"
-        name: "{{ item }}"
-        state: restarted
-      loop: "{{ vm_names }}"
-      when: operating_system is match("RHEL.*")
-
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
