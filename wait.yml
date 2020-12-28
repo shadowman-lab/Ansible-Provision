@@ -21,7 +21,7 @@
 
   tasks:
 
-    - name: Get NIC
+    - name: Test for IP address
       ovirt_nic_info:
         vm: "{{ item }}"
         fetch_nested: yes
