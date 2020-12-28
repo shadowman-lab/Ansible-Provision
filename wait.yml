@@ -38,7 +38,7 @@
         vm: rhel7.shadowman.dev
         fetch_nested: yes
         nested_attributes:
-          - reporteddevices
+          - reported_devices
         name: nic1
         auth: "{{ ovirt_auth }}"
       when: operating_system is match("RHEL.*")
