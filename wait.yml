@@ -38,7 +38,7 @@
  
     - name: Add Linux hosts to just_created group
       debug:
-        msg: "{{ results | json_query ('ovirt_nics') }}"
+        msg: "{{ results[ovirt_nics] }}"
         
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
