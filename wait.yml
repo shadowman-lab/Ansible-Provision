@@ -59,6 +59,15 @@
 - name: Perform hostname Set
   hosts: just_created
   gather_facts: false
+
+  pre_tasks:
+  - name: Login to RHV
+    ovirt_auth:
+      hostname: "{{ rhvm_fqdn }}"
+      username: "{{ rhvm_user }}"
+      password: "{{ rhvm_password }}"
+      ca_file: "{{ rhvm_cafile | default(omit) }}"
+      insecure: "{{ rhvm_insecure | default(true) }}"
     
   tasks:
 
@@ -70,3 +79,21 @@
     service:
       name: qemu-guest-agent
       state: restarted
+
+  - name: Check if Linux VM has created fqdn
+    ovirt_vm_info:
+      auth: "{{ ovirt_auth }}"
+      pattern: name={{ item }}
+    register: result
+    until:  result.ovirt_vms[0].fqdn is defined
+    retries: 60
+    delay: 10
+    loop: "{{ ansible_play_batch }}"
+
+  post_tasks:
+  - name: Logout from RHV
+    ovirt_auth:
+      state: absent
+      ovirt_auth: "{{ ovirt_auth }}"
+    tags:
+      - always
