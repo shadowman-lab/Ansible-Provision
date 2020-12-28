@@ -25,9 +25,14 @@
       ovirt_host_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
+        all_content: yes
       register: result
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
+
+    - name: debug
+      debug:
+        var: result.ovirt_hosts
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
