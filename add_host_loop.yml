@@ -1,0 +1,20 @@
+---
+         
+- name: Test for IP address for Linux
+  ovirt_nic_info:
+    vm: "{{ item }}"
+    fetch_nested: yes
+    nested_attributes:
+      - ips
+    name: nic1
+    auth: "{{ ovirt_auth }}"
+  register: results
+  until:  results.ovirt_nics[0].reported_devices[0].ips[0].address is defined
+  retries: 60
+  delay: 10
+  loop: "{{ vm_names }}"
+  when: operating_system is match("RHEL.*")
+ 
+- name: Add Linux hosts to just_created group
+  debug:
+    msg: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
