@@ -42,12 +42,9 @@
         name: nic1
         auth: "{{ ovirt_auth }}"
       register: results
+      until:  results.ovirt_nics[0].reported_devices[0].ips[0].address is defined
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
-
-    - name: print
-      debug:
-        msg: "{{ results[0].ovirt_nics[0] }}"
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
