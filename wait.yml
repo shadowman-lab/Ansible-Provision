@@ -35,6 +35,13 @@
       delay: 10
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
+ 
+    - name: Add Linux hosts to just_created group
+      add_host:
+        name: "{{ item.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+        groups: just_created
+      loop: "{{ results }}"
+      when: operating_system is match("RHEL.*")
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
