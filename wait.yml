@@ -22,13 +22,10 @@
   tasks:
 
     - name: Check if VM has agent installed for Linux
-      ovirt_vm_info:
+      ovirt_host_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
       register: result
-      until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
-      retries: 60
-      delay: 10
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
 
