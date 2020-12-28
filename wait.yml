@@ -22,17 +22,16 @@
   tasks:
 
     - name: Check if VM has agent installed for Linux
-      ovirt_host_info:
+      ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
-        all_content: yes
       register: result
+      all_content: yes
+      until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
+      retries: 60
+      delay: 10
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
-
-    - name: debug
-      debug:
-        var: result.ovirt_hosts
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
@@ -50,6 +49,7 @@
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
       register: result
+      all_content: yes
       until:  result.ovirt_vms[0].fqdn == item ~ ".shadowman.dev"
       retries: 60
       delay: 10
