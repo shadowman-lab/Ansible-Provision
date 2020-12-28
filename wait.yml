@@ -55,3 +55,19 @@
         ovirt_auth: "{{ ovirt_auth }}"
       tags:
         - always
+
+---
+- name: Perform hostname Set
+  hosts: just_created
+  gather_facts: false
+    
+  tasks:
+
+  - name: RHEL Hostname Set
+    hostname:
+      name: "{{ inventory_hostname }}"
+
+  - name: Restart qemu agent
+    service:
+      name: qemu-guest-agent
+      state: restarted

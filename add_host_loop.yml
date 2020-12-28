@@ -16,5 +16,6 @@
  
 - name: Add Linux hosts to just_created group
   add_host:
-    name: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+    hostname: "{{ item }}"
+    ansible_host: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
     groups: just_created
