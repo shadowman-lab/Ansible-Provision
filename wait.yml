@@ -1,5 +1,5 @@
 ---
-- name: Wait for host to generate IP
+- name: Wait for host to generate IP/FQDN
   hosts: localhost
   connection: local
   gather_facts: false
@@ -56,7 +56,7 @@
       tags:
         - always
 
-- name: Perform hostname Set
+- name: Perform hostname Set and reset agent to get FQDN on Linux
   hosts: just_created
   gather_facts: false
 
