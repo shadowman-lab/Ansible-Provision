@@ -60,6 +60,9 @@
   hosts: just_created
   gather_facts: false
 
+  collections:
+    - redhat.rhv
+
   pre_tasks:
   - name: Login to RHV
     ovirt_auth:
