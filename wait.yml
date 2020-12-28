@@ -25,8 +25,8 @@
       ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
+        all_content: yes
       register: result
-      all_content: yes
       until:  result.ovirt_vms[0].guest_operating_system.kernel.version.build is defined
       retries: 60
       delay: 10
@@ -48,8 +48,8 @@
       ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
+        all_content: yes
       register: result
-      all_content: yes
       until:  result.ovirt_vms[0].fqdn == item ~ ".shadowman.dev"
       retries: 60
       delay: 10
