@@ -87,7 +87,7 @@
     register: result
     until:  result.ovirt_vms[0].fqdn is defined
     retries: 60
-    delay: 10
+    delay: 5
     loop: "{{ ansible_play_batch }}"
 
   post_tasks:
