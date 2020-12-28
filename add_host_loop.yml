@@ -15,5 +15,6 @@
   when: operating_system is match("RHEL.*")
  
 - name: Add Linux hosts to just_created group
-  debug:
-    msg: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+  add_host:
+    name: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+    groups: just_created
