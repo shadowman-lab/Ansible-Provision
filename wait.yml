@@ -35,6 +35,16 @@
       delay: 10
       loop: "{{ vm_names }}"
 
+    - name: Check if VM is up
+      ovirt_vm_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: name={{ item }}
+      register: result
+      until:  result.ovirt_vms[0].status == "up"
+      retries: 60
+      delay: 5
+      loop: "{{ vm_names }}"
+
   post_tasks:
     - name: Logout from RHV
       ovirt_auth:
