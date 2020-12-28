@@ -36,6 +36,9 @@
     - name: Get NIC
       ovirt_nic_info:
         vm: rhel7.shadowman.dev
+        fetch_nested: yes
+        nested_attributes:
+          - reporteddevices
         name: nic1
         auth: "{{ ovirt_auth }}"
       when: operating_system is match("RHEL.*")
