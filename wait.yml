@@ -56,7 +56,6 @@
       tags:
         - always
 
----
 - name: Perform hostname Set
   hosts: just_created
   gather_facts: false
