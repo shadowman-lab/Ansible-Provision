@@ -47,7 +47,7 @@
 
     - name: print
       debug:
-        msg: "{{ results[0] | json_query('ovirt_nics[0].reported_devices[0].ips[?version==`v4`].address') }}"
+        msg: "{{ results.ovirt_nics[0] }}"
 
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
