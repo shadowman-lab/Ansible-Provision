@@ -33,6 +33,13 @@
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
 
+    - name: Get NIC
+      ovirt_nic_info:
+        vm: rhel7.shadowman.dev
+        name: nic1
+        auth: "{{ ovirt_auth }}"
+      when: operating_system is match("RHEL.*")
+
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
       ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
