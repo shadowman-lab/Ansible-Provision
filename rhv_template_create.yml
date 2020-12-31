@@ -46,7 +46,7 @@
 
     - name: Delete host from Sat
       host:
-        name: "{{ operating_system }}_updates.shadowman.dev"
+        name: "localhost.localdomain"
         username: "{{ username }}"
         password: "{{ password }}"
         server_url: "{{ server_url }}"
