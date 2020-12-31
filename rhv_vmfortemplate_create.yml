@@ -1,0 +1,45 @@
+---
+- name: Create VM for Template on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+    
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+  vars:
+    datacenter: Default
+    cluster: Default
+    template: "{{ operating_system }}_ShadowMan"
+    vm_memory: 4GiB
+    
+  tasks:
+     
+    - name: Create and run VM from template
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ operating_system }}_updates.shadowman.dev"
+        template: "{{ template }}"
+        cluster: "{{ cluster }}"
+        memory: "{{ vm_memory }}"
+        high_availability: true
+        state: running
+        wait: yes
+      
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always
