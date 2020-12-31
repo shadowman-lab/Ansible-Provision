@@ -34,6 +34,7 @@
         cluster: Default
         name: "{{ operating_system }}_ShadowMan"
         vm: "{{ operating_system }}_updates.shadowman.dev"
+        seal: yes
         version:
           name: "{{ version_name }}"
     
