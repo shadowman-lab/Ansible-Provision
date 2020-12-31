@@ -1,0 +1,37 @@
+---
+- name: Create Template on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+    
+  pre_tasks:
+    - name: Login to RHV
+      ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+
+  tasks:
+
+    - name: Find old template ID
+      ovirt_template_info:
+        pattern: name={{ operating_system }}_ShadowMan
+      register: template
+
+    
+      
+
+  post_tasks:
+    - name: Logout from RHV
+      ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always
