@@ -20,15 +20,28 @@
 
   tasks:
 
-
-    - name: Find old template ID
-      ovirt_template_info:
+    - name: Stop VM
+      ovirt_vm:
         auth: "{{ ovirt_auth }}"
-        pattern: name={{ operating_system }}_ShadowMan
-      register: template
+        name: "{{ operating_system }}_updates.shadowman.dev"
+        state: stopped
+        wait: yes
 
-   
-      
+    - name: Create new template subversion
+      ovirt_template:
+        auth: "{{ ovirt_auth }}"
+        cluster: Default
+        name: "{{ operating_system }}_ShadowMan"
+        vm: "{{ operating_system }}_updates.shadowman.dev"
+        version:
+          name: "{{ version_name }}"
+    
+    - name: Delete VM
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ operating_system }}_updates.shadowman.dev"
+        state: absent
+        wait: yes
 
   post_tasks:
     - name: Logout from RHV
