@@ -6,6 +6,7 @@
 
   collections:
     - redhat.rhv
+    - redhat.satellite
     
   pre_tasks:
     - name: Login to RHV
@@ -42,6 +43,15 @@
         name: "{{ operating_system }}_updates.shadowman.dev"
         state: absent
         wait: yes
+
+    - name: Delete host from Sat
+      host:
+        name: "{{ operating_system }}_updates.shadowman.dev"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        server_url: "{{ server_url }}"
+        state: absent
+        
 
   post_tasks:
     - name: Logout from RHV
