@@ -26,7 +26,7 @@
         pattern: name={{ vm_name }}
       register: result
 
-    - name: Increase current CPU Sockets
+    - name: Increase current CPU Cores
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
