@@ -17,13 +17,13 @@
         insecure: "{{ rhvm_insecure | default(true) }}"
       tags:
         - always
-      
+
   tasks:
      
     - name: Get current CPU Sockets
       ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
-        pattern: name={{ vm_names }}
+        pattern: name={{ vm_name }}
       register: result
       
       
