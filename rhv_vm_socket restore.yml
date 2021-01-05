@@ -23,9 +23,8 @@
     - name: Restore virtual CPU sockets and cores
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
-        name: tower.shadowman.dev
-        cpu_cores: 1
-        cpu_sockets: 8
+        name: "{{ vm_name }}"
+        cpu_sockets: "{{ cpu_cores|int }}"
       
   post_tasks:
     - name: Logout from RHV
