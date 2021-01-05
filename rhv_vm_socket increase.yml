@@ -26,11 +26,11 @@
         pattern: name={{ vm_name }}
       register: result
 
-    - name: Increase current CPU Cores
+    - name: Increase current virtual CPU sockets
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
-        cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int + 1 }}"
+        cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.sockets|int + 2 }}"
       
   post_tasks:
     - name: Logout from RHV
