@@ -29,11 +29,11 @@
     - name: Update terraform main file
       template: 
         src: templates/terraform.tf.j2
-        dest: /terraform/ovirt/main.tf
+        dest: ~/terraform/ovirt/main.tf
         
     - name: Update State of VM to {{ terraform_state }} from template using Terraform
       terraform:
-        project_path: "/terraform/ovirt/"
+        project_path: "~/terraform/ovirt/"
         state: "{{ terraform_state }}"
         force_init: yes
         
