@@ -1,6 +1,6 @@
 ---
 - name: Update VM on RHV using Terraform
-  hosts: localhost
+  hosts: all
   gather_facts: false
 
   collections:
