@@ -20,17 +20,12 @@
 
   tasks:
      
-    - name: Get current CPU Sockets
-      ovirt_vm_info:
-        auth: "{{ ovirt_auth }}"
-        pattern: name={{ vm_name }}
-      register: result
-
-    - name: Increase current virtual CPU sockets
+    - name: Restore virtual CPU sockets and cores
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
-        name: "{{ vm_name }}"
-        cpu_sockets: "{{ result.ovirt_vms[0].cpu.topology.sockets|int + 2 }}"
+        name: tower.shadowman.dev
+        cpu_cores: 1
+        cpu_sockets: 8
       
   post_tasks:
     - name: Logout from RHV
