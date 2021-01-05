@@ -30,7 +30,7 @@
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
-        cpu_sockets: "{{ result.ovirt_vms[0].cpu.topology.sockets|int + 2 }}"
+        cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int + 1 }}"
       
   post_tasks:
     - name: Logout from RHV
