@@ -10,7 +10,7 @@
   vars:
     vm_names: "{{ vm_name.split(',') }}"
     vm_memory: 4096
-    vm_template: e3c06997-3b34-48ee-8b91-e3dfe34f13da
+    vm_template: f7e1958e-d0d5-4fa9-831f-0c4efd702994
     vm_tag: RHEL
   
   tasks:
@@ -23,7 +23,7 @@
       
     - name: Set facts if RHEL8 chosen
       set_fact:
-        vm_template: 20091ab5-7c67-4d6b-9ba1-31ce8453fd40
+        vm_template: 5f4a37cb-5aaa-498e-bc00-d00b65ce6e17
       when: operating_system == "RHEL8"
   
     - name: Update terraform main file
