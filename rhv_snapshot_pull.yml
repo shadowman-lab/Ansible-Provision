@@ -36,7 +36,6 @@
         inventory: "RHV Inventory"
         project: "SSP Provision and DeProvision"
         playbook: "rhv_snapshot_restore.yml"
-        custom_virtualenv: "/opt/my-envs/python3/"
         credentials: 
           - "RHV Credentials" 
         survey_enabled: true
