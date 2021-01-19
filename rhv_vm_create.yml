@@ -32,16 +32,33 @@
         vm_tag: Windows
       when: operating_system == "Win2016"
      
-    - name: Create and run VM from template
+    - name: Create and run Linux VM from template
       ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ item }}"
         template: "{{ template }}"
         cluster: "{{ cluster }}"
-        memory: "{{vm_memory}}"
+        memory: "{{ vm_memory }}"
         high_availability: true
         state: "{{ vm_state }}"
         wait: yes
+      when: operating_system is match("RHEL.*")
+      loop: "{{ vm_names }}"
+
+    - name: Create and run Windows VM from template
+      ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ item }}"
+        template: "{{ template }}"
+        cluster: "{{ cluster }}"
+        memory: "{{ vm_memory }}"
+        high_availability: true
+        sysprep:
+          host_name: "{{ item.split('.')[0] }}"
+          domain: "{{ item.split('.')[1] }}"
+        state: "{{ vm_state }}"
+        wait: yes
+      when: operating_system is match("Win.*")
       loop: "{{ vm_names }}"
       
     - name: Apply tags using RHV tag playbook
