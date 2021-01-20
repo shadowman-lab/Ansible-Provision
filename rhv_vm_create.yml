@@ -55,7 +55,7 @@
         high_availability: true
         sysprep:
           host_name: "{{ item.split('.')[0] }}"
-          domain: "{{ item.split('.')[1] }}"
+          domain: ad.shadowman.dev
         state: "{{ vm_state }}"
         wait: yes
       when: operating_system is match("Win.*")
