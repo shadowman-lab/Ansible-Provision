@@ -43,12 +43,7 @@
     when: os_type is match("rhel.*")
 
   - name: Ensure host and its DNS record is absent for Windows
-    ipa_host:
-      name: "{{ fqdn }}"
+    win_domain_computer:
+      name: "{{ fqdn.split('.')[0] }}"
       state: absent
-      ipa_pass: "{{ IPA_PASS }}"
-      ipa_host: "{{ IPA_HOST }}"
-      ipa_user: "{{ IPA_USER }}"
-      update_dns: True
-    delegate_to: localhost
     when: os_type is match("windows.*")
