@@ -46,5 +46,4 @@
     win_domain_computer:
       name: "{{ fqdn }}"
       state: absent
-    delegate_to: dc01.ad.shadowman.dev
     when: os_type is match("windows.*")
