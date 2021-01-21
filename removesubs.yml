@@ -42,16 +42,7 @@
         delegate_to: localhost
     when: os_type is match("rhel.*")
 
-  
-  - name: Move Windows host to workgroup to disable in AD
-    win_domain_membership:
-      workgroup_name: removegroup
-      domain_admin_user: "{{ domainuser }}"
-      domain_admin_password: "{{ domainpassword }}" 
-      state: workgroup
-      ignore_errors: true
-    when: os_type is match("windows.*")
-    
+
 
   - name: Remove Windows host from AD
     block:
