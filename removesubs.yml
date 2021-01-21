@@ -50,6 +50,7 @@
 
   - name: Remove Windows DNS record
     win_dns_record:
+      computer_name: "dc01.ad.shadowman.dev"
       name: "{{ vm_name.split('.')[0] }}"
       type: "A"
       state: absent
