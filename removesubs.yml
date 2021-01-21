@@ -48,7 +48,7 @@
       state: absent
     when: os_type is match("windows.*")
 
-  - name: Move Windows host to workgroup
+  - name: Move Windows host to workgroup to disable in AD
     win_domain_membership:
       workgroup_name: removegroup
       domain_admin_user: "{{ domainuser }}"
@@ -56,22 +56,8 @@
       state: workgroup
     when: os_type is match("windows.*")
 
-  - name: Remove Windows Server DNS record
-    block:
-      - name: Remove Windows DNS record
-        win_dns_record:
-          name: "{{ vm_name.split('.')[0] }}"
-          type: "A"
-          state: absent
-          zone: "ad.shadowman.dev"
-        delegate_to: dc01.ad.shadowman.dev
-        when: os_type is match("windows.*")
-    rescue:
-      - name: Retry Remove Windows DNS record due to WINRM
-        win_dns_record:
-          name: "{{ vm_name.split('.')[0] }}"
-          type: "A"
-          state: absent
-          zone: "ad.shadowman.dev"
-        delegate_to: dc01.ad.shadowman.dev
-        when: os_type is match("windows.*")
+  - name: Delete Windows host from AD
+    win_domain_computer:
+      name: "{{ fqdn }}"
+      state: absent
+    when: os_type is match("windows.*")
