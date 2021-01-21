@@ -42,8 +42,16 @@
         delegate_to: localhost
     when: os_type is match("rhel.*")
 
-  - name: Ensure host and its DNS record is absent for Windows
+  - name: Ensure host is absent for Windows
     win_domain_computer:
       name: "{{ fqdn }}"
       state: absent
+    when: os_type is match("windows.*")
+
+  - name: Remove Windows DNS record
+    win_dns_record:
+      name: "{{ vm_name.split('.')[0] }}"
+      type: "A"
+      state: absent
+      zone: "ad.shadowman.dev"
     when: os_type is match("windows.*")
