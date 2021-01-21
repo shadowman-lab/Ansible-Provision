@@ -58,6 +58,6 @@
 
   - name: Delete Windows host from AD
     win_domain_computer:
-      name: "{{ fqdn }}"
+      name: "{{ fqdn.split('.')[0] }}"
       state: absent
     when: os_type is match("windows.*")
