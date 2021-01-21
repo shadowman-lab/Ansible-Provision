@@ -50,6 +50,7 @@
           domain_admin_user: "{{ domainuser }}"
           domain_admin_password: "{{ domainpassword }}" 
           state: workgroup
+          ignore_unreachable: yes  #to ensure we still delete the host if it is out of DNS
         when: os_type is match("windows.*")
     rescue:
       - name: Retry Move Windows host to workgroup to disable in AD due to WINRM
