@@ -9,7 +9,7 @@
     
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -24,7 +24,7 @@
 
   tasks:
     - name: Create Snapshot on VM(s)
-      ovirt_snapshot:
+      redhat.rhv.ovirt_snapshot:
         auth: "{{ ovirt_auth }}"
         vm_name: "{{ vm_name }}"
         description: "{{ snapshot_desc }}"
@@ -35,7 +35,7 @@
 
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:

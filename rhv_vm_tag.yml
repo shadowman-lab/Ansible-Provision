@@ -1,7 +1,7 @@
 ---
          
 - name: Tag a VM
-  ovirt_tag:
+  redhat.rhv.ovirt_tag:
     auth: "{{ ovirt_auth }}"
     name: "{{ vm_tag }}"
     state: attached

@@ -9,7 +9,7 @@
     
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -21,20 +21,20 @@
   tasks:
      
     - name: Get current CPU Sockets
-      ovirt_vm_info:
+      redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ vm_name }}
       register: result
 
     - name: Increase current virtual CPU sockets
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
         cpu_sockets: "{{ result.ovirt_vms[0].cpu.topology.sockets|int + 2 }}"
       
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:

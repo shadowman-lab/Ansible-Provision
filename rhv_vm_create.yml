@@ -9,7 +9,7 @@
     
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -33,7 +33,7 @@
       when: operating_system == "Win2016"
      
     - name: Create and run Linux VM from template
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ item }}"
         template: "{{ template }}"
@@ -46,7 +46,7 @@
       loop: "{{ vm_names }}"
 
     - name: Create and run Windows VM from template
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ item }}"
         template: "{{ template }}"
@@ -66,7 +66,7 @@
       
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:

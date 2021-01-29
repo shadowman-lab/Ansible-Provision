@@ -9,7 +9,7 @@
     
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -26,7 +26,7 @@
   tasks:
      
     - name: Create and run VM from template
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ operating_system }}_updates.shadowman.dev"
         template: "{{ template }}"
@@ -38,7 +38,7 @@
       
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:

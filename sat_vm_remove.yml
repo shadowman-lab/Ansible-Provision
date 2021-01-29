@@ -12,7 +12,7 @@
   tasks:
      
     - name: Remove VM from Satellite
-      host:
+      redhat.satellite.host:
         username: "{{ username }}"
         password: "{{ password }}"
         server_url: "{{ server_url }}"

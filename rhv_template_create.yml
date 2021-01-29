@@ -10,7 +10,7 @@
     
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -22,14 +22,14 @@
   tasks:
 
     - name: Stop VM
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ operating_system }}_updates.shadowman.dev"
         state: stopped
         wait: yes
 
     - name: Create new template subversion
-      ovirt_template:
+      redhat.rhv.ovirt_template:
         auth: "{{ ovirt_auth }}"
         cluster: Default
         name: "{{ operating_system }}_ShadowMan"
@@ -39,14 +39,14 @@
           name: "{{ version_name }}"
     
     - name: Delete VM
-      ovirt_vm:
+      redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ operating_system }}_updates.shadowman.dev"
         state: absent
         wait: yes
 
     - name: Delete host from Sat
-      host:
+      redhat.satellite.host:
         name: "localhost.localdomain"
         username: "{{ username }}"
         password: "{{ password }}"
@@ -56,7 +56,7 @@
 
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:

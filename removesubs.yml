@@ -33,7 +33,7 @@
         when: ansible_host != ''
 
       - name: Delete hosts from Sat if RHEL
-        host:
+        redhat.satellite.host:
           name: "{{ inventory_hostname }}"
           username: "{{ username }}"
           password: "{{ password }}"

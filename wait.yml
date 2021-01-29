@@ -9,7 +9,7 @@
 
   pre_tasks:
     - name: Login to RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
         username: "{{ rhvm_user }}"
         password: "{{ rhvm_password }}"
@@ -27,7 +27,7 @@
       when: operating_system is match("RHEL.*")
         
     - name: Quick Pause to allow RHV to generate incorrect Windows FQDN
-      ovirt_vm_info:
+      redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
       until:  tester.ovirt_vms[0].fqdn is defined
@@ -38,7 +38,7 @@
       when: operating_system == "Win2016"
 
     - name: Check if Windows VM has completed reboot and created fqdn
-      ovirt_vm_info:
+      redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ item }}
       register: result
@@ -50,7 +50,7 @@
 
   post_tasks:
     - name: Logout from RHV
-      ovirt_auth:
+      redhat.rhv.ovirt_auth:
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       tags:
@@ -65,7 +65,7 @@
 
   pre_tasks:
   - name: Login to RHV
-    ovirt_auth:
+    redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"
       username: "{{ rhvm_user }}"
       password: "{{ rhvm_password }}"
@@ -86,7 +86,7 @@
       state: restarted
 
   - name: Check if Linux VM has created fqdn
-    ovirt_vm_info:
+    redhat.rhv.ovirt_vm_info:
       auth: "{{ ovirt_auth }}"
       pattern: name={{ item }}
     register: result
@@ -99,7 +99,7 @@
 
   post_tasks:
   - name: Logout from RHV
-    ovirt_auth:
+    redhat.rhv.ovirt_auth:
       state: absent
       ovirt_auth: "{{ ovirt_auth }}"
     become: no

@@ -32,7 +32,7 @@
         dest: /terraform/ovirt/main.tf
         
     - name: Update State of VM to {{ terraform_state }} from template using Terraform
-      terraform:
+      community.general.terraform:
         project_path: "/terraform/ovirt/"
         state: "{{ terraform_state }}"
         force_init: yes
