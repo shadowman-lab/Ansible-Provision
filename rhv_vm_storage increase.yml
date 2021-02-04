@@ -1,5 +1,5 @@
 ---
-- name: Increase VM sotrage
+- name: Increase VM storage
   hosts: localhost
   connection: local
   gather_facts: false
@@ -33,9 +33,6 @@
       redhat.rhv.ovirt_disk_info:
         auth: "{{ ovirt_auth }}"
         pattern: id={{ result.ovirt_vms[0].disk_attachments[0].id }}
-        fetch_nested: yes
-        nested_attributes:
-          - diskattachments
       register: storage
 
     - name: Set Size in GiB
