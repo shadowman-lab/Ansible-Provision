@@ -40,7 +40,26 @@
         fetch_nested: yes
         nested_attributes:
           - diskattachments
-      register: result
+      register: storage
+
+    - name: debug
+      debug:
+        var: storage.ovirt_disks[0].provisioned_size
+
+    - name: debug
+      debug:
+        msg: "This is {{ storage.ovirt_disks[0].provisioned_size / 1024}}"
+
+    - name: set Size
+      set_fact:
+        storage_size: "{{ storage.ovirt_disks[0].provisioned_size / 1024}}Gib"
+
+    - name: debug
+      debug:
+        var: storage_size
+
+      
+
       
   post_tasks:
     - name: Logout from RHV
