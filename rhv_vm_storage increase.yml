@@ -48,11 +48,11 @@
 
     - name: debug
       debug:
-        msg: "This is {{ storage.ovirt_disks[0].provisioned_size / 1024}}"
+        msg: "This is {{ storage.ovirt_disks[0].provisioned_size / 1073741824}}"
 
     - name: set Size
       set_fact:
-        storage_size: "{{ storage.ovirt_disks[0].provisioned_size / 1024}}Gib"
+        storage_size: "{{ storage.ovirt_disks[0].provisioned_size / 1073741824 | int}}Gib"
 
     - name: debug
       debug:
