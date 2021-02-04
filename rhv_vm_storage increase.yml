@@ -21,9 +21,12 @@
   tasks:
      
     - name: Get current CPU Sockets
-      redhat.rhv.ovirt_disk_info:
+      redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ vm_name }}
+        fetch_nested: yes
+        nested_attributes:
+          - diskattachments
       register: result
       
   post_tasks:
