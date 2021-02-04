@@ -46,7 +46,6 @@
       redhat.rhv.ovirt_disk:
         auth: "{{ ovirt_auth }}"
         id: "{{ result.ovirt_vms[0].disk_attachments[0].id }}"
-        state: attached
         vm_name: "{{ vm_name }}"
         size: "{{ storage_size }}"
       
