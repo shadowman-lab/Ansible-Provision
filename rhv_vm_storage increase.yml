@@ -20,7 +20,7 @@
 
   tasks:
      
-    - name: Get VM Storage
+    - name: Get VM Storage ID
       redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ vm_name }}
@@ -29,11 +29,7 @@
           - diskattachments
       register: result
 
-    - name: debug
-      debug:
-        var: result.ovirt_vms[0].disk_attachments[0].id
-
-    - name: Get VM Storage Size
+    - name: Get Current VM Storage Size
       redhat.rhv.ovirt_disk_info:
         auth: "{{ ovirt_auth }}"
         pattern: id={{ result.ovirt_vms[0].disk_attachments[0].id }}
@@ -42,28 +38,14 @@
           - diskattachments
       register: storage
 
-    - name: debug
-      debug:
-        var: storage.ovirt_disks[0].provisioned_size
-
-    - name: debug
-      debug:
-        msg: "This is {{ storage.ovirt_disks[0].provisioned_size / 1073741824}}"
-
-    - name: set Size
+    - name: Set Size in GiB
       set_fact:
-        storage_size_float: "{{ storage.ovirt_disks[0].provisioned_size / 1073741824 | int}}Gib"
+        storage_size: "{{ storage.ovirt_disks[0].provisioned_size / 1073741824 | int}}Gib"
 
-    - name: set Size
-      set_fact:
-        storage_size: "{{ storage_size_float | int}}Gib"
-
-    - name: debug
-      debug:
-        var: storage_size
-
-      
-
+    - name: Set Storage Size for VM
+      redhat.rhv.ovirt_disk:
+        id: "{{ result.ovirt_vms[0].disk_attachments[0].id }}"
+        size: "{{ storage_size }}"
       
   post_tasks:
     - name: Logout from RHV
