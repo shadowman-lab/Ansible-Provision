@@ -52,7 +52,11 @@
 
     - name: set Size
       set_fact:
-        storage_size: "{{ storage.ovirt_disks[0].provisioned_size / 1073741824 | int}}Gib"
+        storage_size_float: "{{ storage.ovirt_disks[0].provisioned_size / 1073741824 | int}}Gib"
+
+    - name: set Size
+      set_fact:
+        storage_size: "{{ storage_size_float | int}}Gib"
 
     - name: debug
       debug:
