@@ -15,13 +15,11 @@
         password: "{{ rhvm_password }}"
         ca_file: "{{ rhvm_cafile | default(omit) }}"
         insecure: "{{ rhvm_insecure | default(true) }}"
-      tags:
-        - always
 
   tasks:
 
   - block:   
-  
+
     - name: Get VM Storage ID
       redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
@@ -53,5 +51,3 @@
         redhat.rhv.ovirt_auth:
           state: absent
           ovirt_auth: "{{ ovirt_auth }}"
-        tags:
-          - always
