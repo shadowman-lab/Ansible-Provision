@@ -20,10 +20,22 @@
 
   tasks:
      
-    - name: Get current CPU Sockets
+    - name: Get VM Storage
       redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ vm_name }}
+        fetch_nested: yes
+        nested_attributes:
+          - diskattachments
+      register: result
+
+    - name: debug
+      var: result.ovirt_vms[0].disk_attachments[0].id
+
+    - name: Get VM Storage Size
+      redhat.rhv.ovirt_disk_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: id={{ result.ovirt_vms[0].disk_attachments[0].id }}
         fetch_nested: yes
         nested_attributes:
           - diskattachments
