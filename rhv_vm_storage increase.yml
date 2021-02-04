@@ -40,7 +40,7 @@
 
     - name: Set Size in GiB
       set_fact:
-        storage_size: "{{ (storage.ovirt_disks[0].provisioned_size / 1073741824) + 2 | int}}Gib"
+        storage_size: "{{ (storage.ovirt_disks[0].provisioned_size / 1073741824 + 2) | int}}GiB"
 
     - name: Set Storage Size for VM
       redhat.rhv.ovirt_disk:
