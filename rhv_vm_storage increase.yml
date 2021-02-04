@@ -19,7 +19,9 @@
         - always
 
   tasks:
-     
+
+  - block:   
+  
     - name: Get VM Storage ID
       redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
@@ -46,10 +48,10 @@
         vm_name: "{{ vm_name }}"
         size: "{{ storage_size }}"
       
-  always:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
-      tags:
-        - always
+    always:
+      - name: Logout from RHV
+        redhat.rhv.ovirt_auth:
+          state: absent
+          ovirt_auth: "{{ ovirt_auth }}"
+        tags:
+          - always
