@@ -30,7 +30,8 @@
       register: result
 
     - name: debug
-      var: result.ovirt_vms[0].disk_attachments[0].id
+      debug:
+        var: result.ovirt_vms[0].disk_attachments[0].id
 
     - name: Get VM Storage Size
       redhat.rhv.ovirt_disk_info:
