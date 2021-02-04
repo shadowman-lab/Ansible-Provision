@@ -49,7 +49,7 @@
         vm_name: "{{ vm_name }}"
         size: "{{ storage_size }}"
       
-  post_tasks:
+  always:
     - name: Logout from RHV
       redhat.rhv.ovirt_auth:
         state: absent
