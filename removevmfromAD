@@ -1,0 +1,23 @@
+---
+- name: Remove VM From AD
+  hosts: "{{ vm_name }}"
+  gather_facts: false
+  collections:
+    - redhat.satellite
+    - community.general
+
+  tasks:
+
+    - name: Move Windows host to workgroup to disable in AD
+      win_domain_membership:
+        workgroup_name: removegroup
+        domain_admin_user: "{{ domainuser }}"
+        domain_admin_password: "{{ domainpassword }}" 
+        state: workgroup
+  
+    - name: Delete Windows host from AD
+      win_domain_computer:
+        name: "{{ fqdn.split('.')[0] }}"
+        state: absent
+      delegate_to: "dc01.ad.shadowman.dev"
+  
