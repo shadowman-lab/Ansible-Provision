@@ -18,9 +18,6 @@
       run_once: true
       tags:
         - always
-  vars:
-    datacenter: Default
-    vm_names: "{{ vm_name.split(',') }}"
 
   tasks:
     - name: Stop VM
