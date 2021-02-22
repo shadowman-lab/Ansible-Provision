@@ -1,0 +1,38 @@
+---
+- name: Start VM on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  collections:
+    - redhat.rhv
+    
+  pre_tasks:
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
+      tags:
+        - always
+  vars:
+    datacenter: Default
+    vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+    - name: Start VM
+      redhat.rhv.ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ item }}"
+        state: running
+      loop: "{{ vm_names }}"
+
+  post_tasks:
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      tags:
+        - always
