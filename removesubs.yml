@@ -40,7 +40,7 @@
           server_url: "{{ server_url }}"
           state: absent
         delegate_to: localhost
-    when: os_type is match("rhel.*")
+    when: os is match("rhel.*")
 
   - name: Move Windows host to workgroup to disable in AD
     block:
@@ -50,7 +50,7 @@
           domain_admin_user: "{{ domainuser }}"
           domain_admin_password: "{{ domainpassword }}" 
           state: workgroup
-        when: os_type is match("windows.*")
+        when: os is match("windows.*")
     rescue:
       - name: Retry Move Windows host to workgroup to disable in AD due to WINRM
         win_domain_membership:
@@ -58,7 +58,7 @@
           domain_admin_user: "{{ domainuser }}"
           domain_admin_password: "{{ domainpassword }}" 
           state: workgroup
-        when: os_type is match("windows.*")
+        when: os is match("windows.*")
 
   - name: Remove Windows host from AD
     block:
@@ -67,13 +67,13 @@
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
-        when: os_type is match("windows.*")
+        when: os is match("windows.*")
     rescue:
       - name: Retry Delete Windows host from AD due to WINRM
         win_domain_computer:
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
-        when: os_type is match("windows.*")
+        when: os is match("windows.*")
 
  
