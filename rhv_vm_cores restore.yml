@@ -24,7 +24,7 @@
       redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
-        cpu_sockets: "{{ cpu_sockets }}"
+        cpu_cores: "{{ cpu_cores }}"
       
   post_tasks:
     - name: Logout from RHV
