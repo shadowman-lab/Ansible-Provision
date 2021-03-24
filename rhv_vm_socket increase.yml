@@ -20,17 +20,17 @@
 
   tasks:
      
-    - name: Get current CPU Sockets
+    - name: Get current CPU info
       redhat.rhv.ovirt_vm_info:
         auth: "{{ ovirt_auth }}"
         pattern: name={{ vm_name }}
       register: result
 
-    - name: Increase current virtual CPU sockets
+    - name: Increase current virtual CPU cores
       redhat.rhv.ovirt_vm:
         auth: "{{ ovirt_auth }}"
         name: "{{ vm_name }}"
-        cpu_sockets: "{{ result.ovirt_vms[0].cpu.topology.sockets|int + 2 }}"
+        cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int + 2 }}"
       
   post_tasks:
     - name: Logout from RHV
