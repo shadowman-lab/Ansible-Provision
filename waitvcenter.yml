@@ -10,7 +10,7 @@
   tasks:
 
     name: Check status of all VMWare Hosts
-      include_tasks: rhv_vm_tag.yml
+      include_tasks: waitvcenterloop.yml
     loop: vm_names
 
     
