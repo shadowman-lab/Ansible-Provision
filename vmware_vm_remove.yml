@@ -5,7 +5,6 @@
   gather_facts: false
     
   vars:
-    datacenter: Default
     vm_names: "{{ vm_name.split(',') }}"
 
 
@@ -16,7 +15,7 @@
     register: search_result
     vmware.vmware_rest.vcenter_vm_info:
       filter_names:
-      - "{{ item }}"
+      - "{{ vm_names }}"
 
   - name: Delete some VM
     vmware.vmware_rest.vcenter_vm:
