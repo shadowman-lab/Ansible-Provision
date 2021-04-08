@@ -9,7 +9,6 @@
     datastore: "{{ my_datastore.datastore }}"
     folder: "{{ my_virtual_machine_folder.folder }}"
     resource_pool: "{{ my_cluster_info.value.resource_pool }}"
-    guest_OS: "{{ guest_OS }}"
     vm_memory: 1024
     hardware_version: "{{ hardware_version }}"
     vm_names: "{{ vm_name.split(',') }}"
