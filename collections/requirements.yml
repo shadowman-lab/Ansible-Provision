@@ -4,6 +4,8 @@ collections:
 
   - name: redhat.rhv
 
+  - name: vmware.vmware_rest
+
   - name: ansible.tower
 
   - name: ansible.netcommon

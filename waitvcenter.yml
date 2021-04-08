@@ -1,0 +1,16 @@
+---
+- name: Wait for host to generate IP/FQDN
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    - vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+
+    name: Check status of all VMWare Hosts
+      include_tasks: rhv_vm_tag.yml
+    loop: vm_names
+
+    

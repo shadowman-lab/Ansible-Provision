@@ -1,0 +1,37 @@
+---
+- name: Create VM on VCenter
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    cluster: "{{ my_cluster_info.id }}"
+    datastore: "{{ my_datastore.datastore }}"
+    folder: "{{ my_virtual_machine_folder.folder }}"
+    resource_pool: "{{ my_cluster_info.value.resource_pool }}"
+    guest_OS: "{{ guest_OS }}"
+    vm_memory: 1024
+    hardware_version: "{{ hardware_version }}"
+    vm_names: "{{ vm_name.split(',') }}"
+    
+  tasks:
+    #- name: Change facts if running Windows
+    #  set_fact:
+    #    vm_memory: 8GiB
+    #    vm_tag: Windows
+    #  when: operating_system == "Win2016"
+     
+    - name: Create and run Linux VM
+      vmware.vmware_rest.vcenter_vm:
+        placement:
+          cluster: "{{ cluster }}"
+          datastore: "{{ datastore }}"
+          folder: "{{ folder }}"
+          resource_pool: "{{ resource_pool }}"
+        name: "{{ item }}"
+        guest_OS: "{{ guest_OS }}"
+        hardware_version: "{{ hardware_version }}"
+        memory:
+          hot_add_enabled: true
+          size_MiB: "{{ vm_memory }}"
+      loop: "{{ vm_names }}"
