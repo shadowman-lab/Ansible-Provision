@@ -9,8 +9,6 @@
     datastore: "{{ my_datastore.datastore }}"
     folder: "{{ my_virtual_machine_folder.folder }}"
     resource_pool: "{{ my_cluster_info.value.resource_pool }}"
-    vm_memory: 1024
-    hardware_version: "{{ hardware_version }}"
     vm_names: "{{ vm_name.split(',') }}"
     
   tasks:
@@ -20,17 +18,16 @@
     #    vm_tag: Windows
     #  when: operating_system == "Win2016"
      
-    - name: Create and run Linux VM
+    - name: Create and run VM
       vmware.vmware_rest.vcenter_vm:
+        vcenter_validate_certs: False
         placement:
-          cluster: "{{ cluster }}"
-          datastore: "{{ datastore }}"
-          folder: "{{ folder }}"
-          resource_pool: "{{ resource_pool }}"
+          cluster: '{{ cluster_id }}'
+          datastore: '{{ datastore_id }}'
+          folder: '{{ folder_id }}'
+          resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
+        power_on: yes
+        source: "{{ source_vm_id }}"
         guest_OS: "{{ guest_OS }}"
-        hardware_version: "{{ hardware_version }}"
-        memory:
-          hot_add_enabled: true
-          size_MiB: "{{ vm_memory }}"
       loop: "{{ vm_names }}"
