@@ -1,0 +1,45 @@
+---
+- name: Pull VM facts from VMWare
+  hosts: localhost
+  gather_facts: false
+  vars:
+    cluster_name: 'Cluster1'
+    datastore_name: 'NFS_Cersei'
+    folder_name: 'Discovered virtual machine'
+    vm_name: RHEL8
+
+  tasks:
+  
+    - name: Get virtual machine info
+      vmware.vmware_rest.vcenter_vm_info:
+        filter_names:
+        - "{{ vm_name }}"
+        vcenter_validate_certs: False
+      register: vm_info
+
+    - name: Get Cluster info
+      vmware.vmware_rest.vcenter_cluster_info:
+        filter_names:
+        - "{{ cluster_name }}"
+        vcenter_validate_certs: False
+      register: cluster_info
+
+    - name: Get Resource info for {{ cluster_name }}
+      vmware.vmware_rest.vcenter_cluster_info:
+        vcenter_validate_certs: False
+        cluster: "{{ cluster_info.value[0].cluster }}"
+      register: resource_pool_info
+
+    - name: Get datastore info
+      vmware.vmware_rest.vcenter_datastore_info:
+        vcenter_validate_certs: False
+        filter_names:
+        - "{{ datastore_name }}"
+      register: datastore_info
+
+    - name: Get folder info
+      vmware.vmware_rest.vcenter_folder_info:
+        vcenter_validate_certs: False
+        filter_names:
+        - '{{ folder_name }}'
+      register: folder_info
