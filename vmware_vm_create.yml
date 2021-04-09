@@ -10,13 +10,18 @@
     folder: "{{ my_virtual_machine_folder.folder }}"
     resource_pool: "{{ my_cluster_info.value.resource_pool }}"
     vm_names: "{{ vm_name.split(',') }}"
+    source_vm_id: "test"
     
   tasks:
     #- name: Change facts if running Windows
     #  set_fact:
-    #    vm_memory: 8GiB
-    #    vm_tag: Windows
-    #  when: operating_system == "Win2016"
+    #    source_vm_id: 
+    #  when: guest_OS == "Windows64"
+
+    #- name: Change facts if running RHEL8
+    #  set_fact:
+    #    source_vm_id: 
+    #  when: guest_OS == "RHEL_8_64"
      
     - name: Create and run VM
       vmware.vmware_rest.vcenter_vm:
@@ -27,7 +32,7 @@
           folder: '{{ folder_id }}'
           resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
-        power_on: yes
+        power_on: "{{ powered_on }}"
         source: "{{ source_vm_id }}"
         guest_OS: "{{ guest_OS }}"
       loop: "{{ vm_names }}"
