@@ -16,25 +16,21 @@
       vmware.vmware_rest.vcenter_cluster_info:
         filter_names:
         - "{{ cluster_name }}"
-        vcenter_validate_certs: no
       register: cluster_info
 
     - name: Get Resource info for {{ cluster_name }}
       vmware.vmware_rest.vcenter_cluster_info:
-        vcenter_validate_certs: no
         cluster: "{{ cluster_info.value[0].cluster }}"
       register: resource_pool_info
 
     - name: Get datastore info
       vmware.vmware_rest.vcenter_datastore_info:
-        vcenter_validate_certs: no
         filter_names:
         - "{{ datastore_name }}"
       register: datastore_info
 
     - name: Get folder info
       vmware.vmware_rest.vcenter_folder_info:
-        vcenter_validate_certs: no
         filter_names:
         - '{{ folder_name }}'
       register: folder_info

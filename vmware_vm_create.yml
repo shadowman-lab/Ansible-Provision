@@ -25,7 +25,6 @@
      
     - name: Create and run VM
       vmware.vmware_rest.vcenter_vm:
-        vcenter_validate_certs: False
         placement:
           cluster: '{{ cluster_id }}'
           datastore: '{{ datastore_id }}'
