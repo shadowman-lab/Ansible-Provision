@@ -10,18 +10,18 @@
     folder_id: group-v28
     resource_pool_id: resgroup-27
     vm_names: "{{ vm_name.split(',') }}"
-    source_vm_id: "test"
+    source_vm_id: vm-46
     
   tasks:
-    #- name: Change facts if running Windows
-    #  set_fact:
-    #    source_vm_id: 
-    #  when: guest_OS == "Windows64"
+    - name: Change facts if running Windows
+      set_fact:
+        source_vm_id: vm-47
+      when: guest_OS == "WINDOWS_9_SERVER_64"
 
-    #- name: Change facts if running RHEL8
-    #  set_fact:
-    #    source_vm_id: 
-    #  when: guest_OS == "RHEL_8_64"
+    - name: Change facts if running RHEL8
+      set_fact:
+        source_vm_id: vm-45
+      when: guest_OS == "RHEL_8_64"
      
     - name: Create and run VM
       vmware.vmware_rest.vcenter_vm:

@@ -8,13 +8,6 @@
 
   tasks:
 
-    - name: Get virtual machine info
-      vmware.vmware_rest.vcenter_vm_info:
-        filter_names:
-        - RHEL7_ShadowMan
-      register: existing_vms
-      until: existing_vms is not failed
-
     - name: Get Cluster info
       vmware.vmware_rest.vcenter_cluster_info:
         filter_names:
