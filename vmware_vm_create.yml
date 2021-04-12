@@ -31,7 +31,6 @@
           folder: '{{ folder_id }}'
           resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
-        state: clone
         power_on: "{{ powered_on }}"
         source: "{{ source_vm_id }}"
         guest_OS: "{{ guest_OS }}"
