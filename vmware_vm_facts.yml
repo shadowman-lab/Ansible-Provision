@@ -13,6 +13,8 @@
         filter_names:
         - "{{ vm_name }}"
         vcenter_validate_certs: no
+      environment:
+        REQUESTS_CA_BUNDLE: ''
       register: vm_info
 
     - name: Get Cluster info
