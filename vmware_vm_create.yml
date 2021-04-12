@@ -5,10 +5,10 @@
   gather_facts: false
 
   vars:
-    cluster: "{{ my_cluster_info.id }}"
-    datastore: "{{ my_datastore.datastore }}"
-    folder: "{{ my_virtual_machine_folder.folder }}"
-    resource_pool: "{{ my_cluster_info.value.resource_pool }}"
+    cluster: domain-c26
+    datastore: datastore-38
+    folder: group-v28
+    resource_pool: resgroup-27
     vm_names: "{{ vm_name.split(',') }}"
     source_vm_id: "test"
     
