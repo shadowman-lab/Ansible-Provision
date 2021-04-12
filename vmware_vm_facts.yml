@@ -5,8 +5,6 @@
   vars:
     cluster_name: 'Cluster1'
     datastore_name: 'NFS_Cersei'
-    folder_name: 'Discovered virtual machine'
-    vm_name: RHEL8
 
   tasks:
 
