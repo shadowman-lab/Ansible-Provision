@@ -5,10 +5,10 @@
   gather_facts: false
 
   vars:
-    cluster: domain-c26
-    datastore: datastore-38
-    folder: group-v28
-    resource_pool: resgroup-27
+    cluster_id: domain-c26
+    datastore_id: datastore-38
+    folder_id: group-v28
+    resource_pool_id: resgroup-27
     vm_names: "{{ vm_name.split(',') }}"
     source_vm_id: "test"
     
@@ -31,6 +31,7 @@
           folder: '{{ folder_id }}'
           resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
+        state: clone
         power_on: "{{ powered_on }}"
         source: "{{ source_vm_id }}"
         guest_OS: "{{ guest_OS }}"
