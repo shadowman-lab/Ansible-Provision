@@ -30,8 +30,7 @@
         folder: '{{ folder_id }}'
         resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
-        power_on: true
-        state: poweredon
+        state: "{{ state }}"
         template: "{{ source_vm_id }}"
         wait_for_ip_address: yes
       loop: "{{ vm_names }}"
