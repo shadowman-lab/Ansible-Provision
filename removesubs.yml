@@ -14,11 +14,11 @@
         redhat_subscription:
           state: absent
           org_id: Shadow_Man
-        when: ansible_host != ''
+        when: fqdn != null
 
       - name: Remove from IDM
         command: "ipa-client-install --uninstall --unattended"
-        when: ansible_host != ''
+        when: when: fqdn != null
         register: output
         ignore_errors: true
 
@@ -30,7 +30,7 @@
           ipa_host: "{{ IPA_HOST }}"
           ipa_user: "{{ IPA_USER }}"
           update_dns: True
-        when: ansible_host != ''
+        when: fqdn != null
 
       - name: Delete hosts from Sat if RHEL
         redhat.satellite.host:
@@ -40,6 +40,7 @@
           server_url: "{{ server_url }}"
           state: absent
         delegate_to: localhost
+        when: fqdn != null
     when: os is match("rhel.*")
 
   - name: Move Windows host to workgroup to disable in AD
