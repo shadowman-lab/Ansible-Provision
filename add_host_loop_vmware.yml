@@ -4,20 +4,15 @@
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:
     - "{{ item }}"
-  register: search_result
-
-- name: Collect information about a specific VM
-  vmware.vmware_rest.vcenter_vm_info:
-    vm: '{{ search_result.value[0].vm }}'
   register: vm_info
 
-- name: Get Resource info for vm
-  vmware.vmware_rest.vcenter_vm_guest_networking_info:
-    vm: "{{ vm_info.id }}"
+- name: Guest identity
+  vmware.vmware_rest.vcenter_vm_guest_identity_info:
+    vm: "{{ vm_info.value[0].vm }}"
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group
   add_host:
     hostname: "{{ item }}"
-    ansible_host: "{{ vm.full_info.dns.ip_addresses[0] }}"
+    ansible_host: "{{ vm.full_info.ip_address }}"
     groups: just_created
