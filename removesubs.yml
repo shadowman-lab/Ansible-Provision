@@ -18,7 +18,7 @@
 
       - name: Remove from IDM
         command: "ipa-client-install --uninstall --unattended"
-        when: when: fqdn != null
+        when: fqdn != null
         register: output
         ignore_errors: true
 
