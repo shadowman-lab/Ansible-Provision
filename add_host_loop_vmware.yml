@@ -4,11 +4,16 @@
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:
     - "{{ item }}"
+  register: search_result
+
+- name: Collect information about a specific VM
+  vmware.vmware_rest.vcenter_vm_info:
+    vm: '{{ search_result.value[0].vm }}'
   register: vm_info
 
 - name: Get Resource info for vm
   vmware.vmware_rest.vcenter_vm_guest_networking_info:
-    vm: "{{ vm_info.value[0].vm }}"
+    vm: "{{ vm_info.value.id }}"
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group
