@@ -14,5 +14,5 @@
 - name: Add Linux hosts to just_created group
   add_host:
     hostname: "{{ item }}"
-    ansible_host: "{{ vm.full_info.ip_address }}"
+    ansible_host: "{{ vm_full_info.value.ip_address }}"
     groups: just_created
