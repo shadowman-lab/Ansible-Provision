@@ -7,12 +7,12 @@
   register: vm_info
 
 - name: Get Resource info for vm
-  vmware.vmware_rest.vcenter_vm_info:
+  vmware.vmware_rest.vcenter_vm_guest_networking_info:
     vm: "{{ vm_info.value[0].vm }}"
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group
   add_host:
     hostname: "{{ item }}"
-    ansible_host: "{{ vm.full_info }}"
+    ansible_host: "{{ vm.full_info.dns.ip_addresses[0] }}"
     groups: just_created
