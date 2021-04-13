@@ -10,12 +10,23 @@
   tasks:
 
   - name: Look up the VM in the inventory
-    register: search_result
     vmware.vmware_rest.vcenter_vm_info:
       filter_names: "{{ vm_names }}"
+    register: search_result
+
+  - name: Turn off VM
+    vmware.vmware_rest.vcenter_vm_power:
+      state: stop
+      vm: '{{ item.vm }}'
+    with_items: '{{ search_result.value }}'
+    loop_control:
+      label: "{{ item.vm }}"
+    
 
   - name: Delete some VM
     vmware.vmware_rest.vcenter_vm:
       state: absent
       vm: '{{ item.vm }}'
     with_items: '{{ search_result.value }}'
+    loop_control:
+      label: "{{ item.vm }}"
