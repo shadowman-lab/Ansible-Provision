@@ -1,0 +1,27 @@
+---
+- name: Set hostname on Linux
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    - vm_names: "{{ vm_name.split(',') }}"
+
+  tasks:
+
+  - name: Loop to create group for linux hosts
+    include_tasks: add_host_loop_vmware.yml
+    loop: "{{ vm_names }}"
+    when: guest_OS is match("RHEL.*")
+
+- name: Perform hostname Set and reset agent to get FQDN on Linux
+  hosts: just_created
+  gather_facts: false
+
+  tasks:
+
+  - name: RHEL Hostname Set
+    hostname:
+      name: "{{ inventory_hostname }}"
+
+ 
