@@ -17,3 +17,6 @@ collections:
 
   - name: community.general
     source: https://towerhub.shadowman.dev/api/galaxy/content/community/
+
+  - name: community.vmware
+    source: https://towerhub.shadowman.dev/api/galaxy/content/community/
