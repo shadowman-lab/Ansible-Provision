@@ -29,6 +29,7 @@
         datastore: '{{ datastore_id }}'
         folder: '{{ folder_id }}'
         resource_pool: '{{ resource_pool_id }}'
+        datacenter: "Shadowman"
         name: "{{ item }}"
         state: "{{ state }}"
         template: "{{ source_vm_id }}"
