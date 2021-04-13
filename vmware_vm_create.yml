@@ -32,7 +32,6 @@
           resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
         power_on: "{{ powered_on }}"
-        state: instant_clone
+        state: clone
         source: "{{ source_vm_id }}"
-        guest_OS: "{{ guest_OS }}"
       loop: "{{ vm_names }}"
