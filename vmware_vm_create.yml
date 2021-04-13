@@ -8,7 +8,6 @@
     cluster_id: "Cluster1"
     datastore_id: "NFS_Cersei"
     folder_id: "Discovered virtual machine"
-    resource_pool_id: "Cluster1"
     vm_names: "{{ vm_name.split(',') }}"
     source_vm_id: "RHEL7_ShadowMan"
     
@@ -28,7 +27,6 @@
         cluster: '{{ cluster_id }}'
         datastore: '{{ datastore_id }}'
         folder: '{{ folder_id }}'
-        resource_pool: '{{ resource_pool_id }}'
         datacenter: "Shadowman"
         name: "{{ item }}"
         state: "{{ state }}"
