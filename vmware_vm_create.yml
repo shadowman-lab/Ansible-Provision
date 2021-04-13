@@ -7,7 +7,7 @@
   vars:
     cluster_id: "Cluster1"
     datastore_id: "NFS_Cersei"
-    folder_id: "Shadowman/Discovered virtual machine"
+    folder_id: "Discovered virtual machine"
     resource_pool_id: "Cluster1"
     vm_names: "{{ vm_name.split(',') }}"
     source_vm_id: "RHEL7_ShadowMan"
