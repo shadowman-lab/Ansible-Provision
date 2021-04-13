@@ -8,7 +8,7 @@
 
 - name: Get Resource info for vm
   vmware.vmware_rest.vcenter_vm_info:
-    cluster: "{{ vm_info.value[0].vm }}"
+    vm: "{{ vm_info.value[0].vm }}"
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group
