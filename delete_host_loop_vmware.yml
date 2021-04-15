@@ -9,9 +9,9 @@
 - name: Turn off VM
   vmware.vmware_rest.vcenter_vm_power:
     state: stop
-    vm: '{{ search_result.value.vm }}'
+    vm: '{{ search_result.value[0].vm }}'
   
 - name: Delete some VM
   vmware.vmware_rest.vcenter_vm:
     state: absent
-    vm: '{{ search_result.value.vm }}'
+    vm: '{{ search_result.value[0].vm }}'
