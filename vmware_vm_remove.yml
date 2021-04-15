@@ -11,8 +11,7 @@
 
   - name: Look up the VM in the inventory
     vmware.vmware_rest.vcenter_vm_info:
-      filter_names: 
-      - "{{ vm_names }}"
+      filter_names: "{{ vm_name }}"
     register: search_result
 
   - name: Turn off VM
