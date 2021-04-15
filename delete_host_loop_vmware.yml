@@ -1,0 +1,17 @@
+---
+
+- name: Look up the VM in the inventory
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names: 
+    - "{{ item }}"
+  register: search_result
+
+- name: Turn off VM
+  vmware.vmware_rest.vcenter_vm_power:
+    state: stop
+    vm: '{{ search_result.value.vm }}'
+  
+- name: Delete some VM
+  vmware.vmware_rest.vcenter_vm:
+    state: absent
+    vm: '{{ search_result.value.vm }}'

@@ -9,23 +9,6 @@
 
   tasks:
 
-  - name: Look up the VM in the inventory
-    vmware.vmware_rest.vcenter_vm_info:
-      filter_names: "{{ vm_name }}"
-    register: search_result
-
-  - name: Turn off VM
-    vmware.vmware_rest.vcenter_vm_power:
-      state: stop
-      vm: '{{ item.vm }}'
-    with_items: '{{ search_result.value }}'
-    loop_control:
-      label: "{{ item.name }}"
-    
-  - name: Delete some VM
-    vmware.vmware_rest.vcenter_vm:
-      state: absent
-      vm: '{{ item.vm }}'
-    with_items: '{{ search_result.value }}'
-    loop_control:
-      label: "{{ item.name }}"
+  - name: Loop to remove hosts
+    include_tasks: delete_host_loop_vmware.yml
+    loop: "{{ vm_names }}"
