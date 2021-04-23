@@ -55,7 +55,7 @@
           hostname: "{{ item.split('.')[0] }}"
           productid: "{{ productid }}"
           password: "{{ windowspassword }}"
-        runonce:
-        - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1
+          runonce:
+          - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1
       loop: "{{ vm_names }}"
       when: guest_OS is match("WINDOWS.*")
