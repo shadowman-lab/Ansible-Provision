@@ -17,7 +17,7 @@
     start_connected: true
     state: connect
 
-- name: Loop until hostname is set
+- name: Loop until hostname is set correctly
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
     vm: "{{ vm_info.value[0].vm }}"
   register: vm_full_info
