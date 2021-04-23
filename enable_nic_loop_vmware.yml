@@ -17,18 +17,10 @@
     start_connected: true
     state: connect
 
-- name: Loop until IP address is available
-  vmware.vmware_rest.vcenter_vm_guest_identity_info:
-    vm: "{{ vm_info.value[0].vm }}"
-  register: vm_full_info
-  until: vm_full_info.value.ip_address is defined
-  retries: 60
-  delay: 10
-
 - name: Loop until hostname is set
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
     vm: "{{ vm_info.value[0].vm }}"
   register: vm_full_info
   until: vm_full_info.value.host_name|default("False") == item.split('.')[0]
-  retries: 60
+  retries: 120
   delay: 10
