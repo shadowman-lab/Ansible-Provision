@@ -45,6 +45,8 @@
         state: "{{ state }}"
         template: "{{ source_vm_id }}"
         wait_for_ip_address: yes
+        networks:
+        - name: LAN_01
         customization:
           domain: ad.shadowman.dev
           autologon: true
