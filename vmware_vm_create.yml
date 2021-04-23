@@ -47,6 +47,7 @@
         wait_for_ip_address: yes
         networks:
         - name: LAN_01
+          start_connected: true
         customization:
           domain: ad.shadowman.dev
           autologon: true
