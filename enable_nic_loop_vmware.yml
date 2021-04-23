@@ -11,4 +11,4 @@
     vm: "{{ vm_info.value[0].vm }}"
     nic: "network-41"
     start_connected: true
-    state: connected
+    state: connect
