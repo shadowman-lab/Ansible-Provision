@@ -33,7 +33,7 @@
         template: "{{ source_vm_id }}"
         wait_for_ip_address: yes
       loop: "{{ vm_names }}"
-      when: guest_OS is matchmatch("RHEL.*")
+      when: guest_OS is match("RHEL.*")
 
     - name: Create and run Windows VM
       community.vmware.vmware_guest:
@@ -52,4 +52,4 @@
           productid: "{{ productid }}"
           password: "{{ windowspassword }}"
       loop: "{{ vm_names }}"
-      when: guest_OS is matchmatch("WINDOWS.*")
+      when: guest_OS is match("WINDOWS.*")
