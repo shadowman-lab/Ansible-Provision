@@ -1,0 +1,19 @@
+---
+
+- name: Get VM info
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names:
+    - "{{ item }}"
+  register: vm_info
+
+- name: Ethernet info
+  vmware.vmware_rest.vcenter_vm_hardware_ethernet_info:
+    vm: "{{ vm_info.value[0].vm }}"
+  register: vm_ethernet_info
+         
+- name: Connect Ethernet
+  vmware.vmware_rest.vcenter_vm_hardware_ethernet_info:
+    vm: "{{ vm_info.value[0].vm }}"
+    nic: '{{ vm_ethernet_info[0].id }}'
+    start_connected: true
+    state: connected

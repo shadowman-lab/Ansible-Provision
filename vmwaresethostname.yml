@@ -14,12 +14,8 @@
     loop: "{{ vm_names }}"
     when: guest_OS is match("RHEL.*")
 
-  - name: Connect Network Adapter Windows
-    community.vmware.vmware_guest_network:
-      name: "{{ item }}"
-      state: present
-      network_name: LAN_01
-      connected: true
+  - name: Loop to update nic Windows
+    include_tasks: enable_nic_loop_vmware.yml
     loop: "{{ vm_names }}"
     when: guest_OS is match("WINDOWS.*")
 
