@@ -15,14 +15,11 @@
     when: guest_OS is match("RHEL.*")
 
   - name: Connect Network Adapter Windows
-    community.vmware.vmware_guest:
+    community.vmware.vmware_guest_network:
       name: "{{ item }}"
       state: present
-      wait_for_ip_address: yes
-      networks:
-      - name: LAN_01
-        start_connected: true
-        connected: true
+      network_name: LAN_01
+      connected: true
     loop: "{{ vm_names }}"
     when: guest_OS is match("WINDOWS.*")
 
