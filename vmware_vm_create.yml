@@ -44,7 +44,6 @@
         name: "{{ item }}"
         state: "{{ state }}"
         template: "{{ source_vm_id }}"
-        wait_for_ip_address: yes
         wait_for_customization: true
         networks:
         - name: LAN_01

@@ -14,6 +14,18 @@
     loop: "{{ vm_names }}"
     when: guest_OS is match("RHEL.*")
 
+  - name: Connect Network Adapter Windows
+    community.vmware.vmware_guest:
+      name: "{{ item }}"
+      state: present
+      wait_for_ip_address: yes
+      networks:
+      - name: LAN_01
+        start_connected: true
+        connected: true
+    loop: "{{ vm_names }}"
+    when: guest_OS is match("WINDOWS.*")
+
 - name: Perform hostname Set and reset agent to get FQDN on Linux
   hosts: just_created
   gather_facts: false
