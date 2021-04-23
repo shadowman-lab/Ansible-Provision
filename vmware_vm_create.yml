@@ -48,6 +48,7 @@
         customization:
           domain: ad.shadowman.dev
           autologon: true
+          autologoncount: 1
           hostname: "{{ item.split('.')[0] }}"
           productid: "{{ productid }}"
           password: "{{ windowspassword }}"
