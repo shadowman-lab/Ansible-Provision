@@ -9,6 +9,10 @@
 - name: Connect Ethernet
   vmware.vmware_rest.vcenter_vm_hardware_ethernet:
     vm: "{{ vm_info.value[0].vm }}"
-    nic: "network-41"
+    pci_slot_number: 192
+    backing:
+      network_name: "LAN_01"
+      type: "STANDARD_PORTGROUP"
+      network: "network-41"
     start_connected: true
     state: connect
