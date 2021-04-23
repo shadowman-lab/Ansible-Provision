@@ -22,7 +22,7 @@
         source_vm_id: "RHEL8_ShadowMan"
       when: guest_OS == "RHEL_8_64"
      
-    - name: Create and run VM
+    - name: Create and run Linux VM
       community.vmware.vmware_guest:
         cluster: '{{ cluster_id }}'
         datastore: '{{ datastore_id }}'
@@ -33,3 +33,23 @@
         template: "{{ source_vm_id }}"
         wait_for_ip_address: yes
       loop: "{{ vm_names }}"
+      when: guest_OS is matchmatch("RHEL.*")
+
+    - name: Create and run Windows VM
+      community.vmware.vmware_guest:
+        cluster: '{{ cluster_id }}'
+        datastore: '{{ datastore_id }}'
+        folder: '{{ folder_id }}'
+        datacenter: "Shadowman"
+        name: "{{ item }}"
+        state: "{{ state }}"
+        template: "{{ source_vm_id }}"
+        wait_for_ip_address: yes
+        customization:
+          domain: ad.shadowman.dev
+          autologon: true
+          hostname: "{{ item.split('.')[0] }}"
+          productid: "{{ productid }}"
+          password: "{{ windowspassword }}"
+      loop: "{{ vm_names }}"
+      when: guest_OS is matchmatch("WINDOWS.*")
