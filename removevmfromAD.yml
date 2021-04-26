@@ -4,14 +4,6 @@
   gather_facts: false
 
   tasks:
-
-    - name: Move Windows host to workgroup to disable in AD
-      win_domain_membership:
-        workgroup_name: removegroup
-        domain_admin_user: "{{ domainuser }}"
-        domain_admin_password: "{{ domainpassword }}" 
-        state: workgroup
-      ignore_errors: true
   
     - name: Delete Windows host from AD
       win_domain_computer:
