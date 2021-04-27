@@ -63,14 +63,14 @@
   - name: Remove Windows host from AD
     block:
       - name: Delete Windows host from AD
-        ansible.windows.win_domain_computer:
+        community.windows.win_domain_computer:
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
         when: os is match("windows.*")
     rescue:
       - name: Retry Delete Windows host from AD due to WINRM
-        ansible.windows.win_domain_computer:
+        community.windows.win_domain_computer:
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
