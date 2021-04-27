@@ -45,7 +45,7 @@
   - name: Move Windows host to workgroup to disable in AD
     block:
       - name: Move Windows host to workgroup to disable in AD
-        win_domain_membership:
+        ansible.windows.win_domain_membership:
           workgroup_name: removegroup
           domain_admin_user: "{{ domainuser }}"
           domain_admin_password: "{{ domainpassword }}" 
@@ -53,7 +53,7 @@
         when: os is match("windows.*")
     rescue:
       - name: Retry Move Windows host to workgroup to disable in AD due to WINRM
-        win_domain_membership:
+        ansible.windows.win_domain_membership:
           workgroup_name: removegroup
           domain_admin_user: "{{ domainuser }}"
           domain_admin_password: "{{ domainpassword }}" 
@@ -63,14 +63,14 @@
   - name: Remove Windows host from AD
     block:
       - name: Delete Windows host from AD
-        win_domain_computer:
+        ansible.windows.win_domain_computer:
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
         when: os is match("windows.*")
     rescue:
       - name: Retry Delete Windows host from AD due to WINRM
-        win_domain_computer:
+        ansible.windows.win_domain_computer:
           name: "{{ fqdn.split('.')[0] }}"
           state: absent
         delegate_to: "dc01.ad.shadowman.dev"
