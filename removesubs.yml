@@ -11,7 +11,7 @@
   - name: See if host has IP before trying to unregister
     block:
       - name: Unregister system
-        redhat_subscription:
+        community.general.redhat_subscription:
           state: absent
           org_id: Shadow_Man
         when: ansible_host != ''
@@ -23,7 +23,7 @@
         ignore_errors: true
 
       - name: Ensure host and its DNS record is absent for RHEL
-        ipa_host:
+        community.general.ipa_host:
           name: "{{ fqdn }}"
           state: absent
           ipa_pass: "{{ IPA_PASS }}"
