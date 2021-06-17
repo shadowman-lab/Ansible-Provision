@@ -17,7 +17,7 @@
         when: ansible_host != ''
 
       - name: Remove from IDM
-        command: "ipa-client-install --uninstall --unattended"
+        ansible.builtin.command: "ipa-client-install --uninstall --unattended"
         when: ansible_host != ''
         register: output
         ignore_errors: true

@@ -22,7 +22,7 @@
   tasks:
 
     - name: Test for IP address for Linux
-      include_tasks: add_host_loop.yml
+      ansible.builtin.include_tasks: add_host_loop.yml
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
         
@@ -66,11 +66,11 @@
   tasks:
 
   - name: RHEL Hostname Set
-    hostname:
+    ansible.builtin.hostname:
       name: "{{ inventory_hostname }}"
 
   - name: Restart qemu agent
-    service:
+    ansible.builtin.service:
       name: qemu-guest-agent
       state: restarted
 

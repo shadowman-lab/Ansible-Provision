@@ -15,7 +15,7 @@
   tasks:
 
     - name: Change facts if wanting RHEL8
-      set_fact:
+      ansible.builtin.set_fact:
         host_group: "RHV_Image/RHEL8"
         imageid: "11"
         operatingsystem: "10"

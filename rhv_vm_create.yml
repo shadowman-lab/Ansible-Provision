@@ -27,7 +27,7 @@
     
   tasks:
     - name: Change facts if running Windows
-      set_fact:
+      ansible.builtin.set_fact:
         vm_memory: 8GiB
         vm_tag: Windows
       when: operating_system == "Win2016"
@@ -62,7 +62,7 @@
       loop: "{{ vm_names }}"
       
     - name: Apply tags using RHV tag playbook
-      include_tasks: rhv_vm_tag.yml
+      ansible.builtin.include_tasks: rhv_vm_tag.yml
       
   post_tasks:
     - name: Logout from RHV

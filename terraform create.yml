@@ -15,19 +15,19 @@
   
   tasks:
     - name: Set facts if Windows chosen
-      set_fact:
+      ansible.builtin.set_fact:
         vm_memory: 8192
         vm_template: 3e2117b4-3b6d-4d8a-bb4c-c2037682f2e2
         vm_tag: Windows
       when: operating_system == "Win2016"
       
     - name: Set facts if RHEL8 chosen
-      set_fact:
+      ansible.builtin.set_fact:
         vm_template: 5f4a37cb-5aaa-498e-bc00-d00b65ce6e17
       when: operating_system == "RHEL8"
   
     - name: Update terraform main file
-      template: 
+      ansible.builtin.template: 
         src: templates/terraform.tf.j2
         dest: /terraform/ovirt/main.tf
         
@@ -38,5 +38,5 @@
         force_init: yes
         
     - name: Apply tags to created VMs
-      include_tasks: terraform_create_tag.yml
+      ansible.builtin.include_tasks: terraform_create_tag.yml
       when: terraform_state == "present"

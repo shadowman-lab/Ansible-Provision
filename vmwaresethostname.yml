@@ -10,12 +10,12 @@
   tasks:
 
   - name: Loop to create group for linux hosts
-    include_tasks: add_host_loop_vmware.yml
+    ansible.builtin.include_tasks: add_host_loop_vmware.yml
     loop: "{{ vm_names }}"
     when: guest_OS is match("RHEL.*")
 
   - name: Loop to update nic Windows
-    include_tasks: enable_nic_loop_vmware.yml
+    ansible.builtin.include_tasks: enable_nic_loop_vmware.yml
     loop: "{{ vm_names }}"
     when: guest_OS is match("WINDOWS.*")
 
@@ -26,7 +26,7 @@
   tasks:
 
   - name: RHEL Hostname Set
-    hostname:
+    ansible.builtin.hostname:
       name: "{{ inventory_hostname }}"
 
  

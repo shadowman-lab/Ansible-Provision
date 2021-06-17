@@ -10,5 +10,5 @@
   tasks:
 
   - name: Loop to remove hosts
-    include_tasks: delete_host_loop_vmware.yml
+    ansible.builtin.include_tasks: delete_host_loop_vmware.yml
     loop: "{{ vm_names }}"

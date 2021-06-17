@@ -12,7 +12,7 @@
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group
-  add_host:
+  ansible.builtin.add_host:
     hostname: "{{ item }}"
     ansible_host: "{{ vm_full_info.value.ip_address }}"
     groups: just_created

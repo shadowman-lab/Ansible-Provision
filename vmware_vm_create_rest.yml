@@ -14,12 +14,12 @@
     
   tasks:
     - name: Change facts if running Windows
-      set_fact:
+      ansible.builtin.set_fact:
         source_vm_id: vm-47
       when: guest_OS == "WINDOWS_9_SERVER_64"
 
     - name: Change facts if running RHEL8
-      set_fact:
+      ansible.builtin.set_fact:
         source_vm_id: vm-45
       when: guest_OS == "RHEL_8_64"
      
