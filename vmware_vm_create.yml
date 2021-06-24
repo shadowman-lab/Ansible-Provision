@@ -10,11 +10,13 @@
     folder_id: "Discovered virtual machine"
     vm_names: "{{ vm_name.split(',') }}"
     source_vm_id: "RHEL7_ShadowMan"
+    tag: "RHEL"
     
   tasks:
     - name: Change facts if running Windows
       ansible.builtin.set_fact:
         source_vm_id: "Win2016_ShadowMan"
+        tag: "Windows"
       when: guest_OS == "WINDOWS_9_SERVER_64"
 
     - name: Change facts if running RHEL8
@@ -59,3 +61,12 @@
           - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
       loop: "{{ vm_names }}"
       when: guest_OS is match("WINDOWS.*")
+
+    - name: Assign Tags
+      community.vmware.vmware_guest:
+        tag_names:
+          - "{{ tag }}"
+        object_name: "{{ item }}"
+        object_type: VirtualMachine
+        state: add
+      loop: "{{ vm_names }}"
