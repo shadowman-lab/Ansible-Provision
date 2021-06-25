@@ -47,6 +47,7 @@
         name: "{{ item }}"
         state: "{{ state }}"
         template: "{{ source_vm_id }}"
+        validate_certs: no
         networks:
         - name: LAN_01
           start_connected: true
@@ -58,7 +59,6 @@
           hostname: "{{ item.split('.')[0] }}"
           productid: "{{ productid }}"
           password: "{{ windowspassword }}"
-          validate_certs: no
           runonce:
           - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
       loop: "{{ vm_names }}"
