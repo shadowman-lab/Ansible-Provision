@@ -34,6 +34,7 @@
         state: "{{ state }}"
         template: "{{ source_vm_id }}"
         wait_for_ip_address: yes
+        validate_certs: no
       loop: "{{ vm_names }}"
       when: guest_OS is match("RHEL.*")
 
@@ -57,6 +58,7 @@
           hostname: "{{ item.split('.')[0] }}"
           productid: "{{ productid }}"
           password: "{{ windowspassword }}"
+          validate_certs: no
           runonce:
           - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
       loop: "{{ vm_names }}"
@@ -69,4 +71,5 @@
         object_name: "{{ item }}"
         object_type: VirtualMachine
         state: add
+        validate_certs: no
       loop: "{{ vm_names }}"

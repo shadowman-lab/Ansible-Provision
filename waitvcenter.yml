@@ -13,16 +13,19 @@
       register: search_result
       vmware.vmware_rest.vcenter_vm_info:
         filter_names: "{{ vm_names }}"
+        vcenter_validate_certs: no
 
     - name: Collect information about VMs
       vmware.vmware_rest.vcenter_vm_info:
         vm: '{{ item.vm }}'
+        vcenter_validate_certs: no
       register: vm_info
       loop: "{{ search_result.value }}"
 
     - name: Wait until my VM is ready
       vmware.vmware_rest.vcenter_vm_tools_info:
         vm: "{{ item.id }}"
+        vcenter_validate_certs: no
       register: vm_tools_info
       until:
       - vm_tools_info is not failed

@@ -32,6 +32,7 @@
           resource_pool: '{{ resource_pool_id }}'
         name: "{{ item }}"
         power_on: true
+        vcenter_validate_certs: no
         state: clone
         source: "{{ source_vm_id }}"
         guest_customization_spec:
