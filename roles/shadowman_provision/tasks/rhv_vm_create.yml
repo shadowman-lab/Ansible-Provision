@@ -53,7 +53,7 @@
         - "{{ item }}"
     loop: "{{ vm_names }}"
       
-always:
+  always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent

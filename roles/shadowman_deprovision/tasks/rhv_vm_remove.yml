@@ -1,5 +1,5 @@
 ---
-block:
+- block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"
@@ -24,7 +24,7 @@ block:
       wait: yes
     loop: "{{ vm_names }}"
 
-always:
+  always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent

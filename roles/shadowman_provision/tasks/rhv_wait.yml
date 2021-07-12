@@ -1,6 +1,6 @@
 ---
 
-block:
+- block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"
@@ -25,7 +25,7 @@ block:
     loop: "{{ vm_names }}"
     when: operating_system == "Win2016"
 
-always:
+  always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
