@@ -7,6 +7,8 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
+    delegate_to: localhost
+    run_once: true
 
   - name: Stop VM
     redhat.rhv.ovirt_vm:
@@ -14,7 +16,7 @@
       name: "{{ item }}"
       state: stopped
       wait: yes
-    loop: "{{ vm_names }}"
+    delegate_to: localhost
 
   - name: Delete VM
     redhat.rhv.ovirt_vm:
@@ -22,10 +24,12 @@
       name: "{{ item }}"
       state: absent
       wait: yes
-    loop: "{{ vm_names }}"
+    delegate_to: localhost
 
   always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
       ovirt_auth: "{{ ovirt_auth }}"
+    delegate_to: localhost
+    run_once: true

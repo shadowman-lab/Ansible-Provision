@@ -4,4 +4,4 @@
   when: shadowman_provision_hypervisor == "RHV"
 
 - include_tasks: vmware_vm_remove.yml
-  when: shadowman_provision_hypervisor == "VMWare"
+  when: hostshadowman_provision_hypervisor == "VMWare"

@@ -1,7 +1,6 @@
 ---
 - name: Remove VM
-  hosts: localhost
-  connection: local
+  hosts: "{{ vm_name | default('none') }}"
   gather_facts: false
 
   roles:
