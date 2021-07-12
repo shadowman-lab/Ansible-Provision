@@ -1,0 +1,15 @@
+---
+- name: Create VM
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - shadowman_provision
+      
+- name: Perform hostname Set and reset agent to get FQDN on Linux
+  hosts: just_created
+  gather_facts: false
+
+  roles:
+    - shadowman_hostnameset
