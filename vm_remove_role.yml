@@ -1,0 +1,8 @@
+---
+- name: Remove VM
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - shadowman_deprovision
