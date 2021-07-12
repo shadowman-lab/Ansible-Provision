@@ -3,9 +3,9 @@
 - name: Loop to create group for linux hosts
   ansible.builtin.include_tasks: add_host_loop_vmware.yml
   loop: "{{ vm_names }}"
-  when: guest_OS is match("RHEL.*")
+  when: operating_system is match("RHEL.*")
 
 - name: Loop to update nic Windows
   ansible.builtin.include_tasks: enable_nic_loop_vmware.yml
   loop: "{{ vm_names }}"
-  when: guest_OS is match("WINDOWS.*")
+  when: operating_system is match("Win.*")

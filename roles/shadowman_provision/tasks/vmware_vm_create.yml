@@ -3,12 +3,12 @@
   ansible.builtin.set_fact:
     source_vm_id: "Win2016_ShadowMan"
     tag: "Windows"
-  when: guest_OS == "WINDOWS_9_SERVER_64"
+  when: operating_system is match("Win.*")
 
 - name: Change facts if running RHEL8
   ansible.builtin.set_fact:
     source_vm_id: "RHEL8_ShadowMan"
-  when: guest_OS == "RHEL_8_64"
+  when: operating_system == "RHEL8"
   
 - name: Create and run Linux VM
   community.vmware.vmware_guest:
@@ -22,7 +22,7 @@
     wait_for_ip_address: yes
     validate_certs: no
   loop: "{{ vm_names }}"
-  when: guest_OS is match("RHEL.*")
+  when: operating_system is match("RHEL.*")
 
 - name: Create and run Windows VM
   community.vmware.vmware_guest:
@@ -48,7 +48,7 @@
       runonce:
       - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
   loop: "{{ vm_names }}"
-  when: guest_OS is match("WINDOWS.*")
+  when: operating_system is match("Win.*")
 
 - name: Assign Tags
   community.vmware.vmware_tag_manager:
