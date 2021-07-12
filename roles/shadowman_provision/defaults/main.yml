@@ -12,3 +12,4 @@ folder_id: "Discovered virtual machine"
 source_vm_id: "RHEL7_ShadowMan"
 tag: "RHEL"
 shadowman_provision_hypervisor: "RHV"
+state: poweredon
