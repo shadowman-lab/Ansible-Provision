@@ -13,7 +13,7 @@
   - name: Stop VM
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      name: "{{ item }}"
+      name: "{{ inventory_hostname }}"
       state: stopped
       wait: yes
     delegate_to: localhost
@@ -21,7 +21,7 @@
   - name: Delete VM
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      name: "{{ item }}"
+      name: "{{ inventory_hostname }}"
       state: absent
       wait: yes
     delegate_to: localhost
