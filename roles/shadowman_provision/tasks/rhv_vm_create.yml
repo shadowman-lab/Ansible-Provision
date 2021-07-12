@@ -1,0 +1,60 @@
+---
+- block:
+  
+  - name: Login to RHV
+    redhat.rhv.ovirt_auth:
+      hostname: "{{ rhvm_fqdn }}"
+      username: "{{ rhvm_user }}"
+      password: "{{ rhvm_password }}"
+      ca_file: "{{ rhvm_cafile | default(omit) }}"
+      insecure: "{{ rhvm_insecure | default(true) }}"
+    
+  - name: Change facts if running Windows
+    ansible.builtin.set_fact:
+      vm_memory: 8GiB
+      vm_tag: Windows
+    when: operating_system == "Win2016"
+      
+  - name: Create and run Linux VM from template
+    redhat.rhv.ovirt_vm:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ item }}"
+      template: "{{ template }}"
+      cluster: "{{ cluster }}"
+      memory: "{{ vm_memory }}"
+      high_availability: true
+      state: "{{ vm_state }}"
+      wait: yes
+    when: operating_system is match("RHEL.*")
+    loop: "{{ vm_names }}"
+
+  - name: Create and run Windows VM from template
+    redhat.rhv.ovirt_vm:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ item }}"
+      template: "{{ template }}"
+      cluster: "{{ cluster }}"
+      memory: "{{ vm_memory }}"
+      high_availability: true
+      sysprep:
+        host_name: "{{ item.split('.')[0] }}"
+        domain: ad.shadowman.dev
+      state: "{{ vm_state }}"
+      wait: yes
+    when: operating_system is match("Win.*")
+    loop: "{{ vm_names }}"
+      
+  - name: Apply tags
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ vm_tag }}"
+      state: attached
+      vms: 
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+      
+always:
+  - name: Logout from RHV
+    redhat.rhv.ovirt_auth:
+      state: absent
+      ovirt_auth: "{{ ovirt_auth }}"

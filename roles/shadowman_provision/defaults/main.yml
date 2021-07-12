@@ -1,0 +1,14 @@
+---
+
+datacenter: Default
+cluster: Default
+template: "{{ operating_system }}_ShadowMan"
+vm_memory: 4GiB
+vm_names: "{{ vm_name.split(',') }}"
+vm_tag: RHEL
+cluster_id: "Cluster1"
+datastore_id: "NFS_Cersei"
+folder_id: "Discovered virtual machine"
+source_vm_id: "RHEL7_ShadowMan"
+tag: "RHEL"
+shadowman_provision_hypervisor: "RHV"

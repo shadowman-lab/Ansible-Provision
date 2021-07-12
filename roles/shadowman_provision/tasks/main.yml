@@ -1,0 +1,7 @@
+---
+
+- include_tasks: rhv_vm_create.yml
+  when: shadowman_provision_hypervisor == "RHV"
+
+- include_tasks: vmware_vm_create.yml
+  when: shadowman_provision_hypervisor == "VMWare"

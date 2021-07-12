@@ -1,0 +1,61 @@
+---
+- name: Change facts if running Windows
+  ansible.builtin.set_fact:
+    source_vm_id: "Win2016_ShadowMan"
+    tag: "Windows"
+  when: guest_OS == "WINDOWS_9_SERVER_64"
+
+- name: Change facts if running RHEL8
+  ansible.builtin.set_fact:
+    source_vm_id: "RHEL8_ShadowMan"
+  when: guest_OS == "RHEL_8_64"
+  
+- name: Create and run Linux VM
+  community.vmware.vmware_guest:
+    cluster: '{{ cluster_id }}'
+    datastore: '{{ datastore_id }}'
+    folder: '{{ folder_id }}'
+    datacenter: "Shadowman"
+    name: "{{ item }}"
+    state: "{{ state }}"
+    template: "{{ source_vm_id }}"
+    wait_for_ip_address: yes
+    validate_certs: no
+  loop: "{{ vm_names }}"
+  when: guest_OS is match("RHEL.*")
+
+- name: Create and run Windows VM
+  community.vmware.vmware_guest:
+    cluster: '{{ cluster_id }}'
+    datastore: '{{ datastore_id }}'
+    folder: '{{ folder_id }}'
+    datacenter: "Shadowman"
+    name: "{{ item }}"
+    state: "{{ state }}"
+    template: "{{ source_vm_id }}"
+    validate_certs: no
+    networks:
+    - name: LAN_01
+      start_connected: true
+      connected: true
+    customization:
+      domain: ad.shadowman.dev
+      autologon: true
+      autologoncount: 1
+      hostname: "{{ item.split('.')[0] }}"
+      productid: "{{ productid }}"
+      password: "{{ windowspassword }}"
+      runonce:
+      - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
+  loop: "{{ vm_names }}"
+  when: guest_OS is match("WINDOWS.*")
+
+- name: Assign Tags
+  community.vmware.vmware_tag_manager:
+    tag_names:
+      - "{{ tag }}"
+    object_name: "{{ item }}"
+    object_type: VirtualMachine
+    state: add
+    validate_certs: no
+  loop: "{{ vm_names }}"

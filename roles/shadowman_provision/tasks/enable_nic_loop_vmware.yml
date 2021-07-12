@@ -1,0 +1,29 @@
+---
+
+- name: Get VM info
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names:
+    - "{{ item }}"
+    vcenter_validate_certs: no
+  register: vm_info
+         
+- name: Connect Ethernet
+  vmware.vmware_rest.vcenter_vm_hardware_ethernet:
+    vm: "{{ vm_info.value[0].vm }}"
+    pci_slot_number: 192
+    backing:
+      network_name: "LAN_01"
+      type: "STANDARD_PORTGROUP"
+      network: "network-41"
+    start_connected: true
+    state: connect
+    vcenter_validate_certs: no
+
+- name: Loop until hostname is set correctly
+  vmware.vmware_rest.vcenter_vm_guest_identity_info:
+    vm: "{{ vm_info.value[0].vm }}"
+    vcenter_validate_certs: no
+  register: vm_full_info
+  until: vm_full_info.value.host_name|default("False") == item.split('.')[0]
+  retries: 120
+  delay: 10

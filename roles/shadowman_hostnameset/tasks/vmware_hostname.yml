@@ -1,0 +1,7 @@
+---
+
+- name: RHEL Hostname Set
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+ 
