@@ -5,3 +5,9 @@
 
 - include_tasks: vmware_vm_create.yml
   when: shadowman_provision_hypervisor == "VMWare"
+
+- include_tasks: rhv_wait.yml
+  when: shadowman_provision_hypervisor == "RHV"
+
+- include_tasks: vmware_wait.yml
+  when: shadowman_provision_hypervisor == "VMWare"
