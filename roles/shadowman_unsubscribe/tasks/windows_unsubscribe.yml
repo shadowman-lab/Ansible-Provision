@@ -7,6 +7,7 @@
         domain_admin_user: "{{ domainuser }}"
         domain_admin_password: "{{ domainpassword }}" 
         state: workgroup
+        ignore_unreachable: yes
   rescue:
     - name: Retry Move Windows host to workgroup to disable in AD due to WINRM
       ansible.windows.win_domain_membership:
@@ -14,6 +15,7 @@
         domain_admin_user: "{{ domainuser }}"
         domain_admin_password: "{{ domainpassword }}" 
         state: workgroup
+        ignore_unreachable: yes
   always:
     - name: Delete Windows host from AD
       community.windows.win_domain_computer:
