@@ -1,0 +1,13 @@
+---
+- name: Perform VM removal pre-steps
+  hosts: "{{ vm_name }}"
+  gather_facts: false
+
+  tasks:
+    - name: Delete Windows host from AD
+      community.windows.win_domain_computer:
+        name: "{{ fqdn.split('.')[0] }}"
+        state: absent
+      delegate_to: "dc01.ad.shadowman.dev"
+
+ 
