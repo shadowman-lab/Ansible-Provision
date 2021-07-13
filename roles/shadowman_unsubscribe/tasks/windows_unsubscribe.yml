@@ -14,16 +14,8 @@
         domain_admin_user: "{{ domainuser }}"
         domain_admin_password: "{{ domainpassword }}" 
         state: workgroup
-
-- name: Remove Windows host from AD
-  block:
+  always:
     - name: Delete Windows host from AD
-      community.windows.win_domain_computer:
-        name: "{{ fqdn.split('.')[0] }}"
-        state: absent
-      delegate_to: "dc01.ad.shadowman.dev"
-  rescue:
-    - name: Retry Delete Windows host from AD due to WINRM
       community.windows.win_domain_computer:
         name: "{{ fqdn.split('.')[0] }}"
         state: absent
