@@ -25,7 +25,7 @@
         - "RHV Credentials" 
       survey_enabled: true
       survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
-      extra_vars: "{{ extra_var }}"
+      extra_vars: "vm_name: {{ vm_name }}"
       validate_certs: no
       tower_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
       tower_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
