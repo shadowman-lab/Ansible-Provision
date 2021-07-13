@@ -2,5 +2,8 @@
 - include_tasks: rhv_hostname.yml
   when: shadowman_provision_hypervisor == "RHV"
 
+- include_tasks: rhv_hostname.yml
+  when: shadowman_provision_hypervisor == "Terraform"
+
 - include_tasks: vmware_hostname.yml
   when: shadowman_provision_hypervisor == "VMWare"

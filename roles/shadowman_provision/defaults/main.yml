@@ -1,10 +1,11 @@
 ---
-
 datacenter: Default
 cluster: Default
 template: "{{ operating_system }}_ShadowMan"
 vm_memory: 4GiB
 vm_names: "{{ vm_name.split(',') }}"
+vm_template: f7e1958e-d0d5-4fa9-831f-0c4efd702994
+vm_memory_terraform: 4096
 vm_tag: RHEL
 cluster_id: "Cluster1"
 datastore_id: "NFS_Cersei"
