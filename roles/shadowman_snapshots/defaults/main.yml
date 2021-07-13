@@ -1,3 +1,5 @@
 ---
 datacenter: Default
 cluster: Default
+extra_var:
+  vm_name: "{{ vm_name }}"
