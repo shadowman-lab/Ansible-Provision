@@ -1,5 +1,6 @@
 ---
 datacenter: Default
+vm_names: "{{ vm_name.split(',') }}"
 cluster: Default
 extra_var:
   vm_name: "{{ vm_name }}"
