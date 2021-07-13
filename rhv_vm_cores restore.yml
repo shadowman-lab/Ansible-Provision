@@ -1,5 +1,5 @@
 ---
-- name: Increase VM sockets
+- name: Restore VM sockets
   hosts: localhost
   connection: local
   gather_facts: false

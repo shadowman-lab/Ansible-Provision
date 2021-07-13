@@ -1,0 +1,31 @@
+---
+- name: Unregister system
+  community.general.redhat_subscription:
+    state: absent
+    org_id: Shadow_Man
+  when: ansible_host != ''
+
+- name: Remove from IDM
+  ansible.builtin.command: "ipa-client-install --uninstall --unattended"
+  when: ansible_host != ''
+  register: output
+  ignore_errors: true
+
+- name: Ensure host and its DNS record is absent for RHEL
+  community.general.ipa_host:
+    name: "{{ fqdn }}"
+    state: absent
+    ipa_pass: "{{ IPA_PASS }}"
+    ipa_host: "{{ IPA_HOST }}"
+    ipa_user: "{{ IPA_USER }}"
+    update_dns: True
+  when: ansible_host != ''
+
+- name: Delete hosts from Sat if RHEL
+  redhat.satellite.host:
+    name: "{{ inventory_hostname }}"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    server_url: "{{ server_url }}"
+    state: absent
+  delegate_to: localhost

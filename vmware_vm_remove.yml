@@ -1,14 +1,10 @@
 ---
-- name: Remove VM on VCenter
-  hosts: localhost
-  connection: local
+- name: Remove VM on VMWare
+  hosts: "{{ vm_name | default('none') }}"
   gather_facts: false
-    
+
   vars:
-    vm_names: "{{ vm_name.split(',') }}"
+    shadowman_provision_hypervisor: "VMWare"
 
-  tasks:
-
-  - name: Loop to remove hosts
-    ansible.builtin.include_tasks: delete_host_loop_vmware.yml
-    loop: "{{ vm_names }}"
+  roles:
+    - shadowman_deprovision

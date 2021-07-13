@@ -1,0 +1,8 @@
+---
+
+- include_tasks: rhel_unsubscribe.yml
+  when: os is match("rhel.*")
+
+- include_tasks: windows_unsubscribe.yml
+  when: os is match("windows.*")
+  tags: removead
