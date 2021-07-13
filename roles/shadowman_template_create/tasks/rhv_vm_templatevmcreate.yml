@@ -1,4 +1,4 @@
----   
+--- 
 - block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
@@ -7,21 +7,20 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
-    run_once: true
-
-  - name: Create Snapshot on VM(s)
-    redhat.rhv.ovirt_snapshot:
+     
+  - name: Create and run VM from template
+    redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      vm_name: "{{ vm_name }}"
-      description: "{{ snapshot_desc }}"
-      use_memory: false
+      name: "{{ operating_system }}_updates.shadowman.dev"
+      template: "{{ template }}"
+      cluster: "{{ cluster }}"
+      memory: "{{ vm_memory }}"
+      high_availability: true
+      state: running
       wait: yes
-    register: snapshot
-    loop: "{{ vm_names }}"
-
+      
   always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
       ovirt_auth: "{{ ovirt_auth }}"
-    run_once: true

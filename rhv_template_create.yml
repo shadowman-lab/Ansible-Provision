@@ -4,60 +4,8 @@
   connection: local
   gather_facts: false
 
-  collections:
-    - redhat.rhv
-    - redhat.satellite
+  vars:
+    shadowman_template: "createtemplate"
     
-  pre_tasks:
-    - name: Login to RHV
-      redhat.rhv.ovirt_auth:
-        hostname: "{{ rhvm_fqdn }}"
-        username: "{{ rhvm_user }}"
-        password: "{{ rhvm_password }}"
-        ca_file: "{{ rhvm_cafile | default(omit) }}"
-        insecure: "{{ rhvm_insecure | default(true) }}"
-      tags:
-        - always
-
-  tasks:
-
-    - name: Stop VM
-      redhat.rhv.ovirt_vm:
-        auth: "{{ ovirt_auth }}"
-        name: "{{ operating_system }}_updates.shadowman.dev"
-        state: stopped
-        wait: yes
-
-    - name: Create new template subversion
-      redhat.rhv.ovirt_template:
-        auth: "{{ ovirt_auth }}"
-        cluster: Default
-        name: "{{ operating_system }}_ShadowMan"
-        vm: "{{ operating_system }}_updates.shadowman.dev"
-        seal: yes
-        version:
-          name: "{{ version_name }}"
-    
-    - name: Delete VM
-      redhat.rhv.ovirt_vm:
-        auth: "{{ ovirt_auth }}"
-        name: "{{ operating_system }}_updates.shadowman.dev"
-        state: absent
-        wait: yes
-
-    - name: Delete host from Sat
-      redhat.satellite.host:
-        name: "localhost.localdomain"
-        username: "{{ username }}"
-        password: "{{ password }}"
-        server_url: "{{ server_url }}"
-        state: absent
-        
-
-  post_tasks:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
-      tags:
-        - always
+  roles:
+    - shadowman_template_create

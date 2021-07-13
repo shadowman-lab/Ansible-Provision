@@ -1,0 +1,5 @@
+---
+datacenter: Default
+cluster: Default
+template: "{{ operating_system }}_ShadowMan"
+vm_memory: 4GiB

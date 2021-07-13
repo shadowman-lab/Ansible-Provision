@@ -32,7 +32,7 @@
       tower_host: "{{ lookup('env', 'TOWER_HOST') }}"
 
   always:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
+  - name: Logout from RHV
+    redhat.rhv.ovirt_auth:
+      state: absent
+      ovirt_auth: "{{ ovirt_auth }}"
