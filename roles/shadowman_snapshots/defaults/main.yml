@@ -1,0 +1,4 @@
+---
+vm_names: "{{ vm_name.split(',') }}"
+datacenter: Default
+cluster: Default

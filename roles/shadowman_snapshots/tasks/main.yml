@@ -1,0 +1,10 @@
+---
+
+- include_tasks: shadowman_snapshot_pull.yml
+  when: shadowman_snapshot == "pull"
+
+- include_tasks: shadowman_snapshot_create.yml
+  when: shadowman_snapshot == "create"
+
+- include_tasks: shadowman_snapshot_restore.yml
+  when: shadowman_snapshot == "restore"
