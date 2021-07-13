@@ -4,38 +4,8 @@
   connection: local
   gather_facts: false
 
-  collections:
-    - redhat.rhv
+  vars:
+    shadowman_cores: "increase"
     
-  pre_tasks:
-    - name: Login to RHV
-      redhat.rhv.ovirt_auth:
-        hostname: "{{ rhvm_fqdn }}"
-        username: "{{ rhvm_user }}"
-        password: "{{ rhvm_password }}"
-        ca_file: "{{ rhvm_cafile | default(omit) }}"
-        insecure: "{{ rhvm_insecure | default(true) }}"
-      tags:
-        - always
-
-  tasks:
-     
-    - name: Get current CPU info
-      redhat.rhv.ovirt_vm_info:
-        auth: "{{ ovirt_auth }}"
-        pattern: name={{ vm_name }}
-      register: result
-
-    - name: Increase current virtual CPU cores
-      redhat.rhv.ovirt_vm:
-        auth: "{{ ovirt_auth }}"
-        name: "{{ vm_name }}"
-        cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int + 5 }}"
-      
-  post_tasks:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
-      tags:
-        - always
+  roles:
+    - shadowman_rhv_cores

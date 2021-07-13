@@ -4,32 +4,8 @@
   connection: local
   gather_facts: false
 
-  collections:
-    - redhat.rhv
+  vars:
+    shadowman_cores: "restore"
     
-  pre_tasks:
-    - name: Login to RHV
-      redhat.rhv.ovirt_auth:
-        hostname: "{{ rhvm_fqdn }}"
-        username: "{{ rhvm_user }}"
-        password: "{{ rhvm_password }}"
-        ca_file: "{{ rhvm_cafile | default(omit) }}"
-        insecure: "{{ rhvm_insecure | default(true) }}"
-      tags:
-        - always
-
-  tasks:
-     
-    - name: Restore virtual CPU sockets and cores
-      redhat.rhv.ovirt_vm:
-        auth: "{{ ovirt_auth }}"
-        name: "{{ vm_name }}"
-        cpu_cores: "{{ cpu_cores }}"
-      
-  post_tasks:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
-      tags:
-        - always
+  roles:
+    - shadowman_rhv_cores
