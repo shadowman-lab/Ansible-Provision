@@ -7,7 +7,7 @@
   roles:
     - shadowman_provision
       
-- name: Perform hostname Set and reset agent to get FQDN on Linux
+- name: Get IP and set hostname if needed
   hosts: just_created
   gather_facts: false
 
