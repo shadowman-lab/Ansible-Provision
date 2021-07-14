@@ -22,4 +22,4 @@ vm_size: Standard_B1s
 admin_user: "{{ ansible_user }}"
 admin_password: "{{ ansible_password }}"
 resource_group_name: Demo
-storage_account_name: Demo
+storage_account_name: demorh
