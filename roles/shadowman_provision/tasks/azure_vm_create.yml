@@ -1,10 +1,10 @@
 ---
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
-    sku: 'windows2016'
-    version: '20.01.10'
-    publisher: "microsoft-ads"
-    offer: "windows-data-science-vm"
+    sku: "Windows Server 2016 Datacenter"
+    version: "latest"
+    publisher: "MicrosoftWindowsServer"
+    offer: "WindowsServer"
     admin_password: "{{ windowspassword }}"
   when: operating_system is match("Win.*")
 
