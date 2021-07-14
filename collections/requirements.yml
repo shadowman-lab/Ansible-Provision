@@ -13,6 +13,8 @@ collections:
 
   - name: google.cloud
 
+  - name: azure.azcollection
+
   - name: community.kubernetes
     source: https://towerhub.shadowman.dev/api/galaxy/content/community/
 

@@ -14,3 +14,12 @@ source_vm_id: "RHEL7_ShadowMan"
 tag: "RHEL"
 shadowman_provision_hypervisor: "RHV"
 state: poweredon
+publisher: RedHat
+offer: RHEL
+version: '7.8.2020050910'
+sku: '7.8'
+vm_size: Standard_B1s
+admin_user: "{{ ansible_user }}"
+admin_password: "{{ ansible_password }}"
+resource_group: Demo
+storage_account_name: Demo

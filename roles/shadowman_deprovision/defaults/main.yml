@@ -1,3 +1,4 @@
 ---
 vm_names: "{{ vm_name.split(',') }}"
 datacenter: Default
+resource_group: Demo

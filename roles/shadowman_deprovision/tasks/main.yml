@@ -5,3 +5,6 @@
 
 - include_tasks: vmware_vm_remove.yml
   when: shadowman_provision_hypervisor == "VMWare"
+
+- include_tasks: azure_vm_remove.yml
+  when: shadowman_provision_hypervisor == "Azure"
