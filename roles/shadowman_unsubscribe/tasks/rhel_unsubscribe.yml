@@ -19,7 +19,9 @@
     ipa_host: "{{ IPA_HOST }}"
     ipa_user: "{{ IPA_USER }}"
     update_dns: True
-  when: ansible_host != ''
+  when: 
+    - ansible_host != ''
+    - ansible_host != ip_addr
 
 - name: Delete hosts from Sat if RHEL
   redhat.satellite.host:
