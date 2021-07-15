@@ -7,6 +7,7 @@
     domain_admin_password: "{{ domainpassword }}" 
     state: workgroup
   ignore_errors: true #ignore due to WINRM issues
+  when: ansible_host != ip_addr
 
 - name: Remove Windows host from AD
   block:
@@ -15,6 +16,7 @@
         name: "{{ fqdn.split('.')[0] }}"
         state: absent
       delegate_to: "dc01.ad.shadowman.dev"
+  when: ansible_host != ip_addr
   rescue:
     - name: Retry Delete Windows host from AD due to WINRM
       community.windows.win_domain_computer:
