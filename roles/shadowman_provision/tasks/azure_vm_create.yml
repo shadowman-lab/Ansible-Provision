@@ -50,6 +50,8 @@
       - 22
       - 5985
       - 5986
+      - 80
+      - 443
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
@@ -72,21 +74,7 @@
   loop: "{{ vm_names }}"
   when: publisher == "MicrosoftWindowsServer"
 
-- name: Get facts for one Public IP
-  azure_rm_publicipaddress_info:
-    resource_group: myResourceGroup
-    name: "{{ item }}01"
-  register: publicipaddresses
+- name: Loop to verify WinRM
+  ansible.builtin.include_tasks: enable_winrm_loop_azure.yml
   loop: "{{ vm_names }}"
-  when: publisher == "MicrosoftWindowsServer"
-
-- name: set public ip address fact
-  set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address')}}"
-  when: publisher == "MicrosoftWindowsServer"
-
-- name: wait for the WinRM port to come online
-  wait_for:
-    port: 5986
-    host: '{{ publicipaddress }}'
-    timeout: 600
   when: publisher == "MicrosoftWindowsServer"
