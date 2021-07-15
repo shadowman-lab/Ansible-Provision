@@ -3,6 +3,7 @@
   community.general.redhat_subscription:
     state: absent
     org_id: Shadow_Man
+  become: true
   when: ansible_host != ''
 
 - name: Remove from IDM
