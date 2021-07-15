@@ -2,7 +2,6 @@
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
     sku: 'servercore-2016'
-    version: '0.0.1'
     publisher: "cloud-infrastructure-services"
     offer: "servercore-2016"
   when: operating_system is match("Win.*")
@@ -10,7 +9,6 @@
 - name: Change facts if running RHEL8
   ansible.builtin.set_fact:
     sku: 'rhel-lvm84'
-    version: '8.4.2021053101'
     plan_name: "Red Hat Enterprise Linux 8.4 (BYOS)"
   when: operating_system == "RHEL8"
 
@@ -29,7 +27,7 @@
       version: "{{ version }}"
       sku: "{{ sku }}"
     plan:
-      name: "{{ plan_name }}"
+      name: "{{ sku }}"
       product: "{{ offer }}"
       publisher: "{{ publisher }}"
   loop: "{{ vm_names }}"
