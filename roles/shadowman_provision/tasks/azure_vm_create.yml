@@ -45,6 +45,7 @@
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
+    os_type: Windows
     open_ports:
       - 22
       - 5985
