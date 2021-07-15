@@ -5,19 +5,3 @@
     name: "{{ inventory_hostname }}"
     state: absent
   delegate_to: localhost
-
-- name: Delete network interface
-  azure_rm_networkinterface:
-    resource_group: "{{ resource_group }}"
-    name: "{{ network_interface }}"
-    state: absent
-  ignore_errors: true
-  delegate_to: localhost
-
-- name: Delete Security Group
-  azure_rm_securitygroup:
-    resource_group: "{{ resource_group }}"
-    name: "{{ security_group }}"
-    state: absent
-  ignore_errors: true
-  delegate_to: localhost
