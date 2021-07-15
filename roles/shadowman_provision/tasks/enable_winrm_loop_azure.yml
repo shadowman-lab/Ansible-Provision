@@ -1,7 +1,7 @@
 ---
 - name: Get facts for one Public IP
   azure_rm_publicipaddress_info:
-    resource_group: myResourceGroup
+    resource_group: "{{ resource_group_name }}"
     name: "{{ item }}01"
   register: publicipaddresses
   when: publisher == "MicrosoftWindowsServer"
