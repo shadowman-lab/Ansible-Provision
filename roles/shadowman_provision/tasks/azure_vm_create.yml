@@ -27,8 +27,4 @@
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
-    plan:
-      name: "{{ sku }}"
-      product: "{{ offer }}"
-      publisher: "{{ publisher }}"
   loop: "{{ vm_names }}"
