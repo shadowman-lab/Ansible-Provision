@@ -11,6 +11,7 @@
   ansible.builtin.set_fact:
     sku: 'rhel-lvm84'
     version: '8.4.2021053101'
+    plan_name: "Red Hat Enterprise Linux 8.4 (BYOS)"
   when: operating_system == "RHEL8"
 
 - name: Provision instance
@@ -27,4 +28,8 @@
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
+    plan:
+      name: "{{ plan_name }}"
+      product: "{{ offer }}"
+      publisher: "{{ publisher }}"
   loop: "{{ vm_names }}"
