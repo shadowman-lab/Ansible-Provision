@@ -20,6 +20,11 @@
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
+    open_ports:
+      - 22
+      - 80
+      - 443
+      - 5985
     accept_terms: yes
     image:
       publisher: "{{ publisher }}"
@@ -30,18 +35,4 @@
       name: "{{ sku }}"
       product: "{{ offer }}"
       publisher: "{{ publisher }}"
-  loop: "{{ vm_names }}"
-
-- name: Update Azure Security
-  azure_rm_securitygroup:
-    resource_group: Demo
-    name: "{{ item }}01"
-    rules:
-        - name: AllowHTTPANDHTTPS
-          protocol: Tcp
-          source_address_prefix: Any
-          destination_port_range: 80,443
-          access: Allow
-          priority: 102
-          direction: Inbound
   loop: "{{ vm_names }}"
