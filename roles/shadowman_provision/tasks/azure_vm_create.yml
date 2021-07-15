@@ -50,16 +50,11 @@
       - 22
       - 5985
       - 5986
-    accept_terms: yes
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
-    plan:
-      name: "{{ sku }}"
-      product: "{{ offer }}"
-      publisher: "{{ publisher }}"
   register: azure_vm
   loop: "{{ vm_names }}"
   when: publisher == "MicrosoftWindowsServer"
