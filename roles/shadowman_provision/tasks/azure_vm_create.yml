@@ -21,9 +21,14 @@
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
+    accept_terms: yes
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
+    plan:
+      name: "{{ sku }}"
+      product: "{{ offer }}"
+      publisher: "{{ publisher }}"
   loop: "{{ vm_names }}"
