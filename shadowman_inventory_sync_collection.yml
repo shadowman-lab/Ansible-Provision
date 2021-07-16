@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    inventory_source_name: "{{ shadowman_provision_hypervisor}} Production"
+    inventory_source_name: "{{ shadowman_provision_hypervisor }} Production"
     inventory_name: "Shadowman Production"
     
   roles:
