@@ -2,7 +2,7 @@
 
 - name: Update a single inventory source
   ansible.controller.inventory_source_update:
-    name: "{{ inventory_source_name }}"
+    inventory_source: "{{ inventory_source_name }}"
     inventory: "{{ inventory_name }}"
     wait: yes
     controller_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
