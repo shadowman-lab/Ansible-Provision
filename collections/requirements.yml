@@ -19,7 +19,6 @@ collections:
     source: https://towerhub.shadowman.dev/api/galaxy/content/community/
 
   - name: ansible.windows
-    source: https://towerhub.shadowman.dev/api/galaxy/content/community/
 
   - name: community.windows
     source: https://towerhub.shadowman.dev/api/galaxy/content/community/
