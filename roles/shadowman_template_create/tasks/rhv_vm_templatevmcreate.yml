@@ -18,6 +18,20 @@
       high_availability: true
       state: running
       wait: yes
+
+  - name: Test for IP address for Linux
+    redhat.rhv.ovirt_nic_info:
+      vm: "{{ operating_system }}updates.shadowman.dev"
+      fetch_nested: yes
+      nested_attributes:
+        - ips
+      name: nic1
+      auth: "{{ ovirt_auth }}"
+    register: results
+    until:  results.ovirt_nics[0].reported_devices[0].ips[0].version|default("False") == "v4"
+    retries: 60
+    delay: 10
+    when: operating_system is match("RHEL.*")
       
   always:
   - name: Logout from RHV
