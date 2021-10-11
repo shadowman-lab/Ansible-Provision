@@ -30,6 +30,12 @@
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
     rescue:
+
+      - name: Sleep for 10 seconds and continue with play
+        wait_for:
+          timeout: 10
+        delegate_to: localhost
+        
       - name: Attempt to run Linux VM again if disk issue
         redhat.rhv.ovirt_vm:
           auth: "{{ ovirt_auth }}"
