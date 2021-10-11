@@ -14,19 +14,32 @@
       vm_memory: 8GiB
       vm_tag: Windows
     when: operating_system == "Win2016"
-      
-  - name: Create and run Linux VM from template
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ item }}"
-      template: "{{ template }}"
-      cluster: "{{ cluster }}"
-      memory: "{{ vm_memory }}"
-      high_availability: true
-      state: "{{ vm_state }}"
-      wait: yes
-    when: operating_system is match("RHEL.*")
-    loop: "{{ vm_names }}"
+  - block:    
+    - name: Create and run Linux VM from template
+      redhat.rhv.ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ item }}"
+        template: "{{ template }}"
+        cluster: "{{ cluster }}"
+        memory: "{{ vm_memory }}"
+        high_availability: true
+        state: "{{ vm_state }}"
+        wait: yes
+      when: operating_system is match("RHEL.*")
+      loop: "{{ vm_names }}"
+  - rescue:
+      - name: Attempt to run Linux VM again if disk issue
+        redhat.rhv.ovirt_vm:
+          auth: "{{ ovirt_auth }}"
+          name: "{{ item }}"
+          template: "{{ template }}"
+          cluster: "{{ cluster }}"
+          memory: "{{ vm_memory }}"
+          high_availability: true
+          state: "{{ vm_state }}"
+          wait: yes
+        when: operating_system is match("RHEL.*")
+        loop: "{{ vm_names }}"
 
   - name: Create and run Windows VM from template
     redhat.rhv.ovirt_vm:
