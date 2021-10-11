@@ -34,7 +34,7 @@
 
   - name: Delete host from Sat
     redhat.satellite.host:
-      name: "localhost.localdomain"
+      name: "{{ operating_system | lower }}updates.shadowman.dev"
       username: "{{ username }}"
       password: "{{ password }}"
       server_url: "{{ server_url }}"
