@@ -11,7 +11,7 @@
   - name: Stop VM
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system }}updates.shadowman.dev"
+      name: "{{ operating_system | lower }}updates.shadowman.dev"
       state: stopped
       wait: yes
 
@@ -20,7 +20,7 @@
       auth: "{{ ovirt_auth }}"
       cluster: Default
       name: "{{ operating_system }}_ShadowMan"
-      vm: "{{ operating_system }}updates.shadowman.dev"
+      vm: "{{ operating_system | lower }}updates.shadowman.dev"
       seal: yes
       version:
         name: "{{ version_name }}"
@@ -28,7 +28,7 @@
   - name: Delete VM
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system }}updates.shadowman.dev"
+      name: "{{ operating_system | lower }}updates.shadowman.dev"
       state: absent
       wait: yes
 
