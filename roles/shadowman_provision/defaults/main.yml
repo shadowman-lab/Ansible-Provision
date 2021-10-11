@@ -4,7 +4,7 @@ cluster: Default
 template: "{{ operating_system }}_ShadowMan"
 vm_memory: 4GiB
 vm_names: "{{ vm_name.split(',') }}"
-vm_template: f7e1958e-d0d5-4fa9-831f-0c4efd702994
+vm_template: 71a8e15d-3602-41f7-8e2c-4689863131ef
 vm_memory_terraform: 4096
 vm_tag: RHEL
 cluster_id: "Cluster1"
