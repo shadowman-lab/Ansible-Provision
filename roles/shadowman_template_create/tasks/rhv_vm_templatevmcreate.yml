@@ -8,16 +8,36 @@
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
      
-  - name: Create and run VM from template
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system }}updates.shadowman.dev"
-      template: "{{ template }}"
-      cluster: "{{ cluster }}"
-      memory: "{{ vm_memory }}"
-      high_availability: true
-      state: running
-      wait: yes
+
+  - name: Block to handle error with disk
+    block:    
+      - name: Create and run VM from template
+        redhat.rhv.ovirt_vm:
+          auth: "{{ ovirt_auth }}"
+          name: "{{ operating_system }}updates.shadowman.dev"
+          template: "{{ template }}"
+          cluster: "{{ cluster }}"
+          memory: "{{ vm_memory }}"
+          high_availability: true
+          state: running
+          wait: yes
+    rescue:
+
+      - name: Sleep for 10 seconds and continue with play
+        wait_for:
+          timeout: 10
+        delegate_to: localhost
+        
+      - name: Attempt to run Linux VM again if disk issue
+        redhat.rhv.ovirt_vm:
+          auth: "{{ ovirt_auth }}"
+          name: "{{ operating_system }}updates.shadowman.dev"
+          template: "{{ template }}"
+          cluster: "{{ cluster }}"
+          memory: "{{ vm_memory }}"
+          high_availability: true
+          state: running
+          wait: yes
 
   - name: Test for IP address for Linux
     redhat.rhv.ovirt_nic_info:
