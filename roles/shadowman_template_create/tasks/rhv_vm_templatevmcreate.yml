@@ -11,7 +11,7 @@
   - name: Create and run VM from template
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system }}_updates.shadowman.dev"
+      name: "{{ operating_system }}updates.shadowman.dev"
       template: "{{ template }}"
       cluster: "{{ cluster }}"
       memory: "{{ vm_memory }}"
