@@ -3,5 +3,8 @@
 - include_tasks: rhv_vm_increase.yml
   when: shadowman_mem == "increase"
 
+- include_tasks: rhv_vm_decrease.yml
+  when: shadowman_mem == "decrease"
+
 - include_tasks: rhv_vm_restore.yml
   when: shadowman_mem == "restore"

@@ -1,0 +1,11 @@
+---
+- name: Decrease VM sockets
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    shadowman_cores: "decrease"
+    
+  roles:
+    - shadowman_rhv_cores
