@@ -1,0 +1,11 @@
+---
+- name: Restore VM Memory
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    shadowman_mem: "restore"
+    
+  roles:
+    - shadowman_rhv_mem

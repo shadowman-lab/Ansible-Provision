@@ -1,0 +1,11 @@
+---
+- name: Increase VM Memory
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    shadowman_mem: "increase"
+    
+  roles:
+    - shadowman_rhv_mem

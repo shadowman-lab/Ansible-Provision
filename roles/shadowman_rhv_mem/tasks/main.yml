@@ -1,7 +1,7 @@
 ---
 
 - include_tasks: rhv_vm_increase.yml
-  when: shadowman_cores == "increase"
+  when: shadowman_mem == "increase"
 
 - include_tasks: rhv_vm_restore.yml
-  when: shadowman_cores == "restore"
+  when: shadowman_mem == "restore"
