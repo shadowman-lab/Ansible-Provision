@@ -1,0 +1,7 @@
+---
+
+- include_tasks: rhv_vm_increase.yml
+  when: shadowman_cores == "increase"
+
+- include_tasks: rhv_vm_restore.yml
+  when: shadowman_cores == "restore"
