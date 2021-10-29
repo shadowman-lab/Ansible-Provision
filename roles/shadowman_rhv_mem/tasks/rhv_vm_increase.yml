@@ -18,7 +18,7 @@
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_name }}"
-      memory: "{{ result.ovirt_vms[0].memory|int / 1048576 + 256 }}MiB"
+      memory: "{{ result.ovirt_vms[0].memory|int / 1048576 + 256 | string}}MiB"
     
   always:
   - name: Logout from RHV
