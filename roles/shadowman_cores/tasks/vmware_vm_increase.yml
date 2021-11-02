@@ -20,3 +20,10 @@
     vcenter_validate_certs: no
   register: vm_cpu
   delegate_to: localhost
+
+- name: Add one core to the VM
+  vmware.vmware_rest.vcenter_vm_hardware_cpu:
+    vm: '{{ vm_full_info.id }}'
+    count: '{{ vm_cpu.value.count |int + 1}}'
+    vcenter_validate_certs: no
+  delegate_to: localhost
