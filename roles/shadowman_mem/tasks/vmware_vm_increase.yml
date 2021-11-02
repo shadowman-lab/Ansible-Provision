@@ -20,3 +20,10 @@
     vcenter_validate_certs: no
   register: vm_memory
   delegate_to: localhost
+
+- name: Add memory to the VM
+  vmware.vmware_rest.vcenter_vm_hardware_memory:
+    vm: '{{ vm_full_info.id }}'
+    count: '{{ vm_memory.value.size_MiB |int + vm_memory.value.hot_add_increment_size_MiB |int}}'
+    vcenter_validate_certs: no
+  delegate_to: localhost
