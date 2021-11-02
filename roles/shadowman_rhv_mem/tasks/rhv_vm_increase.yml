@@ -7,21 +7,25 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
+    delegate_to: localhost
     
   - name: Get current MEM info
     redhat.rhv.ovirt_vm_info:
       auth: "{{ ovirt_auth }}"
       pattern: name={{ vm_name }}
     register: result
+    delegate_to: localhost
 
   - name: Increase current virtual Memory
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_name }}"
       memory: "{{ (result.ovirt_vms[0].memory|float / 1048576 + 256)|int }}MiB"
+    delegate_to: localhost
     
   always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
       ovirt_auth: "{{ ovirt_auth }}"
+    delegate_to: localhost

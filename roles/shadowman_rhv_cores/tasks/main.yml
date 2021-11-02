@@ -1,10 +1,31 @@
 ---
 
 - include_tasks: rhv_vm_increase.yml
-  when: shadowman_cores == "increase"
+  when: 
+    - shadowman_cores == "increase"
+    - shadowman_provision_hypervisor == "RHV"
 
 - include_tasks: rhv_vm_decrease.yml
-  when: shadowman_cores == "decrease"
+  when: 
+    - shadowman_cores == "decrease"
+    - shadowman_provision_hypervisor == "RHV"
 
 - include_tasks: rhv_vm_restore.yml
-  when: shadowman_cores == "restore"
+  when: 
+    - shadowman_cores == "restore"
+    - shadowman_provision_hypervisor == "RHV"
+
+- include_tasks: vmware_vm_increase.yml
+  when: 
+    - shadowman_cores == "increase"
+    - shadowman_provision_hypervisor == "VMWare"
+
+- include_tasks: vmware_vm_decrease.yml
+  when: 
+    - shadowman_cores == "decrease"
+    - shadowman_provision_hypervisor == "VMWare"
+
+- include_tasks: vmware_vm_restore.yml
+  when: 
+    - shadowman_cores == "restore"
+    - shadowman_provision_hypervisor == "VMWare"

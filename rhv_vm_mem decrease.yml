@@ -1,7 +1,6 @@
 ---
 - name: Decrease VM Memory
-  hosts: localhost
-  connection: local
+  hosts: "{{ vm_name | default('localhost') }}"
   gather_facts: false
 
   vars:

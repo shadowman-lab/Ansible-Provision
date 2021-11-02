@@ -7,21 +7,25 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
+    delegate_to: localhost
     
   - name: Get current CPU info
     redhat.rhv.ovirt_vm_info:
       auth: "{{ ovirt_auth }}"
       pattern: name={{ vm_name }}
     register: result
+    delegate_to: localhost
 
   - name: Increase current virtual CPU cores
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_name }}"
       cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int + 5 }}"
+    delegate_to: localhost
     
   always:
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
       ovirt_auth: "{{ ovirt_auth }}"
+    delegate_to: localhost
