@@ -17,5 +17,6 @@
 - name: Retrieve the CPU information from the VM
   vmware.vmware_rest.vcenter_vm_hardware_cpu_info:
     vm: '{{ vm_full_info.id }}'
+    vcenter_validate_certs: no
   register: vm_cpu
   delegate_to: localhost
