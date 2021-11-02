@@ -1,0 +1,33 @@
+---
+- block:
+  - name: Login to RHV
+    redhat.rhv.ovirt_auth:
+      hostname: "{{ rhvm_fqdn }}"
+      username: "{{ rhvm_user }}"
+      password: "{{ rhvm_password }}"
+      ca_file: "{{ rhvm_cafile | default(omit) }}"
+      insecure: "{{ rhvm_insecure | default(true) }}"
+    delegate_to: localhost
+    run_once: true
+    
+  - name: Get current CPU info
+    redhat.rhv.ovirt_vm_info:
+      auth: "{{ ovirt_auth }}"
+      pattern: name={{ inventory_hostname }}
+    register: result
+    delegate_to: localhost
+
+  - name: Decrease current virtual CPU cores
+    redhat.rhv.ovirt_vm:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ inventory_hostname }}"
+      cpu_cores: "{{ result.ovirt_vms[0].cpu.topology.cores|int - 1 }}"
+    delegate_to: localhost
+    
+  always:
+  - name: Logout from RHV
+    redhat.rhv.ovirt_auth:
+      state: absent
+      ovirt_auth: "{{ ovirt_auth }}"
+    delegate_to: localhost
+    run_once: true
