@@ -1,26 +1,36 @@
---- 
-- block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
-    delegate_to: localhost
-    run_once: true
-     
-  - name: Restore virtual memory
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ inventory_hostname }}"
-      memory: "{{ memory }}"
-    delegate_to: localhost
-      
-  always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
-    delegate_to: localhost
-    run_once: true
+---
+- name: Get VM info
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names:
+    - "{{ inventory_hostname }}"
+    vcenter_validate_certs: no
+  register: vm_info
+  delegate_to: localhost
+
+- name: Collect id about a specific VM
+  vmware.vmware_rest.vcenter_vm_info:
+    vm: "{{ vm_info.value[0].vm }}"
+    vcenter_validate_certs: no
+  register: vm_full_info
+  delegate_to: localhost
+
+- name: Turn off VM
+  vmware.vmware_rest.vcenter_vm_power:
+    state: stop
+    vm: '{{ vm_info.value[0].vm }}'
+    vcenter_validate_certs: no
+  delegate_to: localhost
+
+- name: Restore memory for the VM
+  vmware.vmware_rest.vcenter_vm_hardware_memory:
+    vm: '{{ vm_full_info.id }}'
+    size_MiB: '{{ memory }}'
+    vcenter_validate_certs: no
+  delegate_to: localhost
+
+- name: Turn on VM
+  vmware.vmware_rest.vcenter_vm_power:
+    state: start
+    vm: '{{ vm_info.value[0].vm }}'
+    vcenter_validate_certs: no
+  delegate_to: localhost
