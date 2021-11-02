@@ -7,4 +7,4 @@
     shadowman_cores: "restore"
     
   roles:
-    - shadowman_rhv_cores
+    - shadowman_cores

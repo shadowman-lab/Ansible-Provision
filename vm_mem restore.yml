@@ -7,4 +7,4 @@
     shadowman_mem: "restore"
     
   roles:
-    - shadowman_rhv_mem
+    - shadowman_mem
