@@ -16,15 +16,15 @@ collections:
   - name: azure.azcollection
 
   - name: community.kubernetes
-    source: https://towerpah.shadowman.dev/api/galaxy/content/community/
+    
 
   - name: ansible.windows
 
   - name: community.windows
-    source: https://towerpah.shadowman.dev/api/galaxy/content/community/
+    
 
   - name: community.general
-    source: https://towerpah.shadowman.dev/api/galaxy/content/community/
+    
 
   - name: community.vmware
-    source: https://towerpah.shadowman.dev/api/galaxy/content/community/
+    
