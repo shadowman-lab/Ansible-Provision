@@ -16,15 +16,12 @@ collections:
   - name: azure.azcollection
 
   - name: community.kubernetes
-    
 
   - name: ansible.windows
 
   - name: community.windows
     
-
   - name: community.general
     
-
   - name: community.vmware
     
