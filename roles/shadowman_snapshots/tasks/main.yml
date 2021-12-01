@@ -1,8 +1,5 @@
 ---
 
-- include_tasks: shadowman_snapshot_pull.yml
-  when: shadowman_snapshot == "pull"
-
 - include_tasks: shadowman_snapshot_pull_collection.yml
   when: shadowman_snapshot == "pull_collection"
 
