@@ -21,3 +21,4 @@ sku: 'rhel-lvm79'
 vm_size: Standard_B1s
 resource_group_name: Demo
 storage_account_name: demorh
+terraform_state: absent

@@ -16,7 +16,9 @@
   when: shadowman_provision_hypervisor == "RHV"
 
 - include_tasks: rhv_wait.yml
-  when: shadowman_provision_hypervisor == "Terraform"
+  when: 
+    - shadowman_provision_hypervisor == "Terraform"
+    - terraform_state == "present"
 
 - include_tasks: vmware_wait.yml
   when: shadowman_provision_hypervisor == "VMWare"
