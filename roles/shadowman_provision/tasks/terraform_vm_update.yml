@@ -44,6 +44,5 @@
   - name: Logout from RHV
     redhat.rhv.ovirt_auth:
       state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
-      
+      ovirt_auth: "{{ ovirt_auth }}"      
   when: terraform_state == "present"
