@@ -1,8 +1,8 @@
 {% for item in vm_names %}
-module "vm_{{ item }}"{
+module "vm_{{ item.split('.')[0] }}"{
   source = "../modules/vms"
   vm_name = "{{ item }}"
-  vm_memory_terraform = "{{ vm_memory }}"
+  vm_memory = "{{ vm_memory }}"
   vm_template_id = "{{ vm_template }}"
 }
 {% endfor %}
