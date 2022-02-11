@@ -15,12 +15,25 @@
   ansible.builtin.template: 
     src: templates/terraform.tf.j2
     dest: /terraform/ovirt/main.tf
-    
-- name: Update State of VM to {{ terraform_state }} from template using Terraform
-  community.general.terraform:
-    project_path: "/terraform/ovirt/"
-    state: "{{ terraform_state }}"
-    force_init: yes
+
+- name: Block to handle error with disk
+  block:    
+    - name: Update State of VM to {{ terraform_state }} from template using Terraform
+      community.general.terraform:
+        project_path: "/terraform/ovirt/"
+        state: "{{ terraform_state }}"
+        force_init: yes
+  rescue:
+      - name: Sleep for 10 seconds and continue with play
+        wait_for:
+          timeout: 10
+        delegate_to: localhost
+        
+      - name: Update State of VM to {{ terraform_state }} from template using Terraform
+        community.general.terraform:
+          project_path: "/terraform/ovirt/"
+          state: "{{ terraform_state }}"
+          force_init: yes
 
 - block:
   - name: Login to RHV
