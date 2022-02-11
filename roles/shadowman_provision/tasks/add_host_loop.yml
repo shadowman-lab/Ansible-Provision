@@ -4,6 +4,7 @@
   redhat.rhv.ovirt_nic_info:
     vm: "{{ item }}"
     follows:
+      - reported_devices
       - ips
     name: nic1
     auth: "{{ ovirt_auth }}"
