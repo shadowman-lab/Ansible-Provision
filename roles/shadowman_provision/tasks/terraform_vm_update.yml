@@ -22,7 +22,8 @@
     state: "{{ terraform_state }}"
     force_init: yes
 
-- block:
+- name: This is a block to login to RHV if creating VM
+  block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"
