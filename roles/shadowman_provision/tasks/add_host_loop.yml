@@ -3,8 +3,8 @@
 - name: Test for IP address for Linux
   redhat.rhv.ovirt_nic_info:
     vm: "{{ item }}"
-    follows:
-      - reported_devices
+    fetch_nested: yes
+    nested_attributes:
       - ips
     name: nic1
     auth: "{{ ovirt_auth }}"
