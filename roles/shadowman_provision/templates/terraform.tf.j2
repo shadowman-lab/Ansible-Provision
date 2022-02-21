@@ -7,6 +7,6 @@ module "vm_{{ item.split('.')[0] }}"{
 }
 
 output "vm_name_{{ item.split('.')[0]}}" {
-  value = module.vm_{{ item.split('.')[0].name
+  value = module.vm_{{ item.split('.')[0]}}.name
 }
 {% endfor %}
