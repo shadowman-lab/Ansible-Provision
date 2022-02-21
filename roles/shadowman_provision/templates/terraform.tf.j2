@@ -5,4 +5,8 @@ module "vm_{{ item.split('.')[0] }}"{
   vm_memory = "{{ vm_memory_terraform }}"
   vm_template_id = "{{ vm_template }}"
 }
+
+output "vm_name_{{ item.split('.')[0]}}" {
+  value = module.vm_{{ item.split('.')[0].name
+}
 {% endfor %}
