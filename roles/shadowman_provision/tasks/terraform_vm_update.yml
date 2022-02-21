@@ -23,6 +23,7 @@
         project_path: "/terraform/ovirt/"
         state: "{{ terraform_state }}"
         force_init: yes
+      register: terraformvms
   rescue:
       - name: Sleep for 10 seconds and continue with play
         wait_for:
@@ -34,6 +35,11 @@
           project_path: "/terraform/ovirt/"
           state: "{{ terraform_state }}"
           force_init: yes
+        register: terraformvms
+
+- name: Display created vms
+  ansible.builtin.debug:
+    msg: "{{ terraformvms | json_query('outputs.*.value') }}"
 
 - block:
   - name: Login to RHV
