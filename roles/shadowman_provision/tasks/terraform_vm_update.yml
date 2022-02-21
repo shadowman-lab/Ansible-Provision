@@ -37,9 +37,14 @@
           force_init: yes
         register: terraformvms
 
-- name: Display created vms
+- name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
+
+- name: Set stat for active vms
+  ansible.builtin.set_stats:
+    data:
+      terraformactivevm: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
 
 - block:
   - name: Login to RHV
