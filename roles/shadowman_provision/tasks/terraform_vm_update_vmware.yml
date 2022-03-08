@@ -44,9 +44,8 @@
     loop: "{{ vm_names }}"
 
   - name: Loop to create group for linux hosts
-    ansible.builtin.include_tasks: add_host_loop_vmware.yml
+    ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
     loop: "{{ vm_names }}"
-    delegate_to: localhost
     when: operating_system is match("RHEL.*")
       
   when: terraform_state == "present"
