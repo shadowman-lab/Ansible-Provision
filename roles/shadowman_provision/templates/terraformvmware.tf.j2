@@ -50,7 +50,7 @@ resource "vsphere_virtual_machine" "{{ item.split('.')[0] }}" {
   wait_for_guest_ip_timeout  = -1
 
   disk {
-    label            = "disk0"
+    label            = "{{ item.split('.')[0] }}"
     thin_provisioned = true
     size             = {{terraform_disk}}
   }
