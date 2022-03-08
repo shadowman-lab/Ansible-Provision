@@ -1,0 +1,69 @@
+{% for item in vm_names %}
+provider "vsphere" {
+  vsphere_server = var.vsphere_server
+  user           = var.vsphere_user
+  password       = var.vsphere_password
+
+  # If you have a self-signed cert
+  allow_unverified_ssl = true
+}
+
+data "vsphere_datacenter" "dc" {
+  name = var.datacenter
+}
+
+data "vsphere_compute_cluster" "cluster" {
+  name          = var.cluster
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_datastore" "datastore" {
+  name          = var.datastore
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_network" "network" {
+  name          = {{terraform_network}}
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+data "vsphere_virtual_machine" "template" {
+  name          = "/${var.datacenter}/vm/{{template}}"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
+resource "vsphere_virtual_machine" "{{ item.split('.')[0] }}" {
+  name             = "{{ item }}"
+  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
+  datastore_id     = data.vsphere_datastore.datastore.id
+  folder           = "Discovered virtual machine"
+  firmware         = "efi"
+
+  num_cpus = 1
+  memory   = {{ vm_memory_terraform }}
+
+  network_interface {
+    network_id = data.vsphere_network.network.id
+  }
+
+  wait_for_guest_net_timeout = 10
+  wait_for_guest_ip_timeout  = -1
+
+  disk {
+    label            = "disk0"
+    thin_provisioned = true
+    size             = {{terraform_disk}}
+  }
+
+  guest_id = "{{operating_system|lower}}_64Guest"
+
+  clone {
+    template_uuid = data.vsphere_virtual_machine.template.id
+  }
+}
+
+output "vm_name_{{ item.split('.')[0]}}" {
+  value = vsphere_virtual_machine.{{ item.split('.')[0] }}.name
+}
+
+{% endfor %}

@@ -1,0 +1,45 @@
+---
+#Remove if desired to manually update terraform file
+- name: Set facts if Windows chosen
+  ansible.builtin.set_fact:
+    vm_memory_terraform: 8192
+    vm_tag: Windows
+    terraform_network: "LAN_01"
+    terraform_disk: 40
+  when: operating_system == "Win2016"
+
+#Remove if desired to manually update terraform file
+- name: Update terraform main file
+  ansible.builtin.template: 
+    src: templates/terraformvmware.tf.j2
+    dest: /home/terraform/main.tf
+
+- name: Update State of VM to {{ terraform_state }} from template using Terraform
+  community.general.terraform:
+    project_path: "/home/terraform/"
+    state: "{{ terraform_state }}"
+    force_init: yes
+  register: terraformvms
+  
+- name: Display Current Terraform VMs
+  ansible.builtin.debug:
+    msg: "{{ terraformvms | json_query('outputs.*.value') }}"
+
+#rename var to be vm_name if desired to manually update terraform file
+- name: Set stat for active vms
+  ansible.builtin.set_stats:
+    data:
+      terraformactivevm: "{{ terraformvms | json_query('outputs.*.vm_name') | join(',') }}"
+
+- block:
+  - name: Assign Tags
+    community.vmware.vmware_tag_manager:
+      tag_names:
+        - "{{ tag }}"
+      object_name: "{{ item }}"
+      object_type: VirtualMachine
+      state: add
+      validate_certs: no
+    loop: "{{ vm_names }}"
+      
+  when: terraform_state == "present"
