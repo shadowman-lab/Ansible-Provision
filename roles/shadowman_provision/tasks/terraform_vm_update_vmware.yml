@@ -42,5 +42,11 @@
       validate_certs: no
     delegate_to: localhost
     loop: "{{ vm_names }}"
+
+  - name: Loop to create group for linux hosts
+    ansible.builtin.include_tasks: add_host_loop_vmware.yml
+    loop: "{{ vm_names }}"
+    delegate_to: localhost
+    when: operating_system is match("RHEL.*")
       
   when: terraform_state == "present"
