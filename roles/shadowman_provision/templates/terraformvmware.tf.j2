@@ -37,7 +37,7 @@ resource "vsphere_virtual_machine" "{{ item.split('.')[0] }}" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
-  firmware         = "efi"
+  {% if operating_system == 'RHEL8' %}firmware         = "efi"{% endif %}
 
   num_cpus = 1
   memory   = {{ vm_memory_terraform }}
