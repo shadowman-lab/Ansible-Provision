@@ -2,10 +2,8 @@
 #Remove if desired to manually update terraform file
 - name: Set facts if Windows chosen
   ansible.builtin.set_fact:
-    vm_memory_terraform: 8192
     vm_tag: Windows
     terraform_network: "LAN_01"
-    terraform_disk: 40
   when: operating_system == "Win2016"
 
 #Remove if desired to manually update terraform file

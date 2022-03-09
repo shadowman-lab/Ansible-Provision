@@ -36,13 +36,15 @@ resource "vsphere_virtual_machine" "{{ item.split('.')[0] }}" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
-  {% if operating_system == 'RHEL8' %}firmware         = "efi"{% endif %}
+  firmware         = data.vsphere_virtual_machine.template.firmware
+  scsi_type        = data.vsphere_virtual_machine.template.scsi_type
 
-  num_cpus = 1
-  memory   = {{ vm_memory_terraform }}
+  num_cpus = data.vsphere_virtual_machine.template.num_cpus
+  memory   = data.vsphere_virtual_machine.template.memory
 
   network_interface {
     network_id = data.vsphere_network.network.id
+    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
   wait_for_guest_net_timeout = 10
@@ -50,11 +52,11 @@ resource "vsphere_virtual_machine" "{{ item.split('.')[0] }}" {
 
   disk {
     label            = "{{ item.split('.')[0] }}"
-    thin_provisioned = true
-    size             = {{terraform_disk}}
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    size             = data.vsphere_virtual_machine.template.disks.0.size
   }
 
-  guest_id = "{{operating_system|lower}}_64Guest"
+  guest_id = data.vsphere_virtual_machine.template.guest_id
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
