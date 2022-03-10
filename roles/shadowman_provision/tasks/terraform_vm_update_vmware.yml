@@ -12,6 +12,12 @@
     dest: /home/terraform/main.tf
   when: terraformmain == "ansible"
 
+- name: copy terraform main file for gitops
+  ansible.builtin.copy: 
+    src: templates/main.tf
+    dest: /home/terraform/main.tf
+  when: terraformmain == "gitops"
+
 - name: Update State of VM to {{ terraform_state }} from template using Terraform
   community.general.terraform:
     project_path: "/home/terraform/"
