@@ -10,6 +10,7 @@
   ansible.builtin.template: 
     src: templates/terraformvmware.tf.j2
     dest: /home/terraform/main.tf
+  when: terraformmain == "ansible"
 
 - name: Update State of VM to {{ terraform_state }} from template using Terraform
   community.general.terraform:
