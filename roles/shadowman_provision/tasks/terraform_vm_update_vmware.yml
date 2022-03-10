@@ -32,7 +32,7 @@
 - name: Set stat for active vms if using gitops/manual update
   ansible.builtin.set_stats:
     data:
-      vm_name: "{{ terraformvms | json_query('outputs.*.vm_name') | join(',') }}"
+      vm_name: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
   when: terraformmain == "gitops"
 
 - name: Set fact for vmnames for tagging
