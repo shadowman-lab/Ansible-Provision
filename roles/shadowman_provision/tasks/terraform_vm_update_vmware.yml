@@ -1,5 +1,4 @@
 ---
-#Remove if desired to manually update terraform file
 - name: Set facts if Windows chosen
   ansible.builtin.set_fact:
     vm_tag: Windows
