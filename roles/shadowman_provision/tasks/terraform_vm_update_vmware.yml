@@ -23,11 +23,11 @@
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
 
-#rename var to be vm_name if desired to manually update terraform file
-- name: Set stat for active vms
+- name: Set stat for active vms if using gitops/manual update
   ansible.builtin.set_stats:
     data:
-      terraformactivevm: "{{ terraformvms | json_query('outputs.*.vm_name') | join(',') }}"
+      vm_name: "{{ terraformvms | json_query('outputs.*.vm_name') | join(',') }}"
+  when: terraformmain == "gitops"
 
 - block:
   - name: Assign Tags
