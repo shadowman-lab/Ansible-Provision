@@ -36,9 +36,8 @@
   when: terraformmain == "gitops"
 
 - name: Set fact for vmnames for tagging
-  ansible.builtin.set_stats:
-    data:
-      vm_names: "{{ vm_name.split(',') }}"
+  ansible.builtin.set_fact:
+    vm_names: "{{ terraformvms | json_query('outputs.*.value') }}"
   when: terraformmain == "gitops"
 
 - block:
