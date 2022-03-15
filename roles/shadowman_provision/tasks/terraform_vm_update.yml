@@ -43,12 +43,14 @@
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
+  delegate_to: localhost
 
 #rename var to be vm_name if desired to manually update terraform file
 - name: Set stat for active vms
   ansible.builtin.set_stats:
     data:
       terraformactivevm: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
+  delegate_to: localhost
 
 - block:
   - name: Login to RHV
