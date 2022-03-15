@@ -28,16 +28,19 @@
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
+  delegate_to: localhost
 
 - name: Set stat for active vms if using gitops/manual update
   ansible.builtin.set_stats:
     data:
       vm_name: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
+  delegate_to: localhost
   when: terraformmain == "gitops"
 
 - name: Set fact for vmnames for tagging
   ansible.builtin.set_fact:
     vm_names: "{{ terraformvms | json_query('outputs.*.value') }}"
+  delegate_to: localhost
   when: terraformmain == "gitops"
 
 - block:
