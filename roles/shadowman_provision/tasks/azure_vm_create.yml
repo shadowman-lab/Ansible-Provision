@@ -62,7 +62,7 @@
   when: publisher == "MicrosoftWindowsServer"
 
 - name: Create VM script extension to enable HTTPS WinRM listener
-  azure_rm_virtualmachineextension:
+  azure.azcollection.azure_rm_virtualmachineextension:
     name: winrm-extension
     resource_group: "{{ resource_group_name }}"
     virtual_machine_name: "{{ item }}"
