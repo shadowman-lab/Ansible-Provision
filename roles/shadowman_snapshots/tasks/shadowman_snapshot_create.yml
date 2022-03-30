@@ -1,4 +1,4 @@
----   
+---
 - block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:

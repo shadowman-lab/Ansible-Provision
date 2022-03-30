@@ -12,7 +12,7 @@
     vm: "{{ vm_info.value[0].vm }}"
     vcenter_validate_certs: false
   register: vm_full_info
-         
+
 - name: Add Linux hosts to just_created group
   ansible.builtin.add_host:
     hostname: "{{ item }}"

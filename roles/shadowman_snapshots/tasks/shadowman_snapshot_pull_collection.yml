@@ -1,4 +1,4 @@
----    
+---
 - block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
@@ -22,7 +22,7 @@
       project: "SSP Provision and DeProvision"
       playbook: "rhv_snapshot_restore.yml"
       credentials:
-        - "RHV Credentials" 
+        - "RHV Credentials"
       survey_enabled: true
       survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
       extra_vars: "{{ extra_var }}"

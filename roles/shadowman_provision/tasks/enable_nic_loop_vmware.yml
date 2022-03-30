@@ -6,7 +6,7 @@
       - "{{ item }}"
     vcenter_validate_certs: false
   register: vm_info
-         
+
 - name: Connect Ethernet
   vmware.vmware_rest.vcenter_vm_hardware_ethernet:
     vm: "{{ vm_info.value[0].vm }}"

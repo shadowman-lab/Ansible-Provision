@@ -19,8 +19,8 @@
     ipa_pass: "{{ IPA_PASS }}"
     ipa_host: "{{ IPA_HOST }}"
     ipa_user: "{{ IPA_USER }}"
-    update_dns: True
-  when: 
+    update_dns: true
+  when:
     - ansible_host != ''
     - ansible_host != ip_addr
 

@@ -9,7 +9,7 @@
       insecure: "{{ rhvm_insecure | default(true) }}"
     become: false
     delegate_to: localhost
-    
+
   - name: RHEL Hostname Set
     ansible.builtin.hostname:
       name: "{{ inventory_hostname }}"
@@ -24,7 +24,7 @@
       auth: "{{ ovirt_auth }}"
       pattern: name={{ item }}
     register: result
-    until:  result.ovirt_vms[0].fqdn is defined
+    until: result.ovirt_vms[0].fqdn is defined
     retries: 60
     delay: 5
     loop: "{{ ansible_play_batch }}"

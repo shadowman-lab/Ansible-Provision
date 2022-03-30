@@ -19,7 +19,7 @@
   when: shadowman_provision_hypervisor == "RHV"
 
 - include_tasks: rhv_wait.yml
-  when: 
+  when:
     - shadowman_provision_hypervisor == "Terraform"
     - terraform_state == "present"
 

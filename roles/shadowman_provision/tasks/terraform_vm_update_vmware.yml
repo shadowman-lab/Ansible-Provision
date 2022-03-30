@@ -5,9 +5,9 @@
     terraform_network: "LAN_01"
   when: operating_system == "Win2016"
 
-#Remove if desired to manually update terraform file
+# Remove if desired to manually update terraform file
 - name: Update terraform main file
-  ansible.builtin.template: 
+  ansible.builtin.template:
     src: templates/terraformvmware.tf.j2
     dest: /home/terraform/main.tf
     owner: root
@@ -16,7 +16,7 @@
   when: terraformmain == "ansible"
 
 - name: copy terraform main file for gitops
-  ansible.builtin.copy: 
+  ansible.builtin.copy:
     src: templates/main.tf
     dest: /home/terraform/main.tf
     owner: root
@@ -30,7 +30,7 @@
     state: "{{ terraform_state }}"
     force_init: true
   register: terraformvms
-  
+
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
@@ -50,20 +50,20 @@
   when: terraformmain == "gitops"
 
 - block:
-  - name: Assign Tags
-    community.vmware.vmware_tag_manager:
-      tag_names:
-        - "{{ tag }}"
-      object_name: "{{ item }}"
-      object_type: VirtualMachine
-      state: add
-      validate_certs: false
-    delegate_to: localhost
-    loop: "{{ vm_names }}"
+    - name: Assign Tags
+      community.vmware.vmware_tag_manager:
+        tag_names:
+          - "{{ tag }}"
+        object_name: "{{ item }}"
+        object_type: VirtualMachine
+        state: add
+        validate_certs: false
+      delegate_to: localhost
+      loop: "{{ vm_names }}"
 
-  - name: Loop to create group for linux hosts
-    ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
-    loop: "{{ vm_names }}"
-    when: operating_system is match("RHEL.*")
-      
+    - name: Loop to create group for linux hosts
+      ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
+      loop: "{{ vm_names }}"
+      when: operating_system is match("RHEL.*")
+
   when: terraform_state == "present"

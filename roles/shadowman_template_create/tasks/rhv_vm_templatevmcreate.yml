@@ -1,4 +1,4 @@
---- 
+---
 - block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
@@ -7,10 +7,9 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
-     
 
   - name: Block to handle error with disk
-    block:    
+    block:
       - name: Create and run VM from template
         redhat.rhv.ovirt_vm:
           auth: "{{ ovirt_auth }}"
@@ -24,10 +23,10 @@
     rescue:
 
       - name: Sleep for 10 seconds and continue with play
-        wait_for:
+        ansible.builtin.wait_for:
           timeout: 10
         delegate_to: localhost
-        
+
       - name: Attempt to run Linux VM again if disk issue
         redhat.rhv.ovirt_vm:
           auth: "{{ ovirt_auth }}"
@@ -48,11 +47,11 @@
       name: nic1
       auth: "{{ ovirt_auth }}"
     register: results
-    until:  results.ovirt_nics[0].reported_devices[0].ips[0].version|default("False") == "v4"
+    until: results.ovirt_nics[0].reported_devices[0].ips[0].version|default("False") == "v4"
     retries: 60
     delay: 10
     when: operating_system is match("RHEL.*")
-      
+
   always:
     - name: Logout from RHV
       redhat.rhv.ovirt_auth:

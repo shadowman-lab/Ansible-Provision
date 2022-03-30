@@ -4,9 +4,9 @@
   ansible.windows.win_domain_membership:
     workgroup_name: removegroup
     domain_admin_user: "{{ domainuser }}"
-    domain_admin_password: "{{ domainpassword }}" 
+    domain_admin_password: "{{ domainpassword }}"
     state: workgroup
-  ignore_errors: true #ignore due to WINRM issues
+  ignore_errors: true # ignore due to WINRM issues
   when: ansible_host != ip_addr
 
 - name: Remove Windows host from AD

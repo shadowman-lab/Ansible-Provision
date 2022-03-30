@@ -9,7 +9,7 @@
   ansible.builtin.set_fact:
     source_vm_id: "RHEL8_ShadowMan"
   when: operating_system == "RHEL8"
-  
+
 - name: Create and run Linux VM
   community.vmware.vmware_guest:
     cluster: '{{ cluster_id }}'
@@ -35,9 +35,9 @@
     template: "{{ source_vm_id }}"
     validate_certs: false
     networks:
-    - name: LAN_01
-      start_connected: true
-      connected: true
+      - name: LAN_01
+        start_connected: true
+        connected: true
     customization:
       domain: ad.shadowman.dev
       autologon: true
@@ -46,7 +46,7 @@
       productid: "{{ productid }}"
       password: "{{ windowspassword }}"
       runonce:
-      - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
+        - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
 

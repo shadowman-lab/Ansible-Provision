@@ -14,7 +14,7 @@
     vcenter_validate_certs: false
   delegate_to: localhost
   register: vm_full_info
-         
+
 - name: Add Linux hosts to just_created group
   ansible.builtin.add_host:
     hostname: "{{ item }}"

@@ -1,6 +1,6 @@
 ---
 - block:
-  
+
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"
@@ -8,7 +8,7 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
-    
+
   - name: Change facts if running Windows
     ansible.builtin.set_fact:
       vm_memory: 8GiB
@@ -16,7 +16,7 @@
     when: operating_system == "Win2016"
 
   - name: Block to handle error with disk
-    block:    
+    block:
       - name: Create and run Linux VM from template
         redhat.rhv.ovirt_vm:
           auth: "{{ ovirt_auth }}"
@@ -32,10 +32,10 @@
     rescue:
 
       - name: Sleep for 10 seconds and continue with play
-        wait_for:
+        ansible.builtin.wait_for:
           timeout: 10
         delegate_to: localhost
-        
+
       - name: Attempt to run Linux VM again if disk issue
         redhat.rhv.ovirt_vm:
           auth: "{{ ovirt_auth }}"
@@ -64,16 +64,16 @@
       wait: true
     when: operating_system is match("Win.*")
     loop: "{{ vm_names }}"
-      
+
   - name: Apply tags
     redhat.rhv.ovirt_tag:
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_tag }}"
       state: attached
-      vms: 
+      vms:
         - "{{ item }}"
     loop: "{{ vm_names }}"
-      
+
   always:
     - name: Logout from RHV
       redhat.rhv.ovirt_auth:
