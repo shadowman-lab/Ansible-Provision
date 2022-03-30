@@ -15,13 +15,13 @@
       vm_name: "{{ vm_name }}"
       description: "{{ snapshot_desc }}"
       use_memory: false
-      wait: yes
+      wait: true
     register: snapshot
     loop: "{{ vm_names }}"
 
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
-    run_once: true
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      run_once: true

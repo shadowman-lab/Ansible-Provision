@@ -5,16 +5,16 @@
 
   vars:
     shadowman_provision_hypervisor: "Terraformvmware"
-    
+
   roles:
     - shadowman_provision
-      
+
 - name: Perform hostname Set and reset agent to get FQDN on Linux
   hosts: just_created
   gather_facts: false
 
   vars:
     shadowman_provision_hypervisor: "VMWare"
-    
+
   roles:
     - shadowman_hostnameset

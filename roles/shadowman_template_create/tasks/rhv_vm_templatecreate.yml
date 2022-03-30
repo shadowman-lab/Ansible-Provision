@@ -13,7 +13,7 @@
       auth: "{{ ovirt_auth }}"
       name: "{{ operating_system | lower }}updates.shadowman.dev"
       state: stopped
-      wait: yes
+      wait: true
 
   - name: Create new template subversion
     redhat.rhv.ovirt_template:
@@ -21,7 +21,7 @@
       cluster: Default
       name: "{{ operating_system }}_ShadowMan"
       vm: "{{ operating_system | lower }}updates.shadowman.dev"
-      seal: yes
+      seal: true
       version:
         name: "{{ version_name }}"
     
@@ -30,7 +30,7 @@
       auth: "{{ ovirt_auth }}"
       name: "{{ operating_system | lower }}updates.shadowman.dev"
       state: absent
-      wait: yes
+      wait: true
 
   - name: Delete host from Sat
     redhat.satellite.host:
@@ -41,7 +41,7 @@
       state: absent
         
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

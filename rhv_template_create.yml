@@ -6,6 +6,6 @@
 
   vars:
     shadowman_template: "createtemplate"
-    
+
   roles:
     - shadowman_template_create

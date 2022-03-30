@@ -20,7 +20,7 @@
           memory: "{{ vm_memory }}"
           high_availability: true
           state: running
-          wait: yes
+          wait: true
     rescue:
 
       - name: Sleep for 10 seconds and continue with play
@@ -37,12 +37,12 @@
           memory: "{{ vm_memory }}"
           high_availability: true
           state: running
-          wait: yes
+          wait: true
 
   - name: Test for IP address for Linux
     redhat.rhv.ovirt_nic_info:
       vm: "{{ operating_system | lower }}updates.shadowman.dev"
-      fetch_nested: yes
+      fetch_nested: true
       nested_attributes:
         - ips
       name: nic1
@@ -54,7 +54,7 @@
     when: operating_system is match("RHEL.*")
       
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

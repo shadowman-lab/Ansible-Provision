@@ -15,7 +15,7 @@
       auth: "{{ ovirt_auth }}"
       name: "{{ inventory_hostname }}"
       state: stopped
-      wait: yes
+      wait: true
     delegate_to: localhost
 
   - name: Delete VM
@@ -23,13 +23,13 @@
       auth: "{{ ovirt_auth }}"
       name: "{{ inventory_hostname }}"
       state: absent
-      wait: yes
+      wait: true
     delegate_to: localhost
 
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
-    delegate_to: localhost
-    run_once: true
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      delegate_to: localhost
+      run_once: true

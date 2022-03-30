@@ -3,8 +3,8 @@
 - name: Get VM info
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:
-    - "{{ item }}"
-    vcenter_validate_certs: no
+      - "{{ item }}"
+    vcenter_validate_certs: false
   register: vm_info
          
 - name: Connect Ethernet
@@ -17,12 +17,12 @@
       network: "network-41"
     start_connected: true
     state: connect
-    vcenter_validate_certs: no
+    vcenter_validate_certs: false
 
 - name: Loop until hostname is set correctly
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
     vm: "{{ vm_info.value[0].vm }}"
-    vcenter_validate_certs: no
+    vcenter_validate_certs: false
   register: vm_full_info
   until: vm_full_info.value.host_name|default("False") == item.split('.')[0]
   retries: 120

@@ -18,6 +18,9 @@
   ansible.builtin.template: 
     src: templates/terraform.tf.j2
     dest: /terraform/ovirt/main.tf
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: Block to handle error with disk
   block:    
@@ -25,7 +28,7 @@
       community.general.terraform:
         project_path: "/terraform/ovirt/"
         state: "{{ terraform_state }}"
-        force_init: yes
+        force_init: true
       register: terraformvms
   rescue:
       - name: Sleep for 10 seconds and continue with play
@@ -37,7 +40,7 @@
         community.general.terraform:
           project_path: "/terraform/ovirt/"
           state: "{{ terraform_state }}"
-          force_init: yes
+          force_init: true
         register: terraformvms
 
 - name: Display Current Terraform VMs

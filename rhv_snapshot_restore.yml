@@ -6,6 +6,6 @@
 
   vars:
     shadowman_snapshot: "restore"
-    
+
   roles:
     - shadowman_snapshots

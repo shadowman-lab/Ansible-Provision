@@ -10,19 +10,25 @@
   ansible.builtin.template: 
     src: templates/terraformvmware.tf.j2
     dest: /home/terraform/main.tf
+    owner: root
+    group: root
+    mode: '0644'
   when: terraformmain == "ansible"
 
 - name: copy terraform main file for gitops
   ansible.builtin.copy: 
     src: templates/main.tf
     dest: /home/terraform/main.tf
+    owner: root
+    group: root
+    mode: '0644'
   when: terraformmain == "gitops"
 
 - name: Update State of VM to {{ terraform_state }} from template using Terraform
   community.general.terraform:
     project_path: "/home/terraform/"
     state: "{{ terraform_state }}"
-    force_init: yes
+    force_init: true
   register: terraformvms
   
 - name: Display Current Terraform VMs
@@ -51,7 +57,7 @@
       object_name: "{{ item }}"
       object_type: VirtualMachine
       state: add
-      validate_certs: no
+      validate_certs: false
     delegate_to: localhost
     loop: "{{ vm_names }}"
 

@@ -1,11 +1,10 @@
 ---
-
 - name: Update a single inventory source
   ansible.controller.inventory_source_update:
     inventory_source: "{{ inventory_source_name }}"
     inventory: "{{ inventory_name }}"
-    wait: yes
+    wait: true
     controller_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
     controller_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
     controller_host: "{{ lookup('env', 'TOWER_HOST') }}"
-    validate_certs: no
+    validate_certs: false

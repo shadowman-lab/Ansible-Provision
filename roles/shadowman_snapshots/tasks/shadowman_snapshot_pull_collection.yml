@@ -21,18 +21,18 @@
       inventory: "RHV Inventory"
       project: "SSP Provision and DeProvision"
       playbook: "rhv_snapshot_restore.yml"
-      credentials: 
+      credentials:
         - "RHV Credentials" 
       survey_enabled: true
       survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
       extra_vars: "{{ extra_var }}"
-      validate_certs: no
+      validate_certs: false
       controller_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
       controller_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
       controller_host: "{{ lookup('env', 'TOWER_HOST') }}"
 
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

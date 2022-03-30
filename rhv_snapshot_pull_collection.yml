@@ -6,6 +6,6 @@
 
   vars:
     shadowman_snapshot: "pull_collection"
-    
+
   roles:
     - shadowman_snapshots

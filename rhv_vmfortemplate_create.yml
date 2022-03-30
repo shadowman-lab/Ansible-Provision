@@ -6,6 +6,7 @@
 
   vars:
     shadowman_template: "createvm"
-    
+
   roles:
     - shadowman_template_create
+

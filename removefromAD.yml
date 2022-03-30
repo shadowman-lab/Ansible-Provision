@@ -9,5 +9,3 @@
         name: "{{ fqdn.split('.')[0] }}"
         state: absent
       delegate_to: "dc01.ad.shadowman.dev"
-
- 

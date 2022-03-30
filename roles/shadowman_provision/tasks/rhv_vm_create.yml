@@ -26,7 +26,7 @@
           memory: "{{ vm_memory }}"
           high_availability: true
           state: "{{ vm_state }}"
-          wait: yes
+          wait: true
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
     rescue:
@@ -45,7 +45,7 @@
           memory: "{{ vm_memory }}"
           high_availability: true
           state: "{{ vm_state }}"
-          wait: yes
+          wait: true
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
 
@@ -61,7 +61,7 @@
         host_name: "{{ item.split('.')[0] }}"
         domain: ad.shadowman.dev
       state: "{{ vm_state }}"
-      wait: yes
+      wait: true
     when: operating_system is match("Win.*")
     loop: "{{ vm_names }}"
       
@@ -75,7 +75,7 @@
     loop: "{{ vm_names }}"
       
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

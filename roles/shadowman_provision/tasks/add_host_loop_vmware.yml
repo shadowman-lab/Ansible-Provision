@@ -3,14 +3,14 @@
 - name: Get VM info
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:
-    - "{{ item }}"
-    vcenter_validate_certs: no
+      - "{{ item }}"
+    vcenter_validate_certs: false
   register: vm_info
 
 - name: Guest identity
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
     vm: "{{ vm_info.value[0].vm }}"
-    vcenter_validate_certs: no
+    vcenter_validate_certs: false
   register: vm_full_info
          
 - name: Add Linux hosts to just_created group

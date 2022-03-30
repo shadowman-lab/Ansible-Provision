@@ -7,7 +7,7 @@
       password: "{{ rhvm_password }}"
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
-    become: no
+    become: false
     delegate_to: localhost
     
   - name: RHEL Hostname Set
@@ -28,15 +28,15 @@
     retries: 60
     delay: 5
     loop: "{{ ansible_play_batch }}"
-    become: no
+    become: false
     delegate_to: localhost
 
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
-    become: no
-    delegate_to: localhost
-    tags:
-      - always
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"
+      become: false
+      delegate_to: localhost
+      tags:
+        - always

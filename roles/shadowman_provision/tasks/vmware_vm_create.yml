@@ -19,8 +19,8 @@
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
-    wait_for_ip_address: yes
-    validate_certs: no
+    wait_for_ip_address: true
+    validate_certs: false
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
 
@@ -33,7 +33,7 @@
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
-    validate_certs: no
+    validate_certs: false
     networks:
     - name: LAN_01
       start_connected: true
@@ -57,5 +57,5 @@
     object_name: "{{ item }}"
     object_type: VirtualMachine
     state: add
-    validate_certs: no
+    validate_certs: false
   loop: "{{ vm_names }}"

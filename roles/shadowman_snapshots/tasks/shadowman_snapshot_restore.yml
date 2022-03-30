@@ -20,7 +20,7 @@
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_name }}"
       state: stopped
-      wait: yes
+      wait: true
 
   - name: Restore from Snapshot
     redhat.rhv.ovirt_snapshot:
@@ -28,17 +28,17 @@
       vm_name: "{{ vm_name }}"
       snapshot_id: "{{ snapshot.ovirt_snapshots[0].id }}"
       state: restore
-      wait: yes
+      wait: true
 
   - name: Start VM
     redhat.rhv.ovirt_vm:
       auth: "{{ ovirt_auth }}"
       name: "{{ vm_name }}"
       state: running
-      wait: yes
+      wait: true
 
   always:
-  - name: Logout from RHV
-    redhat.rhv.ovirt_auth:
-      state: absent
-      ovirt_auth: "{{ ovirt_auth }}"
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

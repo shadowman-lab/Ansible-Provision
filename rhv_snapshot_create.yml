@@ -6,6 +6,6 @@
 
   vars:
     shadowman_snapshot: "create"
-    
+
   roles:
     - shadowman_snapshots
