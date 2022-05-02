@@ -8,7 +8,7 @@
 
 - name: Change facts if running RHEL8
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm84'
+    sku: 'rhel-lvm85'
     plan_name: "Red Hat Enterprise Linux 8.4 (BYOS)"
   when: operating_system == "RHEL8"
 
