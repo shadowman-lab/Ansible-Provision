@@ -16,7 +16,7 @@ source_vm_id: "RHEL7_ShadowMan"
 tag: "RHEL"
 shadowman_provision_hypervisor: "RHV"
 state: poweredon
-publisher: redhat
+publisher: RedHat
 offer: rhel-byos
 version: "latest"
 sku: 'rhel-lvm79'
