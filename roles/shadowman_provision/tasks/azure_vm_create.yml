@@ -35,7 +35,7 @@
       product: "{{ offer | lower }}"
       publisher: "{{ publisher | lower }}"
   loop: "{{ vm_names }}"
-  when: publisher == "redhat"
+  when: publisher == "RedHat"
 
 - name: Provision instance Windows
   azure.azcollection.azure_rm_virtualmachine:
