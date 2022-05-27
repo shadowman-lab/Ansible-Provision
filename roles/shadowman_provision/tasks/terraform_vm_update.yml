@@ -10,7 +10,7 @@
 # Remove if desired to manually update terraform file
 - name: Set facts if RHEL8 chosen
   ansible.builtin.set_fact:
-    vm_template: 4989a8d0-9ccd-4829-8b1a-7d63f82bede2
+    vm_template: 9baf8b0d-dca2-4e8f-b037-313fad58ed7d
   when: operating_system == "RHEL8"
 
 # Remove if desired to manually update terraform file
