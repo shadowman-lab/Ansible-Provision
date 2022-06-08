@@ -19,7 +19,7 @@
       auth: "{{ ovirt_auth }}"
       pattern: name={{ item }}
     register: result
-    until: result.ovirt_vms[0].fqdn|default("False") == item or result.ovirt_vms[0].fqdn|default("False") == item ~ ".ad.shadowman.dev"
+    until: result.ovirt_vms[0].fqdn|default("False") == item or result.ovirt_vms[0].fqdn|default("False") == item.split('.')[0] ~ ".ad.shadowman.dev"
     retries: 60
     delay: 10
     loop: "{{ vm_names }}"
