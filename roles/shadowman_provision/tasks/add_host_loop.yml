@@ -1,4 +1,4 @@
----  
+---
 - name: Test for IP address for Linux
   redhat.rhv.ovirt_nic_info:
     vm: "{{ item }}"

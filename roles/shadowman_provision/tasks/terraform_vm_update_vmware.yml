@@ -49,7 +49,8 @@
   delegate_to: localhost
   when: terraformmain == "gitops"
 
-- block:
+- name: VMWare Tags block
+  block:
     - name: Assign Tags
       community.vmware.vmware_tag_manager:
         tag_names:

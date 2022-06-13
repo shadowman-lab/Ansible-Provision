@@ -1,6 +1,7 @@
 ---
 
-- block:
+- name: Block for RHV
+  block:
   - name: Login to RHV
     redhat.rhv.ovirt_auth:
       hostname: "{{ rhvm_fqdn }}"

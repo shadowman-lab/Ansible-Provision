@@ -31,17 +31,17 @@
         force_init: true
       register: terraformvms
   rescue:
-      - name: Sleep for 10 seconds and continue with play
-        ansible.builtin.wait_for:
-          timeout: 10
-        delegate_to: localhost
+    - name: Sleep for 10 seconds and continue with play
+      ansible.builtin.wait_for:
+        timeout: 10
+      delegate_to: localhost
 
-      - name: Update State of VM to {{ terraform_state }} from template using Terraform
-        community.general.terraform:
-          project_path: "/terraform/ovirt/"
-          state: "{{ terraform_state }}"
-          force_init: true
-        register: terraformvms
+    - name: Update State of VM to {{ terraform_state }} from template using Terraform
+      community.general.terraform:
+        project_path: "/terraform/ovirt/"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvms
 
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
@@ -55,7 +55,8 @@
       terraformactivevm: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
   delegate_to: localhost
 
-- block:
+- name: RHV Block
+  block:
     - name: Login to RHV
       redhat.rhv.ovirt_auth:
         hostname: "{{ rhvm_fqdn }}"
@@ -63,7 +64,7 @@
         password: "{{ rhvm_password }}"
         ca_file: "{{ rhvm_cafile | default(omit) }}"
         insecure: "{{ rhvm_insecure | default(true) }}"
-        
+
     - name: Tag a VM
       redhat.rhv.ovirt_tag:
         auth: "{{ ovirt_auth }}"
