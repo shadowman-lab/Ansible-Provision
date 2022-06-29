@@ -30,8 +30,8 @@ data "vsphere_virtual_machine" "template" {
   name          = "/${var.datacenter}/vm/RHEL7_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
-resource "vsphere_virtual_machine" "newgit" {
-  name             = "newgit.shadowman.dev"
+resource "vsphere_virtual_machine" "nick" {
+  name             = "nick.shadowman.dev"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
@@ -62,6 +62,6 @@ resource "vsphere_virtual_machine" "newgit" {
   }
 }
 
-output "vm_name_newgit" {
-  value = vsphere_virtual_machine.newgit.name
+output "vm_name_nick" {
+  value = vsphere_virtual_machine.nick.name
 }
