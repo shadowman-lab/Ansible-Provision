@@ -7,15 +7,11 @@ collections:
   - name: vmware.vmware_rest
     version: 1.0.1
 
-  - name: ansible.tower
+  - name: ansible.controller
 
   - name: ansible.netcommon
 
-  - name: google.cloud
-
   - name: azure.azcollection
-
-  - name: community.kubernetes
 
   - name: ansible.windows
 
