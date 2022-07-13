@@ -36,6 +36,14 @@
   when: terraformmain == "gitops"
   delegate_to: localhost
 
+- name: Decrypt files
+  ansible.builtin.expect: 
+    command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
+    chdir: /tmp/terraform/vmware
+    responses:
+      password: "{{ pah_pass}}"
+  delegate_to: localhost
+
 - name: Update State of VM to {{ terraform_state }} from template using Terraform
   community.general.terraform:
     project_path: "/tmp/terraform/vmware/"
