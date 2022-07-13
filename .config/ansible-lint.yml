@@ -16,3 +16,5 @@ warn_list:
   - ignore-errors
   - yaml
   - git-latest
+  - command-instead-of-module
+  - no-changed-when
