@@ -10,7 +10,7 @@
   ansible.builtin.git:
     repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
     dest: /tmp/home/terraform
-    version: master
+    version: main
     accept_newhostkey: true
     key_file: /certs/id_ed25519
   delegate_to: localhost
