@@ -60,6 +60,12 @@
       password: "{{ pah_pass }}"
   delegate_to: localhost
 
+- name: Update git repo with terraform files
+  ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git push
+  args:
+    chdir: /tmp/terraform
+  delegate_to: localhost
+
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
