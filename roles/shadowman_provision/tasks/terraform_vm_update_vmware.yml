@@ -37,7 +37,7 @@
   delegate_to: localhost
 
 - name: Decrypt files
-  ansible.builtin.expect: 
+  ansible.builtin.expect:
     command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
     chdir: /tmp/terraform/vmware
     responses:
@@ -53,7 +53,7 @@
   delegate_to: localhost
 
 - name: Encrypt files
-  ansible.builtin.expect: 
+  ansible.builtin.expect:
     command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
     chdir: /tmp/terraform/vmware
     responses:
