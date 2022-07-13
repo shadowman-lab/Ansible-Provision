@@ -4,7 +4,6 @@
     vm_tag: Windows
     terraform_network: "LAN_01"
   when: operating_system == "Win2016"
-  delegate_to: localhost
 
 - name: Sync with Gitrepo
   ansible.builtin.git:
@@ -13,7 +12,6 @@
     version: main
     accept_newhostkey: true
     key_file: /certs/id_ed25519
-  delegate_to: localhost
 
 # Remove if desired to manually update terraform file
 - name: Update terraform main file
@@ -24,7 +22,6 @@
     group: root
     mode: '0644'
   when: terraformmain == "ansible"
-  delegate_to: localhost
 
 - name: copy terraform main file for gitops
   ansible.builtin.copy:
@@ -34,7 +31,6 @@
     group: root
     mode: '0644'
   when: terraformmain == "gitops"
-  delegate_to: localhost
 
 - name: Decrypt files
   ansible.builtin.expect:
@@ -42,7 +38,6 @@
     chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
-  delegate_to: localhost
 
 - name: Update State of VM to {{ terraform_state }} from template using Terraform
   community.general.terraform:
@@ -50,7 +45,6 @@
     state: "{{ terraform_state }}"
     force_init: true
   register: terraformvms
-  delegate_to: localhost
 
 - name: Encrypt files
   ansible.builtin.expect:
@@ -58,30 +52,25 @@
     chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
-  delegate_to: localhost
 
 - name: Update git repo with terraform files
   ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git push
   args:
     chdir: /tmp/terraform
-  delegate_to: localhost
 
 - name: Display Current Terraform VMs
   ansible.builtin.debug:
     msg: "{{ terraformvms | json_query('outputs.*.value') }}"
-  delegate_to: localhost
 
 - name: Set stat for active vms if using gitops/manual update
   ansible.builtin.set_stats:
     data:
       vm_name: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
-  delegate_to: localhost
   when: terraformmain == "gitops"
 
 - name: Set fact for vmnames for tagging
   ansible.builtin.set_fact:
     vm_names: "{{ terraformvms | json_query('outputs.*.value') }}"
-  delegate_to: localhost
   when: terraformmain == "gitops"
 
 - name: VMWare Tags block
@@ -94,7 +83,6 @@
         object_type: VirtualMachine
         state: add
         validate_certs: false
-      delegate_to: localhost
       loop: "{{ vm_names }}"
 
     - name: Loop to create group for linux hosts
