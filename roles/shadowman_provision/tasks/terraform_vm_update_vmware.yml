@@ -23,15 +23,6 @@
     mode: '0644'
   when: terraformmain == "ansible"
 
-- name: copy terraform main file for gitops
-  ansible.builtin.copy:
-    src: templates/main.tf
-    dest: /tmp/terraform/vmware/main.tf
-    owner: root
-    group: root
-    mode: '0644'
-  when: terraformmain == "gitops"
-
 - name: Decrypt files
   ansible.builtin.expect:
     command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
