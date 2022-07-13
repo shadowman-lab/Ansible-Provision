@@ -9,7 +9,7 @@
 - name: Sync with Gitrepo
   ansible.builtin.git:
     repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
-    dest: /tmp/home/terraform
+    dest: /tmp/terraform
     version: main
     accept_newhostkey: true
     key_file: /certs/id_ed25519
