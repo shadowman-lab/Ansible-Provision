@@ -10,6 +10,11 @@
     source_vm_id: "RHEL8_ShadowMan"
   when: operating_system == "RHEL8"
 
+- name: Change facts if running RHEL8 Edge
+  ansible.builtin.set_fact:
+    source_vm_id: "RHEL8EDGE_ShadowMan"
+  when: operating_system == "RHEL8Edge"
+
 - name: Create and run Linux VM
   community.vmware.vmware_guest:
     cluster: '{{ cluster_id }}'
