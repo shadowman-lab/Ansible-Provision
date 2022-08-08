@@ -1,10 +1,4 @@
 ---
-- name: Set facts if Windows chosen
-  ansible.builtin.set_fact:
-    vm_tag: Windows
-    terraform_network: "LAN_01"
-  when: operating_system == "Win2016"
-
 - name: Sync with Gitrepo
   ansible.builtin.git:
     repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
