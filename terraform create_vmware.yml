@@ -1,5 +1,5 @@
 ---
-- name: Update VM on RHV using Terraform
+- name: Update VM on VMWare using Terraform
   hosts: localhost
   gather_facts: false
 
