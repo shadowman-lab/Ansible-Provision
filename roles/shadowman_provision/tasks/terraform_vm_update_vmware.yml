@@ -7,7 +7,7 @@
     accept_newhostkey: true
     key_file: /certs/id_ed25519
 
-# Remove if desired to manually update terraform file
+# Leverage GitOps for updating main.tf
 - name: Copy terraform main file
   ansible.builtin.copy:
     src: files/main.tf
