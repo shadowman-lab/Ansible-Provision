@@ -38,7 +38,6 @@
   community.general.terraform:
     project_path: "/tmp/terraform/vmware/"
     state: "{{ terraform_state }}"
-    force_init: true
   register: terraformvms
 
 - name: Encrypt files
