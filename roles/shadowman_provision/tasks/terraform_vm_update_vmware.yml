@@ -8,6 +8,16 @@
     key_file: /certs/id_ed25519
 
 # Remove if desired to manually update terraform file
+- name: Copy terraform main file
+  ansible.builtin.copy:
+    src: files/main.tf
+    dest: /tmp/terraform/vmware/main.tf
+    owner: root
+    group: root
+    mode: '0644'
+  when: terraformmain == "gitops"
+
+# Remove if desired to manually update terraform file
 - name: Update terraform main file
   ansible.builtin.template:
     src: templates/terraformvmware.tf.j2
