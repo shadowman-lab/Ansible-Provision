@@ -1,10 +1,21 @@
 ---
-- name: Unregister system
+- name: Unregister system Satellite
   community.general.redhat_subscription:
     state: absent
     org_id: Shadow_Man
   become: true
-  when: ansible_host != ''
+  when: 
+    - ansible_host != ''
+    - shadowman_provision_hypervisor|default('RHV') != "Azure"
+
+- name: Unregister system from RHSM
+  community.general.redhat_subscription:
+    state: absent
+    org_id: "13247185"
+  become: true
+  when: 
+    - ansible_host != ''
+    - shadowman_provision_hypervisor|default('RHV') == "Azure"
 
 - name: Remove from IDM
   ansible.builtin.command: "ipa-client-install --uninstall --unattended"
@@ -24,11 +35,12 @@
     - ansible_host != ''
     - ansible_host != ip_addr
 
-- name: Delete hosts from Sat if RHEL
+- name: Delete hosts from Sat if RHEL onprem
   redhat.satellite.host:
     name: "{{ inventory_hostname }}"
     username: "{{ username }}"
     password: "{{ password }}"
     server_url: "{{ server_url }}"
     state: absent
+  when: shadowman_provision_hypervisor|default('RHV') != "Azure"
   delegate_to: localhost
