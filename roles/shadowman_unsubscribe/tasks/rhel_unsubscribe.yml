@@ -19,7 +19,9 @@
 
 - name: Remove from IDM
   ansible.builtin.command: "ipa-client-install --uninstall --unattended"
-  when: ansible_host != ''
+  when:
+    - ansible_host != ''
+    - ansible_host != ip_addr
   register: output
   ignore_errors: true
 
