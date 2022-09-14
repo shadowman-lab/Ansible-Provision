@@ -4,18 +4,18 @@
     state: absent
     org_id: Shadow_Man
   become: true
-  when: 
+  when:
     - ansible_host != ''
-    - shadowman_provision_hypervisor|default('RHV') != "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "Azure"
 
 - name: Unregister system from RHSM
   community.general.redhat_subscription:
     state: absent
     org_id: "13247185"
   become: true
-  when: 
+  when:
     - ansible_host != ''
-    - shadowman_provision_hypervisor|default('RHV') == "Azure"
+    - shadowman_provision_hypervisor | default('RHV') == "Azure"
 
 - name: Remove from IDM
   ansible.builtin.command: "ipa-client-install --uninstall --unattended"
@@ -42,5 +42,5 @@
     password: "{{ password }}"
     server_url: "{{ server_url }}"
     state: absent
-  when: shadowman_provision_hypervisor|default('RHV') != "Azure"
+  when: shadowman_provision_hypervisor | default('RHV') != "Azure"
   delegate_to: localhost

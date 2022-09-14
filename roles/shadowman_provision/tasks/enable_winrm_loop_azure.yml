@@ -6,11 +6,11 @@
   register: publicipaddresses
   when: publisher == "MicrosoftWindowsServer"
 
-- name: set public ip address fact
+- name: Set public ip address fact
   ansible.builtin.set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address') }}"
   when: publisher == "MicrosoftWindowsServer"
 
-- name: wait for the WinRM port to come online
+- name: Wait for the WinRM port to come online
   ansible.builtin.wait_for:
     port: 5986
     host: '{{ publicipaddress }}'
