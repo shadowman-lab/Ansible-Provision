@@ -1,4 +1,5 @@
 ---
+# Change sku to 2022-Datacenter for Windows 2022
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
     sku: '2016-Datacenter'
