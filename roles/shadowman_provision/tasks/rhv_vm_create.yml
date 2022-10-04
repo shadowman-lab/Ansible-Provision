@@ -83,6 +83,7 @@
       vms:
         - "{{ item }}"
     loop: "{{ vm_names }}"
+    when: owner is defined
 
   - name: Apply environment tag
     redhat.rhv.ovirt_tag:
@@ -92,6 +93,7 @@
       vms:
         - "{{ item }}"
     loop: "{{ vm_names }}"
+    when: environment is defined
 
   always:
     - name: Logout from RHV

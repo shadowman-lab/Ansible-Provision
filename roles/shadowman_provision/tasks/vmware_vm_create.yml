@@ -60,9 +60,9 @@
     tag_names:
       - tag: "{{ operating_system_tag }}"
         category: operating_system
-      - tag: "{{ environment }}"
+      - tag: "{{ environment | default('dev') }}"
         category: environment
-      - tag: "{{ owner }}"
+      - tag: "{{ owner | default ('shadowman') }}"
         category: owner
     object_name: "{{ item }}"
     object_type: VirtualMachine
