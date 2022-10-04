@@ -75,7 +75,7 @@
         tag_names:
           - tag: "{{ operating_system_tag }}"
             category: operating_system
-          - tag: "{{ environment | default('dev') }}"
+          - tag: "{{ env | default('dev') }}"
             category: environment
           - tag: "{{ owner | default('shadowman') }}"
             category: owner
