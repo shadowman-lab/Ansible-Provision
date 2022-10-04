@@ -36,7 +36,7 @@
       product: "{{ offer | lower }}"
       publisher: "{{ publisher | lower }}"
     tags:
-      environment: "{{ environment | default(omit) }}"
+      environment: "{{ env | default(omit) }}"
       owner: "{{ owner | default(omit) }}"
       operating_system: "RHEL"
   loop: "{{ vm_names }}"
@@ -63,7 +63,7 @@
       version: "{{ version }}"
       sku: "{{ sku }}"
     tags:
-      environment: "{{ environment | default(omit) }}"
+      environment: "{{ env | default(omit) }}"
       owner: "{{ owner | default(omit) }}"
       operating_system: "Windows"
   register: azure_vm

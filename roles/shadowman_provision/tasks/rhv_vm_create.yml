@@ -88,12 +88,12 @@
   - name: Apply environment tag
     redhat.rhv.ovirt_tag:
       auth: "{{ ovirt_auth }}"
-      name: "{{ environment }}"
+      name: "{{ env }}"
       state: attached
       vms:
         - "{{ item }}"
     loop: "{{ vm_names }}"
-    when: environment is defined
+    when: env is defined
 
   always:
     - name: Logout from RHV
