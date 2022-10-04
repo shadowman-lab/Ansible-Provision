@@ -35,6 +35,10 @@
       name: "{{ sku | lower }}"
       product: "{{ offer | lower }}"
       publisher: "{{ publisher | lower }}"
+    tags:
+      environment: "{{ environment }}"
+      owner: "{{ owner }}"
+      operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: publisher == "RedHat"
 
@@ -58,6 +62,10 @@
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
+    tags:
+      environment: "{{ environment }}"
+      owner: "{{ owner }}"
+      operating_system: "Windows"
   register: azure_vm
   loop: "{{ vm_names }}"
   when: publisher == "MicrosoftWindowsServer"

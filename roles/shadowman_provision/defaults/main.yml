@@ -6,14 +6,14 @@ vm_memory: 4GiB
 vm_names: "{{ vm_name.split(',') }}"
 vm_template: 71a8e15d-3602-41f7-8e2c-4689863131ef
 vm_memory_terraform: 4096
-vm_tag: RHEL
+vm_operating_system_tag: RHEL
 terraform_disk: 20
 terraform_network: "LAN_02"
 cluster_id: "Cluster1"
 datastore_id: "NFS_Cersei"
 folder_id: "Discovered virtual machine"
 source_vm_id: "RHEL7_ShadowMan"
-tag: "RHEL"
+operating_system_tag: "RHEL"
 shadowman_provision_hypervisor: "RHV"
 state: poweredon
 publisher: RedHat

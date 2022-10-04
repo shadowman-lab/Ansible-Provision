@@ -2,7 +2,7 @@
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
     source_vm_id: "Win2016_ShadowMan"
-    tag: "Windows"
+    operating_system_tag: "Windows"
   when: operating_system is match("Win.*")
 
 - name: Change facts if running RHEL8
@@ -58,7 +58,12 @@
 - name: Assign Tags
   community.vmware.vmware_tag_manager:
     tag_names:
-      - "{{ tag }}"
+      - tag: "{{ operating_system_tag }}"
+        category: operating_system
+      - tag: "{{ environment }}"
+        category: environment
+      - tag: "{{ owner }}"
+        category: owner
     object_name: "{{ item }}"
     object_type: VirtualMachine
     state: add

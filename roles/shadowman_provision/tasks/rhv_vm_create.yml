@@ -13,7 +13,7 @@
   - name: Change facts if running Windows
     ansible.builtin.set_fact:
       vm_memory: 8GiB
-      vm_tag: Windows
+      vm_operating_system_tag: Windows
     when: operating_system == "Win2016"
 
   - name: Block to handle error with disk
@@ -66,10 +66,28 @@
     when: operating_system is match("Win.*")
     loop: "{{ vm_names }}"
 
-  - name: Apply tags
+  - name: Apply OS tag
     redhat.rhv.ovirt_tag:
       auth: "{{ ovirt_auth }}"
-      name: "{{ vm_tag }}"
+      name: "{{ vm_operating_system_tag }}"
+      state: attached
+      vms:
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+
+  - name: Apply Owner tag
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ owner }}"
+      state: attached
+      vms:
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+
+  - name: Apply environment tag
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ environment }}"
       state: attached
       vms:
         - "{{ item }}"
