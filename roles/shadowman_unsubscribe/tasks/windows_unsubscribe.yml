@@ -10,13 +10,13 @@
   when: ansible_host != ip_addr
 
 - name: Remove Windows host from AD
+  when: ansible_host != ip_addr
   block:
     - name: Delete Windows host from AD
       community.windows.win_domain_computer:
         name: "{{ fqdn.split('.')[0] }}"
         state: absent
-      delegate_to: "dc01.ad.shadowman.dev"
-  when: ansible_host != ip_addr
+      delegate_to: "dc01.ad.shadowman.dev"  
   rescue:
     - name: Retry Delete Windows host from AD due to WINRM
       community.windows.win_domain_computer:

@@ -7,7 +7,8 @@
   when: publisher == "MicrosoftWindowsServer"
 
 - name: Set public ip address fact
-  ansible.builtin.set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address') }}"
+  ansible.builtin.set_fact: 
+    publicipaddress: "{{ publicipaddresses | json_query('publicipaddresses[0].ip_address') }}"
   when: publisher == "MicrosoftWindowsServer"
 
 - name: Wait for the WinRM port to come online

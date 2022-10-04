@@ -34,7 +34,7 @@
     responses:
       password: "{{ pah_pass }}"
 
-- name: Update State of VM to {{ terraform_state }} from template using Terraform
+- name: Update State of VM from template using Terraform to {{ terraform_state }}
   community.general.terraform:
     project_path: "/tmp/terraform/vmware/"
     state: "{{ terraform_state }}"
@@ -68,6 +68,7 @@
   when: terraformmain == "gitops"
 
 - name: VMWare Tags block
+  when: terraform_state == "present"
   block:
     - name: Assign Tags
       community.vmware.vmware_tag_manager:
@@ -76,7 +77,7 @@
             category: operating_system
           - tag: "{{ environment | default('dev') }}"
             category: environment
-          - tag: "{{ owner | default ('shadowman') }}"
+          - tag: "{{ owner | default('shadowman') }}"
             category: owner
         object_name: "{{ item }}"
         object_type: VirtualMachine
@@ -88,5 +89,3 @@
       ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
       loop: "{{ vm_names }}"
       when: operating_system is match("RHEL.*")
-
-  when: terraform_state == "present"

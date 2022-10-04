@@ -1,19 +1,25 @@
 ---
 
-- include_tasks: rhv_vm_create.yml
+- name: RHV VM Create
+  ansible.builtin.include_tasks: rhv_vm_create.yml
   when: shadowman_provision_hypervisor == "RHV"
 
-- include_tasks: azure_vm_create.yml
+- name: Azure VM Create
+  ansible.builtin.include_tasks: azure_vm_create.yml
   when: shadowman_provision_hypervisor == "Azure"
 
-- include_tasks: vmware_vm_create.yml
+- name: VMWare VM Create
+  ansible.builtin.include_tasks: vmware_vm_create.yml
   when: shadowman_provision_hypervisor == "VMWare"
 
-- include_tasks: terraform_vm_update_vmware.yml
+- name: Terraform VMWare VM Create
+  ansible.builtin.include_tasks: terraform_vm_update_vmware.yml
   when: shadowman_provision_hypervisor == "Terraformvmware"
 
-- include_tasks: rhv_wait.yml
+- name: RHV VM Wait
+  ansible.builtin.include_tasks: rhv_wait.yml
   when: shadowman_provision_hypervisor == "RHV"
 
-- include_tasks: vmware_wait.yml
+- name: VMWare VM Wait
+  ansible.builtin.include_tasks: vmware_wait.yml
   when: shadowman_provision_hypervisor == "VMWare"

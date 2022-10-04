@@ -1,10 +1,13 @@
 ---
 
-- include_tasks: rhv_vm_remove.yml
+- name: Remove RHV VM
+  ansible.builtin.include_tasks: rhv_vm_remove.yml
   when: shadowman_provision_hypervisor == "RHV"
 
-- include_tasks: vmware_vm_remove.yml
+- name: Remove VMWare VM
+  ansible.builtin.include_tasks: vmware_vm_remove.yml
   when: shadowman_provision_hypervisor == "VMWare"
 
-- include_tasks: azure_vm_remove.yml
+- name: Remove Azure VM
+  ansible.builtin.include_tasks: azure_vm_remove.yml
   when: shadowman_provision_hypervisor == "Azure"

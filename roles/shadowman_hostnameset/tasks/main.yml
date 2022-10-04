@@ -1,9 +1,12 @@
 ---
-- include_tasks: rhv_hostname.yml
+- name: RHV Hostname
+  ansible.builtin.include_tasks: rhv_hostname.yml
   when: shadowman_provision_hypervisor == "RHV"
 
-- include_tasks: rhv_hostname.yml
+- name: Terraform Hostname
+  ansible.builtin.include_tasks: rhv_hostname.yml
   when: shadowman_provision_hypervisor == "Terraform"
 
-- include_tasks: vmware_hostname.yml
+- name: VMWare Hostname
+  ansible.builtin.include_tasks: vmware_hostname.yml
   when: shadowman_provision_hypervisor == "VMWare"

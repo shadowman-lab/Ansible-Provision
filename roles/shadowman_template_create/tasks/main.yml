@@ -1,7 +1,9 @@
 ---
 
-- include_tasks: rhv_vm_templatevmcreate.yml
+- name: VM Create for Template
+  ansible.builtin.include_tasks: rhv_vm_templatevmcreate.yml
   when: shadowman_template == "createvm"
 
-- include_tasks: rhv_vm_templatecreate.yml
+- name: Create Template
+  ansible.builtin.include_tasks: rhv_vm_templatecreate.yml
   when: shadowman_template == "createtemplate"

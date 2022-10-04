@@ -1,10 +1,13 @@
 ---
 
-- include_tasks: shadowman_snapshot_pull_collection.yml
+- name: Snapshot Pull
+  ansible.builtin.include_tasks: shadowman_snapshot_pull_collection.yml
   when: shadowman_snapshot == "pull_collection"
 
-- include_tasks: shadowman_snapshot_create.yml
+- name: Snapshot Create
+  ansible.builtin.include_tasks: shadowman_snapshot_create.yml
   when: shadowman_snapshot == "create"
 
-- include_tasks: shadowman_snapshot_restore.yml
+- name: Snapshot Restore
+  ansible.builtin.include_tasks: shadowman_snapshot_restore.yml
   when: shadowman_snapshot == "restore"
