@@ -72,7 +72,12 @@
     - name: Assign Tags
       community.vmware.vmware_tag_manager:
         tag_names:
-          - "{{ tag }}"
+          - tag: "{{ operating_system_tag }}"
+            category: operating_system
+          - tag: "{{ environment | default('dev') }}"
+            category: environment
+          - tag: "{{ owner | default ('shadowman') }}"
+            category: owner
         object_name: "{{ item }}"
         object_type: VirtualMachine
         state: add
