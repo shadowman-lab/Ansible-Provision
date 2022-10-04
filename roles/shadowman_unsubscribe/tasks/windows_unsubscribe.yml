@@ -16,7 +16,7 @@
       community.windows.win_domain_computer:
         name: "{{ fqdn.split('.')[0] }}"
         state: absent
-      delegate_to: "dc01.ad.shadowman.dev"  
+      delegate_to: "dc01.ad.shadowman.dev"
   rescue:
     - name: Retry Delete Windows host from AD due to WINRM
       community.windows.win_domain_computer:

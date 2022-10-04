@@ -5,6 +5,6 @@
   when: os is match("rhel.*")
 
 - name: Unsubscribe Windows
-  include_tasks: windows_unsubscribe.yml
+  ansible.builtin.include_tasks: windows_unsubscribe.yml
   when: os is match("windows.*")
   tags: removead
