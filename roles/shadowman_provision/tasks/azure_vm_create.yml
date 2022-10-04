@@ -37,7 +37,7 @@
       publisher: "{{ publisher | lower }}"
     tags:
       environment: "{{ environment | default(omit) }}"
-      owner: "{{ owner  | default(omit)}}"
+      owner: "{{ owner | default(omit) }}"
       operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: publisher == "RedHat"
@@ -63,8 +63,8 @@
       version: "{{ version }}"
       sku: "{{ sku }}"
     tags:
-      environment: "{{ environment  | default(omit) }}"
-      owner: "{{ owner  | default(omit) }}"
+      environment: "{{ environment | default(omit) }}"
+      owner: "{{ owner | default(omit) }}"
       operating_system: "Windows"
   register: azure_vm
   loop: "{{ vm_names }}"
