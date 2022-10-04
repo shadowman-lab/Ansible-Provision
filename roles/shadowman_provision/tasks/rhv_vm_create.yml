@@ -78,7 +78,7 @@
   - name: Apply Owner tag
     redhat.rhv.ovirt_tag:
       auth: "{{ ovirt_auth }}"
-      name: "{{ owner }}"
+      name: "{{ owner.split('@')[0] }}"
       state: attached
       vms:
         - "{{ item }}"
