@@ -79,7 +79,6 @@
     redhat.rhv.ovirt_tag:
       auth: "{{ ovirt_auth }}"
       name: "{{ owner.split('@')[0] }}"
-      description: "owner"
       state: attached
       vms:
         - "{{ item }}"
