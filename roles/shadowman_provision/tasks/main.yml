@@ -1,9 +1,19 @@
 ---
-- name: Check for proper on prem VM name
+- name: Check for proper on prem VM name RHEL
   ansible.builtin.assert:
     that: "'.shadowman.dev' in vm_name"
-    fail_msg: "On Premise VM Name must include FQDN of .shadowman.dev"
-  when: shadowman_provision_hypervisor != "Azure"
+    fail_msg: "On Premise VM Name must include FQDN of .shadowman.dev for RHEL"
+  when: 
+    - shadowman_provision_hypervisor != "Azure"
+    - operating_system != "Win2016"
+
+- name: Check for proper on prem VM name Windows
+  ansible.builtin.assert:
+    that: "'.ad.shadowman.dev' in vm_name"
+    fail_msg: "On Premise VM Name must include FQDN of .ad.shadowman.dev for Windows"
+  when: 
+    - shadowman_provision_hypervisor != "Azure"
+    - operating_system == "Win2016"
 
 - name: RHV VM Create
   ansible.builtin.include_tasks: rhv_vm_create.yml
