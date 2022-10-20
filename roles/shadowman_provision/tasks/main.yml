@@ -1,4 +1,9 @@
 ---
+- name: Check for proper on prem VM name
+  ansible.builtin.assert:
+    that: "'.shadowman.dev' in vm_name"
+    fail_msg: "On Premise VM Name must include FQDN of .shadowman.dev"
+  when: shadowman_provision_hypervisor != "Azure"
 
 - name: RHV VM Create
   ansible.builtin.include_tasks: rhv_vm_create.yml
