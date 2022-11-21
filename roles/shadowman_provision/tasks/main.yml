@@ -6,6 +6,7 @@
   when: 
     - shadowman_provision_hypervisor != "Azure"
     - operating_system != "Win2016"
+    - terraformmain != "gitops"
 
 - name: Check for proper on prem VM name Windows
   ansible.builtin.assert:
@@ -14,6 +15,7 @@
   when: 
     - shadowman_provision_hypervisor != "Azure"
     - operating_system == "Win2016"
+    - terraformmain != "gitops"
 
 - name: RHV VM Create
   ansible.builtin.include_tasks: rhv_vm_create.yml
