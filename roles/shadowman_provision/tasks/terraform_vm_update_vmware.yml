@@ -35,7 +35,7 @@
       password: "{{ pah_pass }}"
 
 - name: Update State of VM from template using Terraform to {{ terraform_state }}
-  community.general.terraform:
+  cloud.terraform.terraform:
     project_path: "/tmp/terraform/vmware/"
     state: "{{ terraform_state }}"
   register: terraformvms
