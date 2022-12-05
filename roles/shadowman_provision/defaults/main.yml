@@ -25,3 +25,5 @@ resource_group_name: Demo
 storage_account_name: demorh
 terraform_state: absent
 terraformmain: ansible
+shadowman_storage_domain: NFS_Cersei
+#When ssd is fixed shadowman_storage_domain: SSD_Array
