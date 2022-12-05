@@ -25,6 +25,7 @@
           template: "{{ template }}"
           cluster: "{{ cluster }}"
           memory: "{{ vm_memory }}"
+          storage_domain: "{{ shadowman_storage_domain }}"
           high_availability: true
           state: "{{ vm_state }}"
           wait: true
@@ -57,6 +58,7 @@
       template: "{{ template }}"
       cluster: "{{ cluster }}"
       memory: "{{ vm_memory }}"
+      storage_domain: "{{ shadowman_storage_domain }}"
       high_availability: true
       sysprep:
         host_name: "{{ item.split('.')[0] }}"
