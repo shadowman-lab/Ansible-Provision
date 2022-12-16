@@ -1,0 +1,58 @@
+---
+- name: Block for RHV
+  block:
+
+  - name: Login to RHV
+    redhat.rhv.ovirt_auth:
+      hostname: "{{ rhvm_fqdn }}"
+      username: "{{ rhvm_user }}"
+      password: "{{ rhvm_password }}"
+      ca_file: "{{ rhvm_cafile | default(omit) }}"
+      insecure: "{{ rhvm_insecure | default(true) }}"
+
+  - name: Create and run VM from template
+    redhat.rhv.ovirt_vm:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ item }}"
+      template: "{{ template }}"
+      cluster: "{{ cluster }}"
+      storage_domain: "{{ shadowman_storage_domain }}"
+      high_availability: true
+      state: "{{ vm_state }}"
+      wait: true
+    loop: "{{ vm_names }}"
+    
+  - name: Apply OCP tag
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "ocp_hosted"
+      state: attached
+      vms:
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+
+  - name: Apply Owner tag
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "{{ owner.split('@')[0] }}"
+      state: attached
+      vms:
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+    when: owner is defined
+
+  - name: Apply environment tag
+    redhat.rhv.ovirt_tag:
+      auth: "{{ ovirt_auth }}"
+      name: "test"
+      state: attached
+      vms:
+        - "{{ item }}"
+    loop: "{{ vm_names }}"
+    when: env is defined
+
+  always:
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

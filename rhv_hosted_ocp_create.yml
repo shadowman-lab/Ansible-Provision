@@ -1,0 +1,8 @@
+---
+- name: Create OCP VM on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - shadowman_hosted_cluster

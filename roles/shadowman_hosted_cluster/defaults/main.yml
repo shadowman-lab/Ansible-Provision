@@ -1,0 +1,8 @@
+---
+datacenter: Default
+cluster: Default
+template: "hypershift-hosted-worker"
+vm_names: "{{ vm_name.split(',') }}"
+state: running
+# shadowman_storage_domain: NFS_Cersei
+shadowman_storage_domain: SSD_Array
