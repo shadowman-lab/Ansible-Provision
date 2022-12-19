@@ -50,6 +50,10 @@
         - "{{ item }}"
     loop: "{{ vm_names }}"
 
+  - name: Wait for 60 seconds for auto discovery
+    ansible.builtin.wait_for:
+      timeout: 60
+
   always:
     - name: Logout from RHV
       redhat.rhv.ovirt_auth:
