@@ -49,7 +49,6 @@
       vms:
         - "{{ item }}"
     loop: "{{ vm_names }}"
-    when: env is defined
 
   always:
     - name: Logout from RHV
