@@ -69,6 +69,10 @@
         workerip: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
       per_host: false
 
+  - name: Add 60 second wait for discovery
+    ansible.builtin.wait_for:
+      timeout: 60
+
   always:
     - name: Logout from RHV
       redhat.rhv.ovirt_auth:
