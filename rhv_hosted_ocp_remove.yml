@@ -5,4 +5,4 @@
   gather_facts: false
 
   roles:
-    - shadowman_hosted_cluster
+    - shadowman_hosted_cluster_remove
