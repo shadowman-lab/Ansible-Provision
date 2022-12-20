@@ -1,2 +1,0 @@
----
-vm_names: "{{ vm_name.split(',') }}"
