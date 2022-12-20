@@ -50,9 +50,24 @@
         - "{{ item }}"
     loop: "{{ vm_names }}"
 
-  - name: Wait for 60 seconds for auto discovery
-    ansible.builtin.wait_for:
-      timeout: 60
+  - name: Test for IP address
+    redhat.rhv.ovirt_nic_info:
+      vm: "{{ vm_names }}"
+      fetch_nested: true
+      nested_attributes:
+        - ips
+      name: nic1
+      auth: "{{ ovirt_auth }}"
+    register: results
+    until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
+    retries: 60
+    delay: 10
+
+  - name: Set stats for IP
+    ansible.builtin.set_stats:
+      data:
+        workerip: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+      per_host: false
 
   always:
     - name: Logout from RHV
