@@ -1,0 +1,36 @@
+---
+- name: Block for RHV
+  block:
+
+  - name: Login to RHV
+    redhat.rhv.ovirt_auth:
+      hostname: "{{ rhvm_fqdn }}"
+      username: "{{ rhvm_user }}"
+      password: "{{ rhvm_password }}"
+      ca_file: "{{ rhvm_cafile | default(omit) }}"
+      insecure: "{{ rhvm_insecure | default(true) }}"
+
+  - name: Test for IP address
+    redhat.rhv.ovirt_nic_info:
+      vm: "{{ vm_names }}"
+      fetch_nested: true
+      nested_attributes:
+        - ips
+      name: nic1
+      auth: "{{ ovirt_auth }}"
+    register: results
+    until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
+    retries: 60
+    delay: 10
+
+  - name: Set stats for IP
+    ansible.builtin.set_stats:
+      data:
+        workerip: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+      per_host: false
+
+  always:
+    - name: Logout from RHV
+      redhat.rhv.ovirt_auth:
+        state: absent
+        ovirt_auth: "{{ ovirt_auth }}"

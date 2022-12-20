@@ -1,0 +1,8 @@
+---
+- name: Get OCP VM IP on RHV
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - shadowman_hosted_cluster_ip
