@@ -52,7 +52,7 @@
 
   - name: Test for IP address
     redhat.rhv.ovirt_nic_info:
-      vm: "{{ vm_names }}"
+      vm: "{{ vm_name }}"
       fetch_nested: true
       nested_attributes:
         - ips
