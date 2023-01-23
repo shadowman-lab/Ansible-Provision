@@ -1,9 +1,11 @@
 ---
 - name: Check for proper on prem VM name RHEL
   ansible.builtin.assert:
-    that: "'.shadowman.dev' in vm_name"
+    that:
+      - "'.shadowman.dev' in vm_name"
+      - "'.ad.shadowman.dev' not in vm_name"
     fail_msg: "On Premise VM Name must include FQDN of .shadowman.dev for RHEL"
-  when: 
+  when:
     - shadowman_provision_hypervisor != "Azure"
     - operating_system != "Win2016"
     - terraformmain != "gitops"
@@ -12,7 +14,7 @@
   ansible.builtin.assert:
     that: "'.ad.shadowman.dev' in vm_name"
     fail_msg: "On Premise VM Name must include FQDN of .ad.shadowman.dev for Windows"
-  when: 
+  when:
     - shadowman_provision_hypervisor != "Azure"
     - operating_system == "Win2016"
     - terraformmain != "gitops"
