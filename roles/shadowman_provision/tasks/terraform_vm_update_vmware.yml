@@ -80,7 +80,7 @@
       loop:
         - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
         - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
-        
+
     - name: Assign Tags
       community.vmware.vmware_tag_manager:
         tag_names:
