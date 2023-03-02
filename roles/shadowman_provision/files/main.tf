@@ -36,8 +36,8 @@ data "vsphere_virtual_machine" "template8" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-resource "vsphere_virtual_machine" "server7" {
-  name             = "server7.shadowman.dev"
+resource "vsphere_virtual_machine" "server1" {
+  name             = "server1.shadowman.dev"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
@@ -56,7 +56,7 @@ resource "vsphere_virtual_machine" "server7" {
   wait_for_guest_ip_timeout  = -1
 
   disk {
-    label            = "server7"
+    label            = "server1"
     thin_provisioned = data.vsphere_virtual_machine.template7.disks.0.thin_provisioned
     size             = data.vsphere_virtual_machine.template7.disks.0.size
   }
@@ -68,12 +68,12 @@ resource "vsphere_virtual_machine" "server7" {
   }
 }
 
-output "vm_name_server7" {
-  value = vsphere_virtual_machine.server7.name
+output "vm_name_server1" {
+  value = vsphere_virtual_machine.server1.name
 }
 
-resource "vsphere_virtual_machine" "server8" {
-  name             = "server8.shadowman.dev"
+resource "vsphere_virtual_machine" "server2" {
+  name             = "server2.shadowman.dev"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
@@ -92,7 +92,7 @@ resource "vsphere_virtual_machine" "server8" {
   wait_for_guest_ip_timeout  = -1
 
   disk {
-    label            = "server8"
+    label            = "server2"
     thin_provisioned = data.vsphere_virtual_machine.template8.disks.0.thin_provisioned
     size             = data.vsphere_virtual_machine.template8.disks.0.size
   }
@@ -104,8 +104,8 @@ resource "vsphere_virtual_machine" "server8" {
   }
 }
 
-output "vm_name_server8" {
-  value = vsphere_virtual_machine.server8.name
+output "vm_name_server2" {
+  value = vsphere_virtual_machine.server2.name
 }
 
 resource "vsphere_virtual_machine" "server3" {
