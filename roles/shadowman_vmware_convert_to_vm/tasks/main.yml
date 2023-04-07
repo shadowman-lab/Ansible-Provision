@@ -1,16 +1,23 @@
 ---
-- name: Stop VM
-  community.vmware.vmware_guest:
-    datacenter: Shadowman
-    cluster: Cluster1
-    name: "{{ template_name }}"
-    state: poweredoff
-    validate_certs: false
-
 - name: Convert to VM
   community.vmware.vmware_guest:
     datacenter: Shadowman
     cluster: Cluster1
     name: "{{ template_name }}"
-    is_template: true
+    is_template: false
     validate_certs: false
+
+- name: Turn on VM
+  community.vmware.vmware_guest:
+    datacenter: Shadowman
+    cluster: Cluster1
+    name: "{{ template_name }}"
+    state: poweredon
+    wait_for_ip_address: true
+    validate_certs: false
+  register: vminfo
+
+- name: Add Host
+  ansible.builtin.add_host:
+    name: "{{ vminfo.instance.ipv4 }}"
+    groups: "justcreated"
