@@ -43,5 +43,8 @@
 - name: Delete hosts from Sat
   redhat.satellite.host:
     name: localhost.localdomain
+    username: "{{ username }}"
+    password: "{{ password }}"
+    server_url: "{{ server_url }}"
     state: absent
   delegate_to: localhost
