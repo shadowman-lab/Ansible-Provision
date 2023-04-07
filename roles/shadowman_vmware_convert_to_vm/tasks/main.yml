@@ -1,0 +1,16 @@
+---
+- name: Stop VM
+  community.vmware.vmware_guest:
+    datacenter: Shadowman
+    cluster: Cluster1
+    name: "{{ template_name }}"
+    state: poweredoff
+    validate_certs: false
+
+- name: Convert to VM
+  community.vmware.vmware_guest:
+    datacenter: Shadowman
+    cluster: Cluster1
+    name: "{{ template_name }}"
+    is_template: true
+    validate_certs: false

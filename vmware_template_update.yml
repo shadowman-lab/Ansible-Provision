@@ -1,0 +1,20 @@
+---
+- name: VMWare VMTemplate Update
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - shadowman_vmware_convert_to_vm
+
+- name: Register and Update
+  hosts: justcreated
+
+  roles:
+    - shadowman_vmware_update_template
+
+- name: VMWare VMTemplate Restore
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - shadowman_vmware_convert_to_template

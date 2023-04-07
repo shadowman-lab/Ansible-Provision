@@ -1,0 +1,47 @@
+---
+- name: Use Activation Key to Register RHEL7 Machine to Satellite
+  community.general.redhat_subscription:
+    state: present
+    activationkey: "RHEL7 Everything"
+    org_id: Shadow_Man
+  when:
+    - ansible_distribution_version is match("7.*")
+
+- name: Use Activation Key to Register RHEL8 Machine to Satellite
+  community.general.redhat_subscription:
+    state: present
+    activationkey: "RHEL8"
+    org_id: Shadow_Man
+  when:
+    - ansible_distribution_version is match("8.*")
+
+- name: Upgrade all packages (yum)
+  ansible.builtin.yum:
+    name: '*'
+    state: latest
+    update_only: true
+  when: ansible_pkg_mgr == "yum"
+
+- name: Upgrade all packages (dnf)
+  ansible.builtin.dnf:
+    name: '*'
+    state: latest
+    update_only: true
+  when: ansible_pkg_mgr == "dnf"
+
+- name: Unregister system Satellite
+  community.general.redhat_subscription:
+    state: absent
+    org_id: Shadow_Man
+
+- name: Clean subscription-manager
+  ansible.builtin.command:
+    cmd: "subscription-manager clean"
+  register: cleanresult
+  changed_when: cleanresult.rc == 0
+
+- name: Delete hosts from Sat
+  redhat.satellite.host:
+    name: localhost.localdomain
+    state: absent
+  delegate_to: localhost
