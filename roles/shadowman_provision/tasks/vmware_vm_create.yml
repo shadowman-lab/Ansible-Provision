@@ -1,19 +1,8 @@
 ---
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
-    source_vm_id: "Win2016_ShadowMan"
     operating_system_tag: "Windows"
   when: operating_system is match("Win.*")
-
-- name: Change facts if running RHEL8
-  ansible.builtin.set_fact:
-    source_vm_id: "RHEL8_ShadowMan"
-  when: operating_system == "RHEL8"
-
-- name: Change facts if running RHEL8 Edge
-  ansible.builtin.set_fact:
-    source_vm_id: "RHEL8EDGE_ShadowMan"
-  when: operating_system == "RHEL8Edge"
 
 - name: Create and run Linux VM
   community.vmware.vmware_guest:
