@@ -79,7 +79,7 @@
                       <Identification>
                           <Credentials>
                               <Domain><![CDATA[$JoinDomain$]]></Domain>
-                              <Password><![CDATA[$DomainAdminPassword$]]></Password>
+                              <Password><![CDATA[$DomainAdminPassword$]]></Password> # gitleaks:allow
                               <Username><![CDATA[$DomainAdmin$]]></Username>
                           </Credentials>
                           <DebugJoin>true</DebugJoin>
