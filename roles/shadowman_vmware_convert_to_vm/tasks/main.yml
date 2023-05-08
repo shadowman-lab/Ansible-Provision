@@ -3,7 +3,6 @@
   community.vmware.vmware_guest:
     datacenter: Shadowman
     cluster: Cluster1
-    folder: "Discovered virtual machine"
     name: "{{ template_name }}"
     is_template: false
     validate_certs: false
