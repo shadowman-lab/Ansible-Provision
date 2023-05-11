@@ -1,24 +1,11 @@
 ---
-- name: Create .ssh folder
-  ansible.builtin.file:
-    path: /root/.ssh
-    state: directory
-    mode: '0777'
-  become: true
-
-- name: Create the ssh key file based on the supplied cred
-  ansible.builtin.copy:
-    content: "{{ cert_key }}"
-    dest: /root/.ssh/id_git
-    mode: '0600'
-
 - name: Sync with Gitrepo
   ansible.builtin.git:
     repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
     dest: /tmp/terraform
     version: main
     accept_newhostkey: true
-    key_file: /root/.ssh/id_git
+    key_file: "{{ cert_key_file }}"
 
 # Leverage GitOps for updating main.tf
 - name: Copy terraform main file
@@ -61,7 +48,7 @@
       password: "{{ pah_pass }}"
 
 - name: Update git repo with terraform files
-  ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git config --global core.sshCommand 'ssh -i /root/.ssh/id_git -F /dev/null' && git push
+  ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
   args:
     chdir: /tmp/terraform
   environment:
