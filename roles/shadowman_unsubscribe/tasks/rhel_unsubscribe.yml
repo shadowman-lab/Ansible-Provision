@@ -2,7 +2,7 @@
 - name: Unregister system Satellite
   community.general.redhat_subscription:
     state: absent
-    org_id: Shadow_Man
+    org_id: Shadowman
   become: true
   when:
     - ansible_host != ''
