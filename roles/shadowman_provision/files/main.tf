@@ -37,7 +37,7 @@ data "vsphere_virtual_machine" "template8" {
 }
 
 resource "vsphere_virtual_machine" "server1" {
-  name             = "server15.shadowman.dev"
+  name             = "server14.shadowman.dev"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
