@@ -5,10 +5,3 @@
 
   roles:
     - shadowman_deprovision
-
-- name: Soft Delete VM
-  hosts: localhost
-  gather_facts: false
-
-  roles:
-    - shadowman_soft_delete
