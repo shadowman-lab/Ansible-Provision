@@ -5,3 +5,4 @@
 
   roles:
     - shadowman_deprovision
+    - shadowman_soft_delete

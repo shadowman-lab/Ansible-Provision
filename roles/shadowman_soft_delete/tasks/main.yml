@@ -1,0 +1,22 @@
+---
+- name: Get Host ID
+  ansible.builtin.uri:
+    url: https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/v2/host_metrics?hostname={{ inventory_hostname }}
+    user: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+    method: GET
+    force_basic_auth: true
+    status_code: 200
+  delegate_to: localhost
+  register: host_metric
+
+- name: Soft Delete host
+  ansible.builtin.uri:
+    url: https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/v2/host_metrics/{{ host_metric.json.results[0].id }}
+    user: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+    password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+    method: DELETE
+    follow_redirects: all
+    force_basic_auth: true
+    status_code: 204
+  delegate_to: localhost
