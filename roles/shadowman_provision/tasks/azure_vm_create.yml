@@ -7,11 +7,15 @@
     offer: "WindowsServer"
   when: operating_system is match("Win.*")
 
-- name: Change facts if running RHEL8
+- name: Change sku if running RHEL8
   ansible.builtin.set_fact:
     sku: 'rhel-lvm88'
-    plan_name: "Red Hat Enterprise Linux 8.8 (BYOS)"
   when: operating_system == "RHEL8"
+
+- name: Change sku if running RHEL9
+  ansible.builtin.set_fact:
+    sku: 'rhel-lvm92'
+  when: operating_system == "RHEL9"
 
 - name: Provision instance RHEL
   azure.azcollection.azure_rm_virtualmachine:
