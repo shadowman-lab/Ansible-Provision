@@ -36,8 +36,13 @@ data "vsphere_virtual_machine" "template8" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_virtual_machine" "template9" {
+  name          = "/${var.datacenter}/vm/RHEL9_ShadowMan"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 resource "vsphere_virtual_machine" "server1" {
-  name             = "server10.shadowman.dev"
+  name             = "server1.shadowman.dev"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
@@ -113,15 +118,15 @@ resource "vsphere_virtual_machine" "server3" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   folder           = "Discovered virtual machine"
-  firmware         = data.vsphere_virtual_machine.template8.firmware
-  scsi_type        = data.vsphere_virtual_machine.template8.scsi_type
+  firmware         = data.vsphere_virtual_machine.template9.firmware
+  scsi_type        = data.vsphere_virtual_machine.template9.scsi_type
 
-  num_cpus = data.vsphere_virtual_machine.template8.num_cpus
-  memory   = data.vsphere_virtual_machine.template8.memory
+  num_cpus = data.vsphere_virtual_machine.template9.num_cpus
+  memory   = data.vsphere_virtual_machine.template9.memory
 
   network_interface {
     network_id = data.vsphere_network.network.id
-    adapter_type = data.vsphere_virtual_machine.template8.network_interface_types[0]
+    adapter_type = data.vsphere_virtual_machine.template9.network_interface_types[0]
   }
 
   wait_for_guest_net_timeout = 10
@@ -129,14 +134,14 @@ resource "vsphere_virtual_machine" "server3" {
 
   disk {
     label            = "server3"
-    thin_provisioned = data.vsphere_virtual_machine.template8.disks.0.thin_provisioned
-    size             = data.vsphere_virtual_machine.template8.disks.0.size
+    thin_provisioned = data.vsphere_virtual_machine.template9.disks.0.thin_provisioned
+    size             = data.vsphere_virtual_machine.template9.disks.0.size
   }
 
-  guest_id = data.vsphere_virtual_machine.template8.guest_id
+  guest_id = data.vsphere_virtual_machine.template9.guest_id
 
   clone {
-    template_uuid = data.vsphere_virtual_machine.template8.id
+    template_uuid = data.vsphere_virtual_machine.template9.id
   }
 }
 
