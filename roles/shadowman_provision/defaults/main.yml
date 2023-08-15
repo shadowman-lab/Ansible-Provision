@@ -27,3 +27,4 @@ terraform_state: absent
 terraformmain: ansible
 # shadowman_storage_domain: NFS_Cersei
 shadowman_storage_domain: SSD_Array
+project_name: vmware
