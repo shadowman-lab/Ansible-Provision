@@ -48,7 +48,7 @@
     responses:
       password: "{{ pah_pass }}"
   register: result
-  failed_when: '"ERROR! Decryption failed" in result.stderr'
+  failed_when: '"ERROR! Decryption failed" in result.stdout_lines[1]'
 
 - name: Update State of VM from template using Terraform to {{ terraform_state }}
   cloud.terraform.terraform:
