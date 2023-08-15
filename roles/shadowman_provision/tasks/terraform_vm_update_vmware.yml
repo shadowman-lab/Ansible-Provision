@@ -7,6 +7,14 @@
     accept_newhostkey: true
     key_file: "{{ cert_key_file }}"
 
+- name: Ensure project directory exists
+  ansible.builtin.file:
+    path: /tmp/terraform/{{ project_name }}
+    state: directory
+    owner: root
+    group: root
+    mode: '0644'
+
 # Leverage GitOps for updating main.tf
 - name: Copy terraform main file
   ansible.builtin.copy:
