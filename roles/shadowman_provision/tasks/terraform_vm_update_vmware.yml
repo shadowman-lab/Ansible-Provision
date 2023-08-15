@@ -7,19 +7,11 @@
     accept_newhostkey: true
     key_file: "{{ cert_key_file }}"
 
-- name: Ensure project directory exists
-  ansible.builtin.file:
-    path: /tmp/terraform/{{ project_name }}
-    state: directory
-    owner: root
-    group: root
-    mode: '0644'
-
 # Leverage GitOps for updating main.tf
 - name: Copy terraform main file
   ansible.builtin.copy:
     src: files/main.tf
-    dest: /tmp/terraform/{{ project_name }}/main.tf
+    dest: /tmp/terraform/vmware/main.tf
     owner: root
     group: root
     mode: '0644'
@@ -35,7 +27,7 @@
 - name: Update terraform main file
   ansible.builtin.template:
     src: templates/terraformvmware.tf.j2
-    dest: /tmp/terraform/{{ project_name }}/main.tf
+    dest: /tmp/terraform/vmware/main.tf
     owner: root
     group: root
     mode: '0644'
@@ -44,23 +36,20 @@
 - name: Decrypt files
   ansible.builtin.expect:
     command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
-    chdir: /tmp/terraform/{{ project_name }}
+    chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
-  register: result
-  failed_when: '"ERROR! Decryption failed" in result.stdout_lines[1]'
 
 - name: Update State of VM from template using Terraform to {{ terraform_state }}
   cloud.terraform.terraform:
-    project_path: "/tmp/terraform/{{ project_name }}/"
+    project_path: "/tmp/terraform/vmware/"
     state: "{{ terraform_state }}"
-    force_init: true
   register: terraformvms
 
 - name: Encrypt files
   ansible.builtin.expect:
     command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
-    chdir: /tmp/terraform/{{ project_name }}
+    chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
 
