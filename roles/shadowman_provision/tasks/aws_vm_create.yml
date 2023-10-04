@@ -1,13 +1,47 @@
 # Create EC2 VPC Subnet & AWS Create EC2 Security Group & Create EC2 instance with public IP
+- name: Create VPC over AWS Cloud
+  amazon.aws.ec2_vpc_net:
+    name: "{{ vpc_name }}"
+    cidr_block: "{{ _vpc_cidr_block_ }}"
+    region: "{{ _region_ }}"
+    dns_support: true
+    dns_hostnames: true
+    tenancy: default
+    state: present
+  register: ec2_vpc_net_result
+
+- name: Create Internet Gateway for VPC
+  amazon.aws.ec2_vpc_igw:
+    vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+    region: "{{ _region_ }}"
+    state: present
+    tags:
+      Name: "{{ igw_name }}"
+  register: igw_result
+
 - name: Create EC2 VPC Subnet
   amazon.aws.ec2_vpc_subnet:
     state: present
-    vpc_id: "{{ _vpc_id_ }}"
-    cidr: "{{ _cidr_ }}"
+    vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+    cidr: "{{ _subnet_cidr_ }}"
     region: "{{ _region_ }}"
     tags:
       Name: "{{ subnet_name }}"
   register: vpcsubnet
+
+- name: Create VPC Public Subnet Route Table
+  amazon.aws.ec2_vpc_route_table:
+    vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
+    region: "{{ _region_ }}"
+    state: present
+    tags:
+      Name: "{{ _route_table_name_ }}"
+    subnets: ["{{ vpcsubnet.subnet.id }}"]
+    # create routes
+    routes:
+      - dest: "{{ destination_cidr_block }}"
+        gateway_id: "{{ igw_result.gateway_id }}"
+  register: public_route_table
 
 - name: AWS Create EC2 Security Group
   amazon.aws.ec2_security_group:
@@ -17,11 +51,22 @@
     region: "{{ _region_ }}"
     rules:
       - proto: tcp
-        ports: "{{ _service_ports }}"
-        cidr_ip: "{{ _cidr_ }}"
-        rule_desc: "{{ _security_group_name_ }}"
+        ports:
+          - 22
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on port 22
+      - proto: tcp
+        ports:
+          - 80
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on port 80
+      - proto: tcp
+        ports:
+          - 443
+        cidr_ip: 0.0.0.0/0
+        rule_desc: allow all on port 443
     tags:
-      Name: "{{ _security_group_name_ }}"
+      Name: "{{ _security_group_ }}"
 
 - name: Create EC2 Key
   amazon.aws.ec2_key:
