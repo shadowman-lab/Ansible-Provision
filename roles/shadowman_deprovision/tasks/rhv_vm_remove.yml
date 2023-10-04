@@ -9,7 +9,6 @@
       ca_file: "{{ rhvm_cafile | default(omit) }}"
       insecure: "{{ rhvm_insecure | default(true) }}"
     delegate_to: localhost
-    run_once: true
 
   - name: Stop VM
     redhat.rhv.ovirt_vm:
@@ -33,4 +32,3 @@
         state: absent
         ovirt_auth: "{{ ovirt_auth }}"
       delegate_to: localhost
-      run_once: true
