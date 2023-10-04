@@ -1,0 +1,45 @@
+# Create EC2 VPC Subnet & AWS Create EC2 Security Group & Create EC2 instance with public IP
+- name: Create EC2 VPC Subnet
+  amazon.aws.ec2_vpc_subnet:
+    state: present
+    vpc_id: "{{ _vpc_id_ }}"
+    cidr: "{{ _cidr_ }}"
+    region: "{{ _region_ }}"
+    tags:
+      Name: "{{ subnet_name }}"
+  register: vpcsubnet
+
+- name: AWS Create EC2 Security Group
+  amazon.aws.ec2_security_group:
+    name: "{{ _security_group_ }}"
+    description: "{{ __security_group_description_ }}"
+    vpc_id: "{{ _vpc_id_ }}"
+    region: "{{ _region_ }}"
+    rules:
+      - proto: tcp
+        ports: "{{ _service_ports }}"
+        cidr_ip: "{{ _cidr_ }}"
+        rule_desc: "{{ _security_group_name_ }}"
+    tags:
+      Name: "{{ _security_group_name_ }}"
+
+- name: Create EC2 Key
+  amazon.aws.ec2_key:
+    name: "{{ _key_name_ }}"
+    region: "{{ _region_ }}"
+
+- name: Create EC2 instance with public IP
+  amazon.aws.ec2_instance:
+    name: "{{ _ec2_instance_name_ }}"
+    key_name: "{{ _key_name_ }}"
+    vpc_subnet_id: "{{ vpcsubnet.subnet.id }}"
+    instance_type: "{{ _instance_type_ }}"
+    security_group: "{{ _security_group_ }}"
+    state: running
+    wait: true
+    network:
+      assign_public_ip: true
+    image_id: "{{ _image_id_ }}"
+    region: "{{ _region_ }}"
+    tags:
+      Name: "{{ _ec2_instance_name_ }}"
