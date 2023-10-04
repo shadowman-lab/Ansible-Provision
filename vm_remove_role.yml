@@ -2,6 +2,7 @@
 - name: Remove VM
   hosts: "{{ vm_name | default('none') }}"
   gather_facts: false
+  serial: 1
 
   roles:
     - shadowman_deprovision
