@@ -157,7 +157,7 @@
     tags:
       name: "{{ item }}"
       owner: "{{ owner }}"
-      env: "{{ env }}"
+      environment: "{{ env }}"
       operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
