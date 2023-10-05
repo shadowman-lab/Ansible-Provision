@@ -62,6 +62,7 @@
 - name: AWS Create EC2 Security Group for RHEL
   amazon.aws.ec2_security_group:
     name: "{{ _security_group_ }}_RHEL"
+    description: "Security Group for Linux VM"
     vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
     region: "{{ _region_ }}"
     rules:
@@ -87,6 +88,7 @@
 - name: AWS Create EC2 Security Group for Windows
   amazon.aws.ec2_security_group:
     name: "{{ _security_group_ }}_Windows"
+    description: "Security Group for Windows VM"
     vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
     region: "{{ _region_ }}"
     rules:
