@@ -2,7 +2,7 @@
 
 - name: Change image ID if running Windows
   ansible.builtin.set_fact:
-    _image_id_: 'XXX'
+    _image_id_: 'ami-0b581691fa8799abd'
   when: operating_system is match("Win.*")
 
 - name: Change image ID if running RHEL8
@@ -24,6 +24,8 @@
     dns_hostnames: true
     tenancy: default
     state: present
+    tags:
+      Name: "{{ vpc_name }}"
   register: ec2_vpc_net_result
 
 - name: Create Internet Gateway for VPC
@@ -115,6 +117,7 @@
   amazon.aws.ec2_key:
     name: "{{ _key_name_ }}"
     region: "{{ _region_ }}"
+  register: awsec2_key
 
 - name: Create EC2 instance with public IP for RHEL
   amazon.aws.ec2_instance:
@@ -130,7 +133,10 @@
     image_id: "{{ _image_id_ }}"
     region: "{{ _region_ }}"
     tags:
-      Name: "{{ _ec2_instance_name_ }}"
+      name: "{{ item }}"
+      owner: "{{ owner }}"
+      env: "{{ env }}"
+      operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
 
@@ -149,6 +155,9 @@
     region: "{{ _region_ }}"
     user_data: "{{ lookup('template', 'userdata.txt.j2') }}"
     tags:
-      Name: "{{ _ec2_instance_name_ }}"
+      name: "{{ item }}"
+      owner: "{{ owner }}"
+      env: "{{ env }}"
+      operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
