@@ -168,6 +168,6 @@
       Name: "{{ item }}"
       owner: "{{ owner }}"
       environment: "{{ env }}"
-      operating_system: "RHEL"
+      operating_system: "Windows"
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
