@@ -27,6 +27,10 @@
   ansible.builtin.include_tasks: azure_vm_create.yml
   when: shadowman_provision_hypervisor == "Azure"
 
+- name: AWS VM Create
+  ansible.builtin.include_tasks: aws_vm_create.yml
+  when: shadowman_provision_hypervisor == "AWS"
+
 - name: VMWare VM Create
   ansible.builtin.include_tasks: vmware_vm_create.yml
   when: shadowman_provision_hypervisor == "VMWare"

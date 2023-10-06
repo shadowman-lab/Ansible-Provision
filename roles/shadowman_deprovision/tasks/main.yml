@@ -11,3 +11,7 @@
 - name: Remove Azure VM
   ansible.builtin.include_tasks: azure_vm_remove.yml
   when: shadowman_provision_hypervisor == "Azure"
+
+- name: Remove AWS VM
+  ansible.builtin.include_tasks: aws_vm_remove.yml
+  when: shadowman_provision_hypervisor == "AWS"

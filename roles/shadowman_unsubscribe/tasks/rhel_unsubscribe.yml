@@ -7,6 +7,7 @@
   when:
     - ansible_host != ''
     - shadowman_provision_hypervisor | default('RHV') != "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
 
 - name: Unregister system from RHSM
   community.general.redhat_subscription:
@@ -16,12 +17,14 @@
   when:
     - ansible_host != ''
     - shadowman_provision_hypervisor | default('RHV') == "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
 
 - name: Remove from IDM
   ansible.builtin.command: "ipa-client-install --uninstall --unattended"
   when:
     - ansible_host != ''
     - ansible_host != ip_addr
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
   register: output
   ignore_errors: true
 
@@ -36,6 +39,7 @@
   when:
     - ansible_host != ''
     - ansible_host != ip_addr
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
 
 - name: Delete hosts from Sat if RHEL onprem
   redhat.satellite.host:
@@ -44,5 +48,7 @@
     password: "{{ password }}"
     server_url: "{{ server_url }}"
     state: absent
-  when: shadowman_provision_hypervisor | default('RHV') != "Azure"
+  when:
+    - shadowman_provision_hypervisor | default('RHV') != "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
   delegate_to: localhost
