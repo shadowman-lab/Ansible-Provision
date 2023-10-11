@@ -7,12 +7,12 @@
 
 - name: Change image ID if running RHEL8
   ansible.builtin.set_fact:
-    _image_id_: 'ami-092b43193629811af'
+    _image_id_: 'ami-08ba959880afbd2a4'
   when: operating_system == "RHEL8"
 
 - name: Change image ID if running RHEL9
   ansible.builtin.set_fact:
-    _image_id_: 'ami-078cbc4c2d057c244'
+    _image_id_: 'ami-023c6ad2a87d58f18'
   when: operating_system == "RHEL9"
 
 - name: Create VPC over AWS Cloud
