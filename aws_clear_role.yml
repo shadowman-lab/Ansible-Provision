@@ -3,18 +3,5 @@
   hosts: localhost
   gather_facts: false
 
-  tasks:
-
-    - name: Run tasks/aws_key_remove.yaml instead of 'main'
-      ansible.builtin.include_role:
-        name: shadowman_deprovision
-        tasks_from: aws_key_remove
-      tags:
-        - key
-
-    - name: Run tasks/aws_account_remove.yaml instead of 'main'
-      ansible.builtin.include_role:
-        name: shadowman_deprovision
-        tasks_from: aws_account_remove
-      tags:
-        - account
+  roles:
+    - shadowman_aws_account_clear
