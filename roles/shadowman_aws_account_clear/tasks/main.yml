@@ -6,6 +6,5 @@
 
 - name: Remove VPC
   ansible.builtin.include_tasks: aws_account_remove.yml
-  when: shadowman_provision_hypervisor == "VMWare"
   tags:
       - account
