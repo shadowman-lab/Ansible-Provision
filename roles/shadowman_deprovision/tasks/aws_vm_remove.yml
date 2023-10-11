@@ -5,3 +5,4 @@
       "tag:Name": "{{ item }}"
     state: absent
   loop: "{{ vm_names }}"
+  delegate_to: localhost
