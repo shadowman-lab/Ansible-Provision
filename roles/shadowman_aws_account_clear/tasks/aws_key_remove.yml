@@ -3,3 +3,5 @@
     name: "{{ _key_name_ }}"
     region: "{{ _region_ }}"
     state: absent
+  tags:
+      - key
