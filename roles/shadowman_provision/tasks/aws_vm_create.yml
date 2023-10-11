@@ -147,6 +147,7 @@
       owner: "{{ owner }}"
       env: "{{ env }}"
       operating_system: "RHEL"
+      usage: "shadowmandemos"
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
 
@@ -169,5 +170,6 @@
       owner: "{{ owner }}"
       environment: "{{ env }}"
       operating_system: "Windows"
+      usage: "shadowmandemos"
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
