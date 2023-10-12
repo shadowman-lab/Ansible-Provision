@@ -15,6 +15,7 @@ folder_id: "Discovered virtual machine"
 source_vm_id: "{{ operating_system }}_ShadowMan"
 operating_system_tag: "RHEL"
 shadowman_provision_hypervisor: "RHV"
+azure_location: eastus
 state: poweredon
 publisher: RedHat
 offer: rhel-byos
@@ -23,6 +24,7 @@ sku: 'rhel-lvm79'
 vm_size: Standard_B1s
 resource_group_name: Demo
 storage_account_name: demorh
+storage_account_type: Standard_RAGRS
 terraform_state: absent
 terraformmain: ansible
 # shadowman_storage_domain: NFS_Cersei

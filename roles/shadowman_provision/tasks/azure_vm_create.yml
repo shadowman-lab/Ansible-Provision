@@ -17,6 +17,17 @@
     sku: 'rhel-lvm92'
   when: operating_system == "RHEL9"
 
+- name: Provision Resource Group
+  azure.azcollection.azure_rm_resourcegroup:
+    name: "{{ resource_group_name }}"
+    location: "{{ azure_location }}"
+
+- name: Provision Storage Account
+  azure.azcollection.azure_rm_storageaccount:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ storage_account_name }}"
+    type: "{{ storage_account_type }}"
+
 - name: Provision instance RHEL
   azure.azcollection.azure_rm_virtualmachine:
     resource_group: "{{ resource_group_name }}"
