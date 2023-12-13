@@ -9,12 +9,12 @@
 
 - name: Change sku if running RHEL8
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm88'
+    sku: 'rhel-lvm89'
   when: operating_system == "RHEL8"
 
 - name: Change sku if running RHEL9
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm92'
+    sku: 'rhel-lvm93'
   when: operating_system == "RHEL9"
 
 - name: Provision Resource Group
