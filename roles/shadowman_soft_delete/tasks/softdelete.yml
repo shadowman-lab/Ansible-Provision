@@ -18,3 +18,4 @@
     follow_redirects: all
     force_basic_auth: true
     status_code: 204
+  when: host_metric.json.results[0].id is defined
