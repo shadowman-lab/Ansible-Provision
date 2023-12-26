@@ -1,6 +1,6 @@
 ---
 - name: Perform VM removal pre-steps
-  hosts: "{{ vm_name }}"
+  hosts: "{{ vm_name | default('all') }}"
   gather_facts: false
 
   roles:
