@@ -18,3 +18,4 @@ warn_list:
   - git-latest
   - command-instead-of-module
   - no-changed-when
+  - syntax-check[unknown-module]
