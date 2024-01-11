@@ -71,7 +71,7 @@
 
   - name: Add Linux hosts to just_created group
     ansible.builtin.add_host:
-      hostname: "{{ item }}"
+      hostname: "{{ vm_name }}"
       ansible_host: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
       groups: just_created
 
