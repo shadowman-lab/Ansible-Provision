@@ -10,6 +10,7 @@
 - name: Get IP and add CA Cert
   hosts: just_created
   gather_facts: false
+  become: true
 
   roles:
     - shadowman_agentcert
