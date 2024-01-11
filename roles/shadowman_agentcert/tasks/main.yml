@@ -1,0 +1,17 @@
+---
+- name: Deploy New CA Cert
+  ansible.builtin.copy:
+    src: /certs/service-ca-cert.crt
+    dest: /etc/assisted-service/service-ca-cert.crt
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Restart agent service
+  ansible.builtin.systemd:
+    name: agent.service
+    state: restarted
+
+- name: Add 60 second wait for discovery
+  ansible.builtin.wait_for:
+    timeout: 60
