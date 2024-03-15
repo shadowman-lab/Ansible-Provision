@@ -17,6 +17,7 @@
     when: operating_system == "Win2016"
 
   - name: Block to handle error with disk
+    when: operating_system is match("RHEL.*")
     block:
       - name: Create and run Linux VM from template
         redhat.rhv.ovirt_vm:
@@ -29,7 +30,6 @@
           high_availability: true
           state: "{{ vm_state }}"
           wait: true
-        when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
         register: async_results
         async: 1000
@@ -62,7 +62,6 @@
           high_availability: true
           state: "{{ vm_state }}"
           wait: true
-        when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
         register: async_results_second
         async: 1000

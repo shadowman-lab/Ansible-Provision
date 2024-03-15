@@ -17,6 +17,21 @@
     validate_certs: false
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
+  register: async_results
+  async: 1000
+  poll: 0
+
+- name: Check RHEL VM Creation status
+  ansible.builtin.async_status:
+    jid: "{{ async_result_item.ansible_job_id }}"
+  loop: "{{ async_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+  when: operating_system is match("RHEL.*")
+  register: async_poll_results
+  until: async_poll_results.finished
+  retries: 100
+  delay: 10
 
 - name: Create and run Windows VM
   community.vmware.vmware_guest:
@@ -43,6 +58,21 @@
         - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
+  register: async_results
+  async: 1000
+  poll: 0
+
+- name: Check Windows VM Creation status
+  ansible.builtin.async_status:
+    jid: "{{ async_result_item.ansible_job_id }}"
+  loop: "{{ async_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+  when: operating_system is match("Win.*")
+  register: async_poll_results
+  until: async_poll_results.finished
+  retries: 100
+  delay: 10
 
 - name: Ensure Tags are created
   community.vmware.vmware_tag:
