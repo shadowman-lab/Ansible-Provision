@@ -177,6 +177,7 @@
       wait: true
     when: operating_system is match("Win.*")
     loop: "{{ vm_names }}"
+    register: async_results
     async: 1000
     poll: 0
 
