@@ -47,14 +47,6 @@
         delay: 10
     rescue:
 
-      - name: Clean up async files
-        ansible.builtin.async_status:
-          jid: "{{ async_result_item.ansible_job_id }}"
-          mode: cleanup
-        loop: "{{ async_results.results }}"
-        loop_control:
-          loop_var: "async_result_item"
-
       - name: Sleep for 10 seconds and continue with play
         ansible.builtin.wait_for:
           timeout: 10
@@ -72,19 +64,6 @@
           wait: true
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
-        async: 1000
-        poll: 0
-
-      - name: Check VM Creation status
-        ansible.builtin.async_status:
-          jid: "{{ async_result_item.ansible_job_id }}"
-        loop: "{{ async_results.results }}"
-        loop_control:
-          loop_var: "async_result_item"
-        register: async_poll_results
-        until: async_poll_results.finished
-        retries: 100
-        delay: 10
 
   - name: Create and run Windows VM from template
     redhat.rhv.ovirt_vm:
