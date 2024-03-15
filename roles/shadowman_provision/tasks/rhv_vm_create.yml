@@ -31,14 +31,14 @@
           wait: true
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
-        register: async_results_second
+        register: async_results
         async: 1000
         poll: 0
 
       - name: Check VM Creation status
         ansible.builtin.async_status:
           jid: "{{ async_result_item.ansible_job_id }}"
-        loop: "{{ async_results_second.results }}"
+        loop: "{{ async_results.results }}"
         loop_control:
           loop_var: "async_result_item"
         register: async_poll_results
@@ -46,6 +46,14 @@
         retries: 100
         delay: 10
     rescue:
+
+      - name: Clean up async files
+        ansible.builtin.async_status:
+          jid: "{{ async_result_item.ansible_job_id }}"
+          mode: cleanup
+        loop: "{{ async_results.results }}"
+        loop_control:
+          loop_var: "async_result_item"
 
       - name: Sleep for 10 seconds and continue with play
         ansible.builtin.wait_for:
