@@ -35,7 +35,7 @@
         async: 1000
         poll: 0
 
-      - name: Check VM Creation status
+      - name: Check RHEL VM Creation status
         ansible.builtin.async_status:
           jid: "{{ async_result_item.ansible_job_id }}"
         loop: "{{ async_results.results }}"
@@ -64,6 +64,20 @@
           wait: true
         when: operating_system is match("RHEL.*")
         loop: "{{ vm_names }}"
+        register: async_results_second
+        async: 1000
+        poll: 0
+
+      - name: Check RHEL VM Running status
+        ansible.builtin.async_status:
+          jid: "{{ async_result_item.ansible_job_id }}"
+        loop: "{{ async_results_second.results }}"
+        loop_control:
+          loop_var: "async_result_item"
+        register: async_poll_results
+        until: async_poll_results.finished
+        retries: 100
+        delay: 10
 
   - name: Create and run Windows VM from template
     redhat.rhv.ovirt_vm:
@@ -167,12 +181,13 @@
     async: 1000
     poll: 0
 
-  - name: Check VM Creation status
+  - name: Check Windows VM Creation status
     ansible.builtin.async_status:
       jid: "{{ async_result_item.ansible_job_id }}"
     loop: "{{ async_results.results }}"
     loop_control:
       loop_var: "async_result_item"
+    when: operating_system is match("Win.*")
     register: async_poll_results
     until: async_poll_results.finished
     retries: 100
