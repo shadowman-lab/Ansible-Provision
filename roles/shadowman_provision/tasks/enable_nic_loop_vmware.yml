@@ -1,5 +1,4 @@
 ---
-
 - name: Get VM info
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:
@@ -12,9 +11,9 @@
     vm: "{{ vm_info.value[0].vm }}"
     pci_slot_number: 192
     backing:
-      network_name: "LAN_01"
-      type: "STANDARD_PORTGROUP"
-      network: "network-41"
+      network_name: LAN_01
+      type: STANDARD_PORTGROUP
+      network: network-41
     start_connected: true
     state: connect
     vcenter_validate_certs: false

@@ -1,15 +1,15 @@
 ---
 - name: Change facts if running Windows
   ansible.builtin.set_fact:
-    operating_system_tag: "Windows"
+    operating_system_tag: Windows
   when: operating_system is match("Win.*")
 
 - name: Create and run Linux VM
   community.vmware.vmware_guest:
-    cluster: '{{ cluster_id }}'
-    datastore: '{{ datastore_id }}'
-    folder: '{{ folder_id }}'
-    datacenter: "Shadowman"
+    cluster: "{{ cluster_id }}"
+    datastore: "{{ datastore_id }}"
+    folder: "{{ folder_id }}"
+    datacenter: Shadowman
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
@@ -26,7 +26,7 @@
     jid: "{{ async_result_item.ansible_job_id }}"
   loop: "{{ async_results.results }}"
   loop_control:
-    loop_var: "async_result_item"
+    loop_var: async_result_item
   when: operating_system is match("RHEL.*")
   register: async_poll_results
   until: async_poll_results.finished
@@ -35,10 +35,10 @@
 
 - name: Create and run Windows VM
   community.vmware.vmware_guest:
-    cluster: '{{ cluster_id }}'
-    datastore: '{{ datastore_id }}'
-    folder: '{{ folder_id }}'
-    datacenter: "Shadowman"
+    cluster: "{{ cluster_id }}"
+    datastore: "{{ datastore_id }}"
+    folder: "{{ folder_id }}"
+    datacenter: Shadowman
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
@@ -67,7 +67,7 @@
     jid: "{{ async_result_item.ansible_job_id }}"
   loop: "{{ async_results.results }}"
   loop_control:
-    loop_var: "async_result_item"
+    loop_var: async_result_item
   when: operating_system is match("Win.*")
   register: async_poll_results
   until: async_poll_results.finished
@@ -81,8 +81,8 @@
     state: present
     validate_certs: false
   loop:
-    - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
-    - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
+    - { name: "{{ env | default('dev') }}", category_id: urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL }
+    - { name: "{{ owner | default('shadowman') }}", category_id: urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL }
 
 - name: Assign Tags
   community.vmware.vmware_tag_manager:

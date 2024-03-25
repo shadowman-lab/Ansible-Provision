@@ -1,30 +1,29 @@
 ---
-
 - name: Block for RHV
   block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Test for IP address for Linux
-    ansible.builtin.include_tasks: add_host_loop.yml
-    loop: "{{ vm_names }}"
-    when: operating_system is match("RHEL.*")
+    - name: Test for IP address for Linux
+      ansible.builtin.include_tasks: add_host_loop.yml
+      loop: "{{ vm_names }}"
+      when: operating_system is match("RHEL.*")
 
-  - name: Check if Windows VM has completed reboot and created fqdn
-    redhat.rhv.ovirt_vm_info:
-      auth: "{{ ovirt_auth }}"
-      pattern: name={{ item }}
-    register: result
-    until: result.ovirt_vms[0].fqdn|default("False") == item or result.ovirt_vms[0].fqdn|default("False") == item.split('.')[0] ~ ".ad.shadowman.dev"
-    retries: 60
-    delay: 10
-    loop: "{{ vm_names }}"
-    when: operating_system == "Win2016"
+    - name: Check if Windows VM has completed reboot and created fqdn
+      redhat.rhv.ovirt_vm_info:
+        auth: "{{ ovirt_auth }}"
+        pattern: name={{ item }}
+      register: result
+      until: result.ovirt_vms[0].fqdn|default("False") == item or result.ovirt_vms[0].fqdn|default("False") == item.split('.')[0] ~ ".ad.shadowman.dev"
+      retries: 60
+      delay: 10
+      loop: "{{ vm_names }}"
+      when: operating_system == "Win2016"
 
   always:
     - name: Logout from RHV

@@ -1,57 +1,56 @@
 ---
 - name: RHV Block
   block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Block to handle error with disk
-    block:
-      - name: Create and run VM from template
-        redhat.rhv.ovirt_vm:
-          auth: "{{ ovirt_auth }}"
-          name: "{{ operating_system | lower }}updates.shadowman.dev"
-          template: "{{ template }}"
-          cluster: "{{ cluster }}"
-          memory: "{{ vm_memory }}"
-          high_availability: true
-          state: running
-          wait: true
-    rescue:
+    - name: Block to handle error with disk
+      block:
+        - name: Create and run VM from template
+          redhat.rhv.ovirt_vm:
+            auth: "{{ ovirt_auth }}"
+            name: "{{ operating_system | lower }}updates.shadowman.dev"
+            template: "{{ template }}"
+            cluster: "{{ cluster }}"
+            memory: "{{ vm_memory }}"
+            high_availability: true
+            state: running
+            wait: true
+      rescue:
+        - name: Sleep for 10 seconds and continue with play
+          ansible.builtin.wait_for:
+            timeout: 10
+          delegate_to: localhost
 
-      - name: Sleep for 10 seconds and continue with play
-        ansible.builtin.wait_for:
-          timeout: 10
-        delegate_to: localhost
+        - name: Attempt to run Linux VM again if disk issue
+          redhat.rhv.ovirt_vm:
+            auth: "{{ ovirt_auth }}"
+            name: "{{ operating_system | lower }}updates.shadowman.dev"
+            template: "{{ template }}"
+            cluster: "{{ cluster }}"
+            memory: "{{ vm_memory }}"
+            high_availability: true
+            state: running
+            wait: true
 
-      - name: Attempt to run Linux VM again if disk issue
-        redhat.rhv.ovirt_vm:
-          auth: "{{ ovirt_auth }}"
-          name: "{{ operating_system | lower }}updates.shadowman.dev"
-          template: "{{ template }}"
-          cluster: "{{ cluster }}"
-          memory: "{{ vm_memory }}"
-          high_availability: true
-          state: running
-          wait: true
-
-  - name: Test for IP address for Linux
-    redhat.rhv.ovirt_nic_info:
-      vm: "{{ operating_system | lower }}updates.shadowman.dev"
-      fetch_nested: true
-      nested_attributes:
-        - ips
-      name: nic1
-      auth: "{{ ovirt_auth }}"
-    register: results
-    until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
-    retries: 60
-    delay: 10
-    when: operating_system is match("RHEL.*")
+    - name: Test for IP address for Linux
+      redhat.rhv.ovirt_nic_info:
+        vm: "{{ operating_system | lower }}updates.shadowman.dev"
+        fetch_nested: true
+        nested_attributes:
+          - ips
+        name: nic1
+        auth: "{{ ovirt_auth }}"
+      register: results
+      until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
+      retries: 60
+      delay: 10
+      when: operating_system is match("RHEL.*")
 
   always:
     - name: Logout from RHV

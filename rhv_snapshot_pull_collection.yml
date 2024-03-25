@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    shadowman_snapshot: "pull_collection"
+    shadowman_snapshot: pull_collection
 
   roles:
     - shadowman_snapshots

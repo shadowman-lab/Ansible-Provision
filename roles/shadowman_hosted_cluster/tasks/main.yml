@@ -1,79 +1,78 @@
 ---
 - name: Block for RHV
   block:
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+    - name: Create and run VM from template
+      redhat.rhv.ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ item }}"
+        template: "{{ template }}"
+        cluster: "{{ cluster }}"
+        storage_domain: "{{ shadowman_storage_domain }}"
+        high_availability: true
+        state: "{{ vm_state }}"
+        wait: true
+      loop: "{{ vm_names }}"
 
-  - name: Create and run VM from template
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ item }}"
-      template: "{{ template }}"
-      cluster: "{{ cluster }}"
-      storage_domain: "{{ shadowman_storage_domain }}"
-      high_availability: true
-      state: "{{ vm_state }}"
-      wait: true
-    loop: "{{ vm_names }}"
+    - name: Apply OCP tag
+      redhat.rhv.ovirt_tag:
+        auth: "{{ ovirt_auth }}"
+        name: ocp_hosted
+        state: attached
+        vms:
+          - "{{ item }}"
+      loop: "{{ vm_names }}"
 
-  - name: Apply OCP tag
-    redhat.rhv.ovirt_tag:
-      auth: "{{ ovirt_auth }}"
-      name: "ocp_hosted"
-      state: attached
-      vms:
-        - "{{ item }}"
-    loop: "{{ vm_names }}"
+    - name: Apply Owner tag
+      redhat.rhv.ovirt_tag:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ owner.split('@')[0] }}"
+        state: attached
+        vms:
+          - "{{ item }}"
+      loop: "{{ vm_names }}"
+      when: owner is defined
 
-  - name: Apply Owner tag
-    redhat.rhv.ovirt_tag:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ owner.split('@')[0] }}"
-      state: attached
-      vms:
-        - "{{ item }}"
-    loop: "{{ vm_names }}"
-    when: owner is defined
+    - name: Apply environment tag
+      redhat.rhv.ovirt_tag:
+        auth: "{{ ovirt_auth }}"
+        name: test
+        state: attached
+        vms:
+          - "{{ item }}"
+      loop: "{{ vm_names }}"
 
-  - name: Apply environment tag
-    redhat.rhv.ovirt_tag:
-      auth: "{{ ovirt_auth }}"
-      name: "test"
-      state: attached
-      vms:
-        - "{{ item }}"
-    loop: "{{ vm_names }}"
+    - name: Test for IP address
+      redhat.rhv.ovirt_nic_info:
+        vm: "{{ vm_name }}"
+        fetch_nested: true
+        nested_attributes:
+          - ips
+        name: nic1
+        auth: "{{ ovirt_auth }}"
+      register: results
+      until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
+      retries: 60
+      delay: 10
 
-  - name: Test for IP address
-    redhat.rhv.ovirt_nic_info:
-      vm: "{{ vm_name }}"
-      fetch_nested: true
-      nested_attributes:
-        - ips
-      name: nic1
-      auth: "{{ ovirt_auth }}"
-    register: results
-    until: results.ovirt_nics[0].reported_devices[0].ips[0].version | default("False") == "v4"
-    retries: 60
-    delay: 10
+    - name: Set stats for IP
+      ansible.builtin.set_stats:
+        data:
+          workerip: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+        per_host: false
 
-  - name: Set stats for IP
-    ansible.builtin.set_stats:
-      data:
-        workerip: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
-      per_host: false
-
-  - name: Add Linux hosts to just_created group
-    ansible.builtin.add_host:
-      hostname: "{{ vm_name }}"
-      ansible_host: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
-      groups: just_created
+    - name: Add Linux hosts to just_created group
+      ansible.builtin.add_host:
+        hostname: "{{ vm_name }}"
+        ansible_host: "{{ results.ovirt_nics[0].reported_devices[0].ips[0].address }}"
+        groups: just_created
 
   always:
     - name: Logout from RHV

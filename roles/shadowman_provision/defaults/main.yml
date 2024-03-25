@@ -8,19 +8,19 @@ vm_template: 71a8e15d-3602-41f7-8e2c-4689863131ef
 vm_memory_terraform: 4096
 vm_operating_system_tag: RHEL
 terraform_disk: 20
-terraform_network: "LAN_02"
-cluster_id: "Cluster1"
-datastore_id: "NFS_Cersei"
-folder_id: "Discovered virtual machine"
+terraform_network: LAN_02
+cluster_id: Cluster1
+datastore_id: NFS_Cersei
+folder_id: Discovered virtual machine
 source_vm_id: "{{ operating_system }}_ShadowMan"
-operating_system_tag: "RHEL"
-shadowman_provision_hypervisor: "RHV"
+operating_system_tag: RHEL
+shadowman_provision_hypervisor: RHV
 azure_location: eastus
 state: poweredon
 publisher: RedHat
 offer: rhel-byos
-version: "latest"
-sku: 'rhel-lvm79'
+version: latest
+sku: rhel-lvm79
 vm_size: Standard_B1s
 resource_group_name: Demo
 storage_account_name: demorh
@@ -31,13 +31,13 @@ terraformmain: ansible
 shadowman_storage_domain: SSD_Array
 _image_id_: ami-08b207be5fdce406f
 _region_: us-east-2
-vpc_name: "Shadowman VPC"
-_vpc_cidr_block_: '11.0.0.0/16'
-igw_name: "Shadowman IGW"
-_subnet_cidr_: '11.0.1.0/24'
-subnet_name: "Shadowman Subnet"
-_route_table_name_: "Shadowman Route Table"
-destination_cidr_block: '0.0.0.0/0'
-_security_group_: "ShadowmanSG"
-_key_name_: "Shadowmankey"
-_instance_type_: "t2.micro"
+vpc_name: Shadowman VPC
+_vpc_cidr_block_: 11.0.0.0/16
+igw_name: Shadowman IGW
+_subnet_cidr_: 11.0.1.0/24
+subnet_name: Shadowman Subnet
+_route_table_name_: Shadowman Route Table
+destination_cidr_block: "0.0.0.0/0"
+_security_group_: ShadowmanSG
+_key_name_: Shadowmankey
+_instance_type_: t2.micro

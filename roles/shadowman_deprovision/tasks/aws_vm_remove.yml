@@ -1,8 +1,9 @@
+---
 - name: Delete EC2 Instance
   amazon.aws.ec2_instance:
     region: "{{ _region_ }}"
     filters:
-      "tag:Name": "{{ item }}"
+      tag:Name: "{{ item }}"
     state: absent
   loop: "{{ vm_names }}"
   delegate_to: localhost

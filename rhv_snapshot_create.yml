@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    shadowman_snapshot: "create"
+    shadowman_snapshot: create
 
   roles:
     - shadowman_snapshots

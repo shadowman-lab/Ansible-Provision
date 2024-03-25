@@ -1,3 +1,4 @@
+---
 - name: Delete AWS Create EC2 Security Group for Windows
   amazon.aws.ec2_security_group:
     name: "{{ _security_group_ }}_Windows"
@@ -18,7 +19,7 @@
   amazon.aws.ec2_vpc_route_table_info:
     region: "{{ _region_ }}"
     filters:
-      "tag:Name": "{{ _route_table_name_ }}"
+      tag:Name: "{{ _route_table_name_ }}"
   register: routetableresult
   tags:
     - account
@@ -38,7 +39,7 @@
   amazon.aws.ec2_vpc_subnet_info:
     region: "{{ _region_ }}"
     filters:
-      "tag:Name": "{{ subnet_name }}"
+      tag:Name: "{{ subnet_name }}"
   register: subnetresult
   tags:
     - account
@@ -57,7 +58,7 @@
   amazon.aws.ec2_vpc_igw_info:
     region: "{{ _region_ }}"
     filters:
-      "tag:Name": "{{ igw_name }}"
+      tag:Name: "{{ igw_name }}"
   register: igwresult
   tags:
     - account
@@ -75,7 +76,7 @@
   amazon.aws.ec2_vpc_net_info:
     region: "{{ _region_ }}"
     filters:
-      "tag:Name": "{{ vpc_name }}"
+      tag:Name: "{{ vpc_name }}"
   register: vpcresult
   tags:
     - account

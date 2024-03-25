@@ -1,36 +1,36 @@
 ---
 - name: RHV Block
   block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Pull snapshot for a VM
-    redhat.rhv.ovirt_snapshot_info:
-      auth: "{{ ovirt_auth }}"
-      vm: "{{ vm_name }}"
-    register: snapshot
+    - name: Pull snapshot for a VM
+      redhat.rhv.ovirt_snapshot_info:
+        auth: "{{ ovirt_auth }}"
+        vm: "{{ vm_name }}"
+      register: snapshot
 
-  - name: Create Snapshot Restore Job Template
-    ansible.controller.job_template:
-      name: "Snapshot Restore"
-      job_type: "run"
-      inventory: "RHV Inventory"
-      project: "SSP Provision and DeProvision"
-      playbook: "rhv_snapshot_restore.yml"
-      credentials:
-        - "RHV Credentials"
-      survey_enabled: true
-      survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
-      extra_vars: "{{ extra_var }}"
-      validate_certs: false
-      controller_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
-      controller_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
-      controller_host: "{{ lookup('env', 'TOWER_HOST') }}"
+    - name: Create Snapshot Restore Job Template
+      ansible.controller.job_template:
+        name: Snapshot Restore
+        job_type: run
+        inventory: RHV Inventory
+        project: SSP Provision and DeProvision
+        playbook: rhv_snapshot_restore.yml
+        credentials:
+          - RHV Credentials
+        survey_enabled: true
+        survey_spec: "{{ lookup('template', 'templates/snapshot.j2') }}"
+        extra_vars: "{{ extra_var }}"
+        validate_certs: false
+        controller_username: "{{ lookup('env', 'TOWER_USERNAME') }}"
+        controller_password: "{{ lookup('env', 'TOWER_PASSWORD') }}"
+        controller_host: "{{ lookup('env', 'TOWER_HOST') }}"
 
   always:
     - name: Logout from RHV

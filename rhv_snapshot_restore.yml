@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    shadowman_snapshot: "restore"
+    shadowman_snapshot: restore
 
   roles:
     - shadowman_snapshots

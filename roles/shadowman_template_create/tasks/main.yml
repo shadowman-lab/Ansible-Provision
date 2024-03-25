@@ -1,5 +1,4 @@
 ---
-
 - name: VM Create for Template
   ansible.builtin.include_tasks: rhv_vm_templatevmcreate.yml
   when: shadowman_template == "createvm"

@@ -1,5 +1,4 @@
 ---
-
 - name: Remove RHV VM
   ansible.builtin.include_tasks: rhv_vm_remove.yml
   when: shadowman_provision_hypervisor == "RHV"
