@@ -1,3 +1,4 @@
+---
 - name: Delete EC2 Key
   amazon.aws.ec2_key:
     name: "{{ _key_name_ }}"

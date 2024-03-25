@@ -1,5 +1,4 @@
 ---
-
 - name: Unsubscribe RHEL
   ansible.builtin.include_tasks: rhel_unsubscribe.yml
   when: os is match("rhel.*")

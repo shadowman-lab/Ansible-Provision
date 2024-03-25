@@ -1,8 +1,8 @@
 ---
 _region_: us-east-2
-vpc_name: "Shadowman VPC"
-igw_name: "Shadowman IGW"
-subnet_name: "Shadowman Subnet"
-_route_table_name_: "Shadowman Route Table"
-_security_group_: "ShadowmanSG"
-_key_name_: "Shadowmankey"
+vpc_name: Shadowman VPC
+igw_name: Shadowman IGW
+subnet_name: Shadowman Subnet
+_route_table_name_: Shadowman Route Table
+_security_group_: ShadowmanSG
+_key_name_: Shadowmankey

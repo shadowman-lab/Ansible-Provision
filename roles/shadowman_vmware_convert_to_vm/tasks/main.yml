@@ -20,4 +20,4 @@
 - name: Add Host
   ansible.builtin.add_host:
     name: "{{ vminfo.instance.ipv4 }}"
-    groups: "justcreated"
+    groups: justcreated

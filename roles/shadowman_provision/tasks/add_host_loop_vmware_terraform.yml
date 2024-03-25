@@ -1,5 +1,4 @@
 ---
-
 - name: Get VM info
   vmware.vmware_rest.vcenter_vm_info:
     filter_names:

@@ -1,7 +1,7 @@
 ---
 - name: Sync with Gitrepo
   ansible.builtin.git:
-    repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
+    repo: git@github.com:shadowman-lab/Ansible-Terraform.git
     dest: /tmp/terraform
     version: main
     accept_newhostkey: true
@@ -14,7 +14,7 @@
     dest: /tmp/terraform/vmware/main.tf
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   when: terraformmain == "gitops"
 
 # Set owner from Git webhook 
@@ -30,31 +30,32 @@
     dest: /tmp/terraform/vmware/main.tf
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   when: terraformmain == "ansible"
 
 - name: Decrypt files
   ansible.builtin.expect:
-    command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
+    command: ansible-vault decrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars
     chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
 
 - name: Update State of VM from template using Terraform to {{ terraform_state }}
   cloud.terraform.terraform:
-    project_path: "/tmp/terraform/vmware/"
+    project_path: /tmp/terraform/vmware/
     state: "{{ terraform_state }}"
   register: terraformvms
 
 - name: Encrypt files
   ansible.builtin.expect:
-    command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars'
+    command: ansible-vault encrypt terraform.tfstate terraform.tfstate.backup terraform.tfvars
     chdir: /tmp/terraform/vmware
     responses:
       password: "{{ pah_pass }}"
 
 - name: Update git repo with terraform files
-  ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
+  ansible.builtin.shell: git add -A && git commit -m "Synching new files to repo" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null'
+    && git push
   args:
     chdir: /tmp/terraform
   environment:
@@ -81,7 +82,6 @@
 - name: VMWare Tags block
   when: terraform_state == "present"
   block:
-
     - name: Ensure Tags are created
       community.vmware.vmware_tag:
         category_id: "{{ item.category_id }}"
@@ -89,8 +89,8 @@
         state: present
         validate_certs: false
       loop:
-        - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
-        - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
+        - { name: "{{ env | default('dev') }}", category_id: urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL }
+        - { name: "{{ owner | default('shadowman') }}", category_id: urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL }
 
     - name: Assign Tags
       community.vmware.vmware_tag_manager:

@@ -1,5 +1,4 @@
 ---
-
 - name: Loop to create group for linux hosts
   ansible.builtin.include_tasks: add_host_loop_vmware.yml
   loop: "{{ vm_names }}"

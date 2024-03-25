@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    shadowman_template: "createtemplate"
+    shadowman_template: createtemplate
 
   roles:
     - shadowman_template_create

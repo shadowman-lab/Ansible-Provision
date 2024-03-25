@@ -2,7 +2,7 @@
 - name: Use Activation Key to Register RHEL7 Machine to Satellite
   community.general.redhat_subscription:
     state: present
-    activationkey: "RHEL7"
+    activationkey: RHEL7
     org_id: Shadowman
   when:
     - ansible_distribution_version is match("7.*")
@@ -10,7 +10,7 @@
 - name: Use Activation Key to Register RHEL8 Machine to Satellite
   community.general.redhat_subscription:
     state: present
-    activationkey: "RHEL8"
+    activationkey: RHEL8
     org_id: Shadowman
   when:
     - ansible_distribution_version is match("8.*")
@@ -18,21 +18,21 @@
 - name: Use Activation Key to Register RHEL9 Machine to Satellite
   community.general.redhat_subscription:
     state: present
-    activationkey: "RHEL9"
+    activationkey: RHEL9
     org_id: Shadowman
   when:
     - ansible_distribution_version is match("9.*")
 
 - name: Upgrade all packages (yum)
   ansible.builtin.yum:
-    name: '*'
+    name: "*"
     state: latest
     update_only: true
   when: ansible_pkg_mgr == "yum"
 
 - name: Upgrade all packages (dnf)
   ansible.builtin.dnf:
-    name: '*'
+    name: "*"
     state: latest
     update_only: true
   when: ansible_pkg_mgr == "dnf"
@@ -55,7 +55,7 @@
 
 - name: Clean subscription-manager
   ansible.builtin.command:
-    cmd: "subscription-manager clean"
+    cmd: subscription-manager clean
   register: cleanresult
   changed_when: cleanresult.rc == 0
 

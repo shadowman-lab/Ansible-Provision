@@ -5,7 +5,7 @@
     dest: /etc/assisted-service/service-ca-cert.crt
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
 
 - name: Restart agent service
   ansible.builtin.systemd:

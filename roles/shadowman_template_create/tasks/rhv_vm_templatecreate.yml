@@ -1,45 +1,45 @@
 ---
 - name: RHV Block
   block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+    - name: Login to RHV
+      redhat.rhv.ovirt_auth:
+        hostname: "{{ rhvm_fqdn }}"
+        username: "{{ rhvm_user }}"
+        password: "{{ rhvm_password }}"
+        ca_file: "{{ rhvm_cafile | default(omit) }}"
+        insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Stop VM
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system | lower }}updates.shadowman.dev"
-      state: stopped
-      wait: true
+    - name: Stop VM
+      redhat.rhv.ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ operating_system | lower }}updates.shadowman.dev"
+        state: stopped
+        wait: true
 
-  - name: Create new template subversion
-    redhat.rhv.ovirt_template:
-      auth: "{{ ovirt_auth }}"
-      cluster: Default
-      name: "{{ operating_system }}_ShadowMan"
-      vm: "{{ operating_system | lower }}updates.shadowman.dev"
-      seal: true
-      version:
-        name: "{{ version_name }}"
+    - name: Create new template subversion
+      redhat.rhv.ovirt_template:
+        auth: "{{ ovirt_auth }}"
+        cluster: Default
+        name: "{{ operating_system }}_ShadowMan"
+        vm: "{{ operating_system | lower }}updates.shadowman.dev"
+        seal: true
+        version:
+          name: "{{ version_name }}"
 
-  - name: Delete VM
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ operating_system | lower }}updates.shadowman.dev"
-      state: absent
-      wait: true
+    - name: Delete VM
+      redhat.rhv.ovirt_vm:
+        auth: "{{ ovirt_auth }}"
+        name: "{{ operating_system | lower }}updates.shadowman.dev"
+        state: absent
+        wait: true
 
-  - name: Delete host from Sat
-    redhat.satellite.host:
-      name: "{{ operating_system | lower }}updates.shadowman.dev"
-      username: "{{ username }}"
-      password: "{{ password }}"
-      server_url: "{{ server_url }}"
-      state: absent
+    - name: Delete host from Sat
+      redhat.satellite.host:
+        name: "{{ operating_system | lower }}updates.shadowman.dev"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        server_url: "{{ server_url }}"
+        state: absent
 
   always:
     - name: Logout from RHV

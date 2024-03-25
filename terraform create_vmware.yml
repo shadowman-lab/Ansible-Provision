@@ -4,7 +4,7 @@
   gather_facts: false
 
   vars:
-    shadowman_provision_hypervisor: "Terraformvmware"
+    shadowman_provision_hypervisor: Terraformvmware
 
   roles:
     - shadowman_provision
@@ -14,7 +14,7 @@
   gather_facts: false
 
   vars:
-    shadowman_provision_hypervisor: "VMWare"
+    shadowman_provision_hypervisor: VMWare
 
   roles:
     - shadowman_hostnameset

@@ -1,7 +1,7 @@
 ---
 datacenter: Default
 cluster: Default
-template: "hypershift-hosted-worker"
+template: hypershift-hosted-worker
 vm_names: "{{ vm_name.split(',') }}"
 vm_state: running
 # shadowman_storage_domain: NFS_Cersei

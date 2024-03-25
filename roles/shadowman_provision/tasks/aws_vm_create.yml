@@ -1,18 +1,19 @@
+---
 # Create EC2 VPC Subnet & AWS Create EC2 Security Group & Create EC2 instance with public IP
 
 - name: Change image ID if running Windows
   ansible.builtin.set_fact:
-    _image_id_: 'ami-0b581691fa8799abd'
+    _image_id_: ami-0b581691fa8799abd
   when: operating_system is match("Win.*")
 
 - name: Change image ID if running RHEL8
   ansible.builtin.set_fact:
-    _image_id_: 'ami-08ba959880afbd2a4'
+    _image_id_: ami-08ba959880afbd2a4
   when: operating_system == "RHEL8"
 
 - name: Change image ID if running RHEL9
   ansible.builtin.set_fact:
-    _image_id_: 'ami-023c6ad2a87d58f18'
+    _image_id_: ami-023c6ad2a87d58f18
   when: operating_system == "RHEL9"
 
 - name: Create VPC over AWS Cloud
@@ -64,24 +65,24 @@
 - name: AWS Create EC2 Security Group for RHEL
   amazon.aws.ec2_security_group:
     name: "{{ _security_group_ }}_RHEL"
-    description: "Security Group for Linux VM"
+    description: Security Group for Linux VM
     vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
     region: "{{ _region_ }}"
     rules:
       - proto: tcp
         ports:
           - 22
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 22
       - proto: tcp
         ports:
           - 80
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 80
       - proto: tcp
         ports:
           - 443
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 443
     tags:
       Name: "{{ _security_group_ }}"
@@ -90,24 +91,24 @@
 - name: AWS Create EC2 Security Group for Windows
   amazon.aws.ec2_security_group:
     name: "{{ _security_group_ }}_Windows"
-    description: "Security Group for Windows VM"
+    description: Security Group for Windows VM
     vpc_id: "{{ ec2_vpc_net_result.vpc.id }}"
     region: "{{ _region_ }}"
     rules:
       - proto: tcp
         ports:
           - 5986
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 5986
       - proto: tcp
         ports:
           - 80
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 80
       - proto: tcp
         ports:
           - 443
-        cidr_ip: 0.0.0.0/0
+        cidr_ip: "0.0.0.0/0"
         rule_desc: allow all on port 443
     tags:
       Name: "{{ _security_group_ }}"
@@ -119,14 +120,14 @@
     region: "{{ _region_ }}"
   register: awsec2key
 
-- name: Update SSH key in controller    # noqa: no-handler
+- name: Update SSH key in controller # noqa: no-handler
   ansible.controller.credential:
-    name: "AWS {{ _key_name_ }}"
+    name: AWS {{ _key_name_ }}
     state: present
-    credential_type: "AWS Key"
+    credential_type: AWS Key
     inputs:
       aws_ssh_key: "{{ awsec2key.key.private_key }}"
-      awsusername: "ec2-user"
+      awsusername: ec2-user
   when: awsec2key.changed
 
 - name: Create EC2 instance with public IP for RHEL
@@ -146,8 +147,8 @@
       Name: "{{ item }}"
       owner: "{{ owner }}"
       env: "{{ env }}"
-      operating_system: "RHEL"
-      usage: "shadowmandemos"
+      operating_system: RHEL
+      usage: shadowmandemos
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
 
@@ -169,7 +170,7 @@
       Name: "{{ item }}"
       owner: "{{ owner }}"
       environment: "{{ env }}"
-      operating_system: "Windows"
-      usage: "shadowmandemos"
+      operating_system: Windows
+      usage: shadowmandemos
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
