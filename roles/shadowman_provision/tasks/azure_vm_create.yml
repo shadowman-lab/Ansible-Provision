@@ -56,6 +56,21 @@
       operating_system: "RHEL"
   loop: "{{ vm_names }}"
   when: publisher == "RedHat"
+  register: async_results
+  async: 1000
+  poll: 0
+
+- name: Check RHEL VM Creation status
+  ansible.builtin.async_status:
+    jid: "{{ async_result_item.ansible_job_id }}"
+  loop: "{{ async_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+  when: publisher == "RedHat"
+  register: async_poll_results
+  until: async_poll_results.finished
+  retries: 100
+  delay: 10
 
 - name: Provision instance Windows
   azure.azcollection.azure_rm_virtualmachine:
@@ -81,9 +96,23 @@
       environment: "{{ env | default(omit) }}"
       owner: "{{ owner | default(omit) }}"
       operating_system: "Windows"
-  register: azure_vm
   loop: "{{ vm_names }}"
   when: publisher == "MicrosoftWindowsServer"
+  register: async_results
+  async: 1000
+  poll: 0
+
+- name: Check Windows VM Creation status
+  ansible.builtin.async_status:
+    jid: "{{ async_result_item.ansible_job_id }}"
+  loop: "{{ async_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+  when: publisher == "MicrosoftWindowsServer"
+  register: async_poll_results
+  until: async_poll_results.finished
+  retries: 100
+  delay: 10
 
 - name: Create VM script extension to enable HTTPS WinRM listener
   azure.azcollection.azure_rm_virtualmachineextension:
