@@ -1,4 +1,4 @@
-# Create EC2 VPC Subnet & AWS Create EC2 Security Group & Create EC2 instance with public IP
+# Create EC2 VPC & EC2 Internet Gateway & EC2 VPC Subnet & Create VPC Public Subnet Route Table & AWS Create EC2 Security Group & Create EC2 Key & Create EC2 instance with public IP
 
 - name: Change image ID if running Windows
   ansible.builtin.set_fact:
