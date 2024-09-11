@@ -47,7 +47,7 @@
       cloud.terraform.terraform:
         project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         state: "{{ terraform_state }}"
-        # force_init: true
+        force_init: true
       register: terraformvms
 
     - name: Encrypt files
