@@ -1,0 +1,18 @@
+{
+    "name": "",
+    "description": "",
+    "spec": [
+      {
+        "question_name": "Which Terraform Build would you like to delete?",
+        "question_description": "",
+        "required": true,
+        "type": "multiplechoice",
+        "variable": "tf_build",
+        "min": null,
+        "max": null,
+        "default": "",
+        "choices": "{% for build in dir_out.stdout_lines %}{{ build }}\n{% endfor %}",
+        "new_question": true
+      }
+    ]
+  }
