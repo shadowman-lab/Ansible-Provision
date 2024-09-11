@@ -72,6 +72,12 @@ resource "vsphere_virtual_machine" "server1" {
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template7.id
+    customize {
+      linux_options {
+        host_name = "server1.shadowman.dev"
+        domain    = "shadowman.dev"
+      }
+    }
   }
 }
 
@@ -114,6 +120,12 @@ resource "vsphere_virtual_machine" "server2" {
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template8.id
+    customize {
+      linux_options {
+        host_name = "server2.shadowman.dev"
+        domain    = "shadowman.dev"
+      }
+    }
   }
 }
 
@@ -156,6 +168,12 @@ resource "vsphere_virtual_machine" "server3" {
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template9.id
+    customize {
+      linux_options {
+        host_name = "server3.shadowman.dev"
+        domain    = "shadowman.dev"
+      }
+    }
   }
 }
 
