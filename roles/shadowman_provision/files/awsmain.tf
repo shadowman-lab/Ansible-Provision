@@ -95,7 +95,7 @@ delete_on_termination = false
   }
   key_name = "Shadowmankey"
   tags = {
-      Name = "rhel9app.shadowman.dev"
+      Name = "rhel9.shadowman.dev"
       owner: "adworjan"
       env: "dev"
       operating_system: "RHEL9"
