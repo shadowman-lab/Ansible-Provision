@@ -64,7 +64,7 @@
         chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
-      when: terraform_state == "present" and not projectcreate.changed
+      when: terraform_state == "present" and not projectcreate.changed and terraformvms.changed
 
     - name: Remove build directory if deleting Infrastructure
       ansible.builtin.file:
