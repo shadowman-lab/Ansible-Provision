@@ -191,7 +191,7 @@
         execution_environment: Automation Hub Terraform and Powershell execution environment
         playbook: terraform_vsphere_destroy.yml
         credentials:
-          - vSphere Terraform ENV
+          - Terraform vSphere Credentials
           - Automation Controller Credentials
           - Private Hub Credentials
           - Alex SSH Git Credential
