@@ -102,3 +102,7 @@ delete_on_termination = false
       usage: "shadowmandemos"
       }
 }
+
+output "app-server" {
+  value = aws_instance.app-server.tags.Name
+}

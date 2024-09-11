@@ -18,11 +18,48 @@
         mode: '755'
       register: projectcreate
 
+    - name: Decrypt files if Project already exists
+      ansible.builtin.expect:
+        command: 'ansible-vault decrypt terraform.tfstate'
+        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: not projectcreate.change
+
+    - name: Perform initial Check of VMs
+      cloud.terraform.terraform:
+        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvmsbefore
+      check_mode: true
+      when: not projectcreate.changed
+
     - name: Copy main Terraform manifest
       ansible.builtin.copy:
         src: files/awsmain.tf
         mode: '755'
         dest: /{{ aws_terraform_working_dir }}/{{ tf_build }}/main.tf
+
+    - name: Perform update Check of VMs
+      cloud.terraform.terraform:
+        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvmsafter
+      check_mode: true
+      when: not projectcreate.changed
+
+    - name: Get lists of VMs
+      ansible.builtin.set_fact:
+        vmsbefore: "{{ terraformvmsbefore | json_query('outputs.*.value') }}"
+        vmsafer: "{{ terraformvmsafter | json_query('outputs.*.value') }}"
+      when: not projectcreate.changed
+
+    - name: Show list of VMs to be deleted
+      ansible.builtin.debug:
+        msg: "{{ vmsbefore | difference(vmsafter) }}"
+      when: not projectcreate.changed
 
     - name: Create gitignore for Terraform working files if project did not exist
       ansible.builtin.copy:
@@ -35,13 +72,27 @@
 
 - name: Creating Terraform IoC
   block:
-    - name: Decrypt files if Project already exists
+    - name: Decrypt state file if deleting
       ansible.builtin.expect:
         command: 'ansible-vault decrypt terraform.tfstate'
         chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
-      when: not projectcreate.changed or terraform_state == "absent"
+      when: terraform_state == "absent"
+
+    - name: Perform initial Check of VMs to see what will be removed
+      cloud.terraform.terraform:
+        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvmstodelete
+      check_mode: true
+      when: terraform_state == "absent"
+
+    - name: Debug VMs to Delete
+      ansible.builtin.debug:
+        vmstodelete: "{{ terraformvmstodelete | json_query('outputs.*.value') }}"
+      when: terraform_state == "absent"
 
     - name: Initialize Terraform Provider
       cloud.terraform.terraform:
