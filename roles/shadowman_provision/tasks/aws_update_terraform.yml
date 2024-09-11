@@ -45,12 +45,20 @@
       ansible.builtin.set_fact:
         vmsbefore: "{{ terraformvscheck | json_query('diff.before.values.outputs.*.value') }}"
         vmsafter: "{{ terraformvscheck | json_query('diff.after.values.outputs.*.value') }}"
-      when: not projectcreate.changed
+      when: not projectcreate.changed and terraformvscheck.diff is defined
 
     - name: Show list of VMs to be deleted
       ansible.builtin.debug:
         msg: "{{ vmsbefore | difference(vmsafter) }}"
-      when: not projectcreate.changed
+      when: not projectcreate.changed and terraformvscheck.diff is defined
+
+    - name: Unsubscribe VMs
+      ansible.controller.workflow_launch:
+        workflow_template: "Unsubscribe VMs from AWS"
+        extra_vars:
+          vm_name: "{{ vmsbefore | difference(vmsafter) }}"
+        wait: true
+      when: not projectcreate.changed and terraformvscheck.diff is defined
 
     - name: Create gitignore for Terraform working files if project did not exist
       ansible.builtin.copy:
@@ -82,7 +90,15 @@
 
     - name: Debug VMs to Delete
       ansible.builtin.debug:
-        vmstodelete: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
+        msg: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
+      when: terraform_state == "absent"
+
+    - name: Unsubscribe VMs
+      ansible.controller.workflow_launch:
+        workflow_template: "Unsubscribe VMs from AWS"
+        extra_vars:
+          vm_name: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
+        wait: true
       when: terraform_state == "absent"
 
     - name: Initialize Terraform Provider
@@ -91,6 +107,12 @@
         state: "{{ terraform_state }}"
         force_init: true
       register: terraformvms
+
+    - name: Set stat for active vms
+      ansible.builtin.set_stats:
+        data:
+          vm_name: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
+      when: terraform_state == "present"
 
     - name: Encrypt state file if the first build
       ansible.builtin.expect:
