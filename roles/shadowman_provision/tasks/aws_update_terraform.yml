@@ -24,7 +24,7 @@
         chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
-      when: not projectcreate.change
+      when: not projectcreate.changed
 
     - name: Perform initial Check of VMs
       cloud.terraform.terraform:
