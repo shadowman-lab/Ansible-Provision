@@ -56,7 +56,7 @@
       ansible.controller.workflow_launch:
         workflow_template: "Unsubscribe VMs from AWS"
         extra_vars:
-          vm_name: "{{ vmsbefore | difference(vmsafter) }}"
+          vm_name: "{{ vmsbefore | difference(vmsafter) | join(',') }}"
         wait: true
       when: not projectcreate.changed and terraformvscheck.diff is defined
 
@@ -97,7 +97,7 @@
       ansible.controller.workflow_launch:
         workflow_template: "Unsubscribe VMs from AWS"
         extra_vars:
-          vm_name: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
+          vm_name: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') | join(',') }}"
         wait: true
       when: terraform_state == "absent"
 
