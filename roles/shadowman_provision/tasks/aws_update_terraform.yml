@@ -37,7 +37,7 @@
   block:
     - name: Decrypt files if Project already exists
       ansible.builtin.expect:
-        command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup'
+        command: 'ansible-vault decrypt terraform.tfstate'
         chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
