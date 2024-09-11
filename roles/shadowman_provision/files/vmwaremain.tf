@@ -53,6 +53,12 @@ resource "vsphere_virtual_machine" "server1" {
     adapter_type = data.vsphere_virtual_machine.template7.network_interface_types[0]
   }
 
+  tags = [
+    "urn:vmomi:InventoryServiceTag:41497d49-f982-4ff3-8c58-b48d7c8f3814:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:4bdb57e9-2993-4157-8b17-0a8bcf98930f:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:9748f3d1-08b5-4ccf-abbe-0b6c1c24d4fc:GLOBAL"
+  ]
+
   wait_for_guest_net_timeout = 10
   wait_for_guest_ip_timeout  = -1
 
@@ -89,6 +95,12 @@ resource "vsphere_virtual_machine" "server2" {
     adapter_type = data.vsphere_virtual_machine.template8.network_interface_types[0]
   }
 
+  tags = [
+    "urn:vmomi:InventoryServiceTag:41497d49-f982-4ff3-8c58-b48d7c8f3814:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:4bdb57e9-2993-4157-8b17-0a8bcf98930f:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:9748f3d1-08b5-4ccf-abbe-0b6c1c24d4fc:GLOBAL"
+  ]
+
   wait_for_guest_net_timeout = 10
   wait_for_guest_ip_timeout  = -1
 
@@ -124,6 +136,12 @@ resource "vsphere_virtual_machine" "server3" {
     network_id = data.vsphere_network.network.id
     adapter_type = data.vsphere_virtual_machine.template9.network_interface_types[0]
   }
+
+  tags = [
+    "urn:vmomi:InventoryServiceTag:41497d49-f982-4ff3-8c58-b48d7c8f3814:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:4bdb57e9-2993-4157-8b17-0a8bcf98930f:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:9748f3d1-08b5-4ccf-abbe-0b6c1c24d4fc:GLOBAL"
+  ]
 
   wait_for_guest_net_timeout = 10
   wait_for_guest_ip_timeout  = -1

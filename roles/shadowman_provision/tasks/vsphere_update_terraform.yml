@@ -199,36 +199,7 @@
         survey_spec: "{{ slurpfile['content'] | b64decode }}"
         survey_enabled: true
 
-- name: VMWare Tags block
+- name: Loop to create group for linux hosts
+  ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
+  loop: "{{ vm_names }}"
   when: terraform_state == "present"
-  block:
-
-    - name: Ensure Tags are created
-      community.vmware.vmware_tag:
-        category_id: "{{ item.category_id }}"
-        tag_name: "{{ item.name }}"
-        state: present
-        validate_certs: false
-      loop:
-        - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
-        - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
-
-    - name: Assign Tags
-      community.vmware.vmware_tag_manager:
-        tag_names:
-          - tag: "{{ operating_system_tag }}"
-            category: operating_system
-          - tag: "{{ env | default('dev') }}"
-            category: environment
-          - tag: "{{ owner | default('shadowman') }}"
-            category: owner
-        object_name: "{{ item }}"
-        object_type: VirtualMachine
-        state: add
-        validate_certs: false
-      loop: "{{ vm_names }}"
-
-    - name: Loop to create group for linux hosts
-      ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
-      loop: "{{ vm_names }}"
-      when: operating_system is match("RHEL.*")
