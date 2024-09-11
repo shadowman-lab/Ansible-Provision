@@ -4,21 +4,30 @@ provider "aws" {
 resource "aws_vpc" "ansiblevpc" {
   cidr_block = "11.0.0.0/16"
   tags = {
-    "Name" = "Application-1"
+    "Name" = "Ansible-Terraform-VPC"
   }
 }
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.ansiblevpc.id
   cidr_block        = "11.0.2.0/24"
   availability_zone = "us-east-2a"
+  tags = {
+    "Name" = "Ansible-Terraform-Subnet-Private"
+  }
 }
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.ansiblevpc.id
   cidr_block        = "11.0.1.0/24"
   availability_zone = "us-east-2a"
+  tags = {
+    "Name" = "Ansible-Terraform-Subnet-Public"
+  }
 }
 resource "aws_route_table" "ansible-rt" {
   vpc_id = aws_vpc.ansiblevpc.id
+  tags = {
+    "Name" = "Ansible-Terraform-RT"
+  }
 }
 resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
@@ -30,25 +39,40 @@ resource "aws_route_table_association" "private" {
 }
 resource "aws_internet_gateway" "ansible-igw" {
   vpc_id = aws_vpc.ansiblevpc.id
+  tags = {
+    "Name" = "Ansible-Terraform-IG"
+  }
 }
 resource "aws_route" "internet-route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.ansible-rt.id
   gateway_id             = aws_internet_gateway.ansible-igw.id
+  tags = {
+    "Name" = "Ansible-Terraform-Route"
+  }
 }
 resource "aws_network_interface" "ansible-nic" {
   subnet_id       = aws_subnet.public.id
   private_ips     = ["11.0.1.120"]
   security_groups = [aws_security_group.web-pub-sg.id]
+  tags = {
+    "Name" = "Ansible-Terraform-NI"
+  }
 }
 resource "aws_eip" "ip-one" {
   vpc                       = true
   network_interface         = aws_network_interface.ansible-nic.id
   depends_on                = [aws_instance.app-server]
+  tags = {
+    "Name" = "Ansible-Terraform-EIP"
+  }
 }
 resource "aws_security_group" "web-pub-sg" {
   name        = "Ansible_SG"                ### Survey
   description = "allow inbound traffic"
+  tags = {
+    "Name" = "Ansible-Terraform-SG"
+  }
   vpc_id      = aws_vpc.ansiblevpc.id
   ingress {
     description = "from my ip range"
