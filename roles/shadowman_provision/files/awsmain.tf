@@ -78,6 +78,13 @@ resource "aws_security_group" "web-pub-sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  ingress {
+    description = "HTTPS"
+    from_port   = "443"
+    to_port     = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   egress {
     cidr_blocks = ["0.0.0.0/0"]
     from_port   = "0"
@@ -95,7 +102,7 @@ delete_on_termination = false
   }
   key_name = "Shadowmankey"
   tags = {
-      Name = "rhel9app.shadowman.dev"
+      Name = "rhel9aws.shadowman.dev"
       owner: "adworjan"
       env: "dev"
       operating_system: "RHEL9"

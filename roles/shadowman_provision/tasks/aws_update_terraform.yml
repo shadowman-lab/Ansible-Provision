@@ -45,12 +45,17 @@
       ansible.builtin.set_fact:
         vmsbefore: "{{ terraformvscheck | json_query('diff.before.values.outputs.*.value') }}"
         vmsafter: "{{ terraformvscheck | json_query('diff.after.values.outputs.*.value') }}"
-      when: not projectcreate.changed and terraformvscheck.diff is defined
+      when: not projectcreate.changed
+
+    - name: Set fact of VMs to be deleted
+      ansible.builtin.set_fact:
+        vmstodelete: "{{ vmsbefore | difference(vmsafter) }}"
+      when: not projectcreate.changed
 
     - name: Show list of VMs to be deleted
       ansible.builtin.debug:
-        msg: "{{ vmsbefore | difference(vmsafter) }}"
-      when: not projectcreate.changed and terraformvscheck.diff is defined
+        msg: "{{ vmstodelete }}"
+      when: not projectcreate.changed and vmstodelete.length > 0
 
     - name: Unsubscribe VMs
       ansible.controller.workflow_launch:
@@ -58,7 +63,7 @@
         extra_vars:
           vm_name: "{{ vmsbefore | difference(vmsafter) | join(',') }}"
         wait: true
-      when: not projectcreate.changed and terraformvscheck.diff is defined
+      when: not projectcreate.changed and vmstodelete.length > 0
 
     - name: Create gitignore for Terraform working files if project did not exist
       ansible.builtin.copy:
