@@ -59,7 +59,7 @@
 
     - name: Unsubscribe VMs
       ansible.controller.workflow_launch:
-        workflow_template: "Unsubscribe VMs from AWS"
+        workflow_template: "Unsubscribe VMs for Terraform"
         extra_vars:
           vm_name: "{{ vmsbefore | difference(vmsafter) | join(',') }}"
         wait: true
@@ -100,7 +100,7 @@
 
     - name: Unsubscribe VMs
       ansible.controller.workflow_launch:
-        workflow_template: "Unsubscribe VMs from AWS"
+        workflow_template: "Unsubscribe VMs for Terraform"
         extra_vars:
           vm_name: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') | join(',') }}"
         wait: true

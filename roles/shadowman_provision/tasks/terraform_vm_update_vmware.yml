@@ -10,14 +10,14 @@
 # Leverage GitOps for updating main.tf
 - name: Copy terraform main file
   ansible.builtin.copy:
-    src: files/main.tf
+    src: files/vmwaremain.tf
     dest: /tmp/terraform/vmware/main.tf
     owner: root
     group: root
     mode: '0644'
   when: terraformmain == "gitops"
 
-# Set owner from Git webhook 
+# Set owner from Git webhook
 - name: Set owner if using webhook
   ansible.builtin.set_fact:
     owner: "{{ tower_webhook_payload.head_commit.author.username }}@shadowman.dev"
