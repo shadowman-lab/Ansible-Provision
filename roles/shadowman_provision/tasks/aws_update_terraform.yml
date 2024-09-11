@@ -55,7 +55,7 @@
     - name: Show list of VMs to be deleted
       ansible.builtin.debug:
         msg: "{{ vmstodelete }}"
-      when: not projectcreate.changed and vmstodelete.length > 0
+      when: not projectcreate.changed and (vmstodelete | length > 0)
 
     - name: Unsubscribe VMs
       ansible.controller.workflow_launch:
@@ -63,7 +63,7 @@
         extra_vars:
           vm_name: "{{ vmsbefore | difference(vmsafter) | join(',') }}"
         wait: true
-      when: not projectcreate.changed and vmstodelete.length > 0
+      when: not projectcreate.changed and (vmstodelete | length > 0)
 
     - name: Create gitignore for Terraform working files if project did not exist
       ansible.builtin.copy:
