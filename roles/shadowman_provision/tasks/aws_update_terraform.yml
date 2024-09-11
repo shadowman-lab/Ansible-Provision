@@ -19,8 +19,8 @@
       register: projectcreate
 
     - name: Copy main Terraform manifest
-      ansible.builtin.template:
-        src: awsmain.tf
+      ansible.builtin.copy:
+        src: files/awsmain.tf
         mode: '755'
         dest: /{{ aws_terraform_working_dir }}/{{ tf_build }}/main.tf
 
