@@ -43,8 +43,8 @@
 
     - name: Get lists of VMs
       ansible.builtin.set_fact:
-        vmsbefore: "{{ terraformvscheck | json_query('diff.before.outputs.*.value') }}"
-        vmsafter: "{{ terraformvscheck | json_query('diff.after.outputs.*.value') }}"
+        vmsbefore: "{{ terraformvscheck | json_query('diff.before.values.outputs.*.value') }}"
+        vmsafter: "{{ terraformvscheck | json_query('diff.after.values.outputs.*.value') }}"
       when: not projectcreate.changed
 
     - name: Show list of VMs to be deleted
@@ -82,7 +82,7 @@
 
     - name: Debug VMs to Delete
       ansible.builtin.debug:
-        vmstodelete: "{{ terraformvmstodelete | json_query('diff.before.outputs.*.value') }}"
+        vmstodelete: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
       when: terraform_state == "absent"
 
     - name: Initialize Terraform Provider
