@@ -1,7 +1,7 @@
 ---
 - name: Clone Terraform Repo
   ansible.builtin.git:
-    repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
+    repo: 'git@github.com:shadowman-lab/Ansible-Terraform-AWS.git'
     version: main
     accept_newhostkey: true
     key_file: "{{ cert_key_file }}"
