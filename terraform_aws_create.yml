@@ -7,6 +7,7 @@
     shadowman_provision_hypervisor: "Terraformaws"
     terraform_state: "present"
     terraformmain: "gitops"
+    operating_system: "ignore"
 
   roles:
     - shadowman_provision
