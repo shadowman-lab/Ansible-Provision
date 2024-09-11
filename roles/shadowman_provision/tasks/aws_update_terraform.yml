@@ -141,6 +141,13 @@
         state: absent
       when: terraform_state == "absent"
 
+    - name: Sync AWS Inventory Post Deletion
+      ansible.controller.inventory_source_update:
+        name: AWS Production
+        inventory: Shadowman Production
+        organization: Infrastructure
+      when: terraform_state == "absent"
+
     - name: Update git repo with terraform files
       ansible.builtin.shell: git add -A && git commit -m "Updating Terraform Projects" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
       args:
