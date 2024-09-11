@@ -1,0 +1,13 @@
+---
+- name: Update VM on vSphere using Terraform
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    shadowman_provision_hypervisor: "Terraformvsphere"
+    terraform_state: "absent"
+    terraformmain: "gitops"
+    operating_system: "ignore"
+
+  roles:
+    - shadowman_provision

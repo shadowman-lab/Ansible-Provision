@@ -1,0 +1,234 @@
+---
+- name: Clone Terraform Repo
+  ansible.builtin.git:
+    repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
+    version: main
+    accept_newhostkey: true
+    key_file: "{{ cert_key_file }}"
+    dest: "{{ terraform_working_dir }}"
+
+- name: Creating Git Project
+  when: terraform_state == "present"
+  block:
+
+    - name: Create Terraform project
+      ansible.builtin.file:
+        path: "{{ terraform_working_dir }}{{ tf_build }}"
+        state: directory
+        mode: '755'
+      register: projectcreate
+
+    - name: Decrypt files if Project already exists
+      ansible.builtin.expect:
+        command: 'ansible-vault decrypt terraform.tfstate'
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: not projectcreate.changed
+
+    - name: Copy main Terraform manifest
+      ansible.builtin.copy:
+        src: files/vmwaremain.tf
+        mode: '755'
+        dest: /{{ terraform_working_dir }}/{{ tf_build }}/main.tf
+
+    - name: Check of VMs to see what will be deleted
+      cloud.terraform.terraform:
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvscheck
+      check_mode: true
+      when: not projectcreate.changed
+
+    - name: Get lists of VMs
+      ansible.builtin.set_fact:
+        vmsbefore: "{{ terraformvscheck | json_query('diff.before.values.outputs.*.value') }}"
+        vmsafter: "{{ terraformvscheck | json_query('diff.after.values.outputs.*.value') }}"
+      when: not projectcreate.changed
+
+    - name: Set fact of VMs to be deleted
+      ansible.builtin.set_fact:
+        vmstodelete: "{{ vmsbefore | difference(vmsafter) }}"
+      when: not projectcreate.changed
+
+    - name: Show list of VMs to be deleted
+      ansible.builtin.debug:
+        msg: "{{ vmstodelete }}"
+      when: not projectcreate.changed and (vmstodelete | length > 0)
+
+    - name: Unsubscribe VMs
+      ansible.controller.workflow_launch:
+        workflow_template: "Unsubscribe VMs for Terraform"
+        extra_vars:
+          vm_name: "{{ vmsbefore | difference(vmsafter) | join(',') }}"
+        wait: true
+      when: not projectcreate.changed and (vmstodelete | length > 0)
+
+    - name: Create gitignore for Terraform working files if project did not exist
+      ansible.builtin.copy:
+        dest: "{{ terraform_working_dir }}{{ tf_build }}/.gitignore"
+        mode: '755'
+        content: |
+          .terraform
+          .terraform.lock.hcl
+      when: projectcreate.changed
+
+- name: Creating Terraform IoC
+  block:
+    - name: Decrypt state file if deleting
+      ansible.builtin.expect:
+        command: 'ansible-vault decrypt terraform.tfstate'
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: terraform_state == "absent"
+
+    - name: Perform initial Check of VMs to see what will be removed
+      cloud.terraform.terraform:
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvmstodelete
+      check_mode: true
+      when: terraform_state == "absent"
+
+    - name: Debug VMs to Delete
+      ansible.builtin.debug:
+        msg: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') }}"
+      when: terraform_state == "absent"
+
+    - name: Unsubscribe VMs
+      ansible.controller.workflow_launch:
+        workflow_template: "Unsubscribe VMs for Terraform"
+        extra_vars:
+          vm_name: "{{ terraformvmstodelete | json_query('diff.before.values.outputs.*.value') | join(',') }}"
+        wait: true
+      when: terraform_state == "absent"
+
+    - name: Initialize Terraform Provider
+      cloud.terraform.terraform:
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvms
+
+    - name: Set stat for active vms
+      ansible.builtin.set_stats:
+        data:
+          vm_name: "{{ terraformvms | json_query('outputs.*.value') | join(',') }}"
+      when: terraform_state == "present"
+
+    - name: Set fact for vmnames for tagging
+      ansible.builtin.set_fact:
+        vm_names: "{{ terraformvms | json_query('outputs.*.value') }}"
+      when: terraform_state == "present"
+
+    - name: Encrypt state file if the first build
+      ansible.builtin.expect:
+        command: 'ansible-vault encrypt terraform.tfstate'
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: terraform_state == "present" and projectcreate.changed
+
+    - name: Encrypt the state and backup file if the second or later build
+      ansible.builtin.expect:
+        command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup'
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: terraform_state == "present" and not projectcreate.changed and terraformvms.changed
+
+    - name: Remove build directory if deleting Infrastructure
+      ansible.builtin.file:
+        path: "{{ terraform_working_dir }}{{ tf_build }}"
+        state: absent
+      when: terraform_state == "absent"
+
+    - name: Sync VMWare Inventory Post Deletion
+      ansible.controller.inventory_source_update:
+        name: VMWare Production
+        inventory: Shadowman Production
+        organization: Infrastructure
+      when: terraform_state == "absent"
+
+    - name: Update git repo with terraform files
+      ansible.builtin.shell: git add -A && git commit -m "Updating Terraform Projects" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
+      args:
+        chdir: "{{ terraform_working_dir }}"
+      environment:
+        GIT_COMMITTER_NAME: "{{ git_name | default(omit) }}"
+        GIT_COMMITTER_EMAIL: "{{ git_email | default(omit) }}"
+        GIT_AUTHOR_NAME: "{{ git_name | default(omit) }}"
+        GIT_AUTHOR_EMAIL: "{{ git_email | default(omit) }}"
+      when: terraformvms.changed
+
+- name: Updating Terraform Build list
+  block:
+    - name: Get working directories
+      ansible.builtin.command: "ls {{ terraform_working_dir }}"
+      register: dir_out
+
+    - name: Creating Survey spec
+      ansible.builtin.template:
+        src: terraform_survey_spec.json.j2
+        dest: "{{ terraform_working_dir }}/remove_vm_survey.json"
+        mode: '755'
+
+    - name: Formating list
+      ansible.builtin.slurp:
+        src: "{{ terraform_working_dir }}/remove_vm_survey.json"
+      register: slurpfile
+
+    - name: Creating Removal Job Template with Survey
+      ansible.controller.job_template:
+        name: Remove Terraform Manifest vSphere
+        organization: Infrastructure
+        job_type: run
+        inventory: Localhost Inventory
+        project: SSP Provision and DeProvision
+        execution_environment: Automation Hub Terraform and Powershell execution environment
+        playbook: terraform_vsphere_destroy.yml
+        credentials:
+          - vSphere Terraform ENV
+          - Automation Controller Credentials
+          - Private Hub Credentials
+          - Alex SSH Git Credential
+        state: present
+        survey_spec: "{{ slurpfile['content'] | b64decode }}"
+        survey_enabled: true
+
+- name: VMWare Tags block
+  when: terraform_state == "present"
+  block:
+
+    - name: Ensure Tags are created
+      community.vmware.vmware_tag:
+        category_id: "{{ item.category_id }}"
+        tag_name: "{{ item.name }}"
+        state: present
+        validate_certs: false
+      loop:
+        - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
+        - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
+
+    - name: Assign Tags
+      community.vmware.vmware_tag_manager:
+        tag_names:
+          - tag: "{{ operating_system_tag }}"
+            category: operating_system
+          - tag: "{{ env | default('dev') }}"
+            category: environment
+          - tag: "{{ owner | default('shadowman') }}"
+            category: owner
+        object_name: "{{ item }}"
+        object_type: VirtualMachine
+        state: add
+        validate_certs: false
+      loop: "{{ vm_names }}"
+
+    - name: Loop to create group for linux hosts
+      ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
+      loop: "{{ vm_names }}"
+      when: operating_system is match("RHEL.*")

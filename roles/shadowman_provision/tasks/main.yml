@@ -39,6 +39,10 @@
   ansible.builtin.include_tasks: terraform_vm_update_vmware.yml
   when: shadowman_provision_hypervisor == "Terraformvmware"
 
+- name: Terraform VMWare VM Create with Project
+  ansible.builtin.include_tasks: vsphere_update_terraform.yml
+  when: shadowman_provision_hypervisor == "Terraformvsphere"
+
 - name: Terraform AWS VM Create
   ansible.builtin.include_tasks: aws_update_terraform.yml
   when: shadowman_provision_hypervisor == "Terraformaws"
