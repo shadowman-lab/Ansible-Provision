@@ -47,9 +47,6 @@ resource "aws_route" "internet-route" {
   destination_cidr_block = "0.0.0.0/0"
   route_table_id         = aws_route_table.ansible-rt.id
   gateway_id             = aws_internet_gateway.ansible-igw.id
-  tags = {
-    "Name" = "Ansible-Terraform-Route"
-  }
 }
 resource "aws_network_interface" "ansible-nic" {
   subnet_id       = aws_subnet.public.id
