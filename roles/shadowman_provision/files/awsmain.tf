@@ -3,6 +3,7 @@ provider "aws" {
 }
 resource "aws_vpc" "ansiblevpc" {
   cidr_block = "11.0.0.0/16"
+  enable_dns_hostnames = true
   tags = {
     "Name" = "Ansible-Terraform-VPC"
   }
