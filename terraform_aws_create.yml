@@ -6,6 +6,7 @@
   vars:
     shadowman_provision_hypervisor: "Terraformaws"
     terraform_state: "present"
+    terraformmain: "gitops"
 
   roles:
     - shadowman_provision
