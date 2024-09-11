@@ -5,7 +5,7 @@
     version: main
     accept_newhostkey: true
     key_file: "{{ cert_key_file }}"
-    dest: "{{ aws_terraform_working_dir }}"
+    dest: "{{ terraform_working_dir }}"
 
 - name: Creating Git Project
   when: terraform_state == "present"
@@ -13,7 +13,7 @@
 
     - name: Create Terraform project
       ansible.builtin.file:
-        path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        path: "{{ terraform_working_dir }}{{ tf_build }}"
         state: directory
         mode: '755'
       register: projectcreate
@@ -21,7 +21,7 @@
     - name: Decrypt files if Project already exists
       ansible.builtin.expect:
         command: 'ansible-vault decrypt terraform.tfstate'
-        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
       when: not projectcreate.changed
@@ -30,11 +30,11 @@
       ansible.builtin.copy:
         src: files/awsmain.tf
         mode: '755'
-        dest: /{{ aws_terraform_working_dir }}/{{ tf_build }}/main.tf
+        dest: /{{ terraform_working_dir }}/{{ tf_build }}/main.tf
 
     - name: Check of VMs to see what will be deleted
       cloud.terraform.terraform:
-        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
         state: "{{ terraform_state }}"
         force_init: true
       register: terraformvscheck
@@ -67,7 +67,7 @@
 
     - name: Create gitignore for Terraform working files if project did not exist
       ansible.builtin.copy:
-        dest: "{{ aws_terraform_working_dir }}{{ tf_build }}/.gitignore"
+        dest: "{{ terraform_working_dir }}{{ tf_build }}/.gitignore"
         mode: '755'
         content: |
           .terraform
@@ -79,14 +79,14 @@
     - name: Decrypt state file if deleting
       ansible.builtin.expect:
         command: 'ansible-vault decrypt terraform.tfstate'
-        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
       when: terraform_state == "absent"
 
     - name: Perform initial Check of VMs to see what will be removed
       cloud.terraform.terraform:
-        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
         state: "{{ terraform_state }}"
         force_init: true
       register: terraformvmstodelete
@@ -108,7 +108,7 @@
 
     - name: Initialize Terraform Provider
       cloud.terraform.terraform:
-        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        project_path: "{{ terraform_working_dir }}{{ tf_build }}"
         state: "{{ terraform_state }}"
         force_init: true
       register: terraformvms
@@ -122,7 +122,7 @@
     - name: Encrypt state file if the first build
       ansible.builtin.expect:
         command: 'ansible-vault encrypt terraform.tfstate'
-        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
       when: terraform_state == "present" and projectcreate.changed
@@ -130,14 +130,14 @@
     - name: Encrypt the state and backup file if the second or later build
       ansible.builtin.expect:
         command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup'
-        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        chdir: "{{ terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
       when: terraform_state == "present" and not projectcreate.changed and terraformvms.changed
 
     - name: Remove build directory if deleting Infrastructure
       ansible.builtin.file:
-        path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        path: "{{ terraform_working_dir }}{{ tf_build }}"
         state: absent
       when: terraform_state == "absent"
 
@@ -151,7 +151,7 @@
     - name: Update git repo with terraform files
       ansible.builtin.shell: git add -A && git commit -m "Updating Terraform Projects" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
       args:
-        chdir: "{{ aws_terraform_working_dir }}"
+        chdir: "{{ terraform_working_dir }}"
       environment:
         GIT_COMMITTER_NAME: "{{ git_name | default(omit) }}"
         GIT_COMMITTER_EMAIL: "{{ git_email | default(omit) }}"
@@ -162,18 +162,18 @@
 - name: Updating Terraform Build list
   block:
     - name: Get working directories
-      ansible.builtin.command: "ls {{ aws_terraform_working_dir }}"
+      ansible.builtin.command: "ls {{ terraform_working_dir }}"
       register: dir_out
 
     - name: Creating Survey spec
       ansible.builtin.template:
         src: terraform_survey_spec.json.j2
-        dest: "{{ aws_terraform_working_dir }}/remove_vm_survey.json"
+        dest: "{{ terraform_working_dir }}/remove_vm_survey.json"
         mode: '755'
 
     - name: Formating list
       ansible.builtin.slurp:
-        src: "{{ aws_terraform_working_dir }}/remove_vm_survey.json"
+        src: "{{ terraform_working_dir }}/remove_vm_survey.json"
       register: slurpfile
 
     - name: Creating Removal Job Template with Survey
