@@ -14,7 +14,7 @@ resource "aws_subnet" "private" {
 }
 resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.ansiblevpc.id
-  cidr_block        = "11.0.1.64/24"
+  cidr_block        = "11.0.1.0/24"
   availability_zone = "us-east-2a"
 }
 resource "aws_route_table" "ansible-rt" {
