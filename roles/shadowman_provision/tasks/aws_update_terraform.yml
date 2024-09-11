@@ -81,6 +81,7 @@
         GIT_COMMITTER_EMAIL: "{{ git_email | default(omit) }}"
         GIT_AUTHOR_NAME: "{{ git_name | default(omit) }}"
         GIT_AUTHOR_EMAIL: "{{ git_email | default(omit) }}"
+      when: terraformvms.changed
 
 - name: Updating Terraform Build list
   block:
