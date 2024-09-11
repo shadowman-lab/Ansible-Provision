@@ -198,3 +198,8 @@
         state: present
         survey_spec: "{{ slurpfile['content'] | b64decode }}"
         survey_enabled: true
+
+- name: Loop to create group for linux hosts
+  ansible.builtin.include_tasks: add_host_loop_vmware_terraform.yml
+  loop: "{{ vm_names }}"
+  when: terraform_state == "present"
