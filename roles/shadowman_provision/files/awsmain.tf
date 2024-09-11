@@ -85,7 +85,7 @@ resource "aws_security_group" "web-pub-sg" {
     to_port     = "0"
   }
 }
-resource "aws_instance" "app-server" {
+resource "aws_instance" "app-server1" {
   instance_type = "t2.micro"
   ami           = "ami-023c6ad2a87d58f18"
   network_interface {
@@ -95,7 +95,25 @@ delete_on_termination = false
   }
   key_name = "Shadowmankey"
   tags = {
-      Name = "rhel9.shadowman.dev"
+      Name = "rhel9app1.shadowman.dev"
+      owner: "adworjan"
+      env: "dev"
+      operating_system: "RHEL9"
+      usage: "shadowmandemos"
+      }
+}
+
+resource "aws_instance" "app-server2" {
+  instance_type = "t2.micro"
+  ami           = "ami-023c6ad2a87d58f18"
+  network_interface {
+    network_interface_id = aws_network_interface.ansible-nic.id
+    device_index         = 0
+delete_on_termination = false
+  }
+  key_name = "Shadowmankey"
+  tags = {
+      Name = "rhel9app2.shadowman.dev"
       owner: "adworjan"
       env: "dev"
       operating_system: "RHEL9"
