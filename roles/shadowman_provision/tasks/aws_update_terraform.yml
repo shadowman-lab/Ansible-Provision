@@ -58,9 +58,9 @@
           password: "{{ pah_pass }}"
       when: terraform_state == "present" and projectcreate.changed
 
-    - name: Encrypt the backup file if the second or later build
+    - name: Encrypt the state and backup file if the second or later build
       ansible.builtin.expect:
-        command: 'ansible-vault encrypt terraform.tfstate.backup'
+        command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup'
         chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
         responses:
           password: "{{ pah_pass }}"
