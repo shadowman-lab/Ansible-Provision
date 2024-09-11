@@ -1,23 +1,19 @@
 provider "vsphere" {
-  vsphere_server = var.vsphere_server
-  user           = var.vsphere_user
-  password       = var.vsphere_password
-
   # If you have a self-signed cert
   allow_unverified_ssl = true
 }
 
 data "vsphere_datacenter" "dc" {
-  name = var.datacenter
+  name = "Shadowman"
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = var.cluster
+  name          = "Cluster1"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = var.datastore
+  name          = "NFS_Cersei"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -27,17 +23,17 @@ data "vsphere_network" "network" {
 }
 
 data "vsphere_virtual_machine" "template7" {
-  name          = "/${var.datacenter}/vm/RHEL7_ShadowMan"
+  name          = "/Shadowman/vm/RHEL7_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_virtual_machine" "template8" {
-  name          = "/${var.datacenter}/vm/RHEL8_ShadowMan"
+  name          = "/Shadowman/vm/RHEL8_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_virtual_machine" "template9" {
-  name          = "/${var.datacenter}/vm/RHEL9_ShadowMan"
+  name          = "/Shadowman/vm/RHEL9_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
