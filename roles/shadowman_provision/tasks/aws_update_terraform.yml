@@ -106,6 +106,7 @@
         job_type: run
         inventory: Localhost Inventory
         project: SSP Provision and DeProvision
+        execution_environment: Automation Hub Terraform and Powershell execution environment
         playbook: terraform_aws_destroy.yml
         credentials:
           - AWS Environment Credentials

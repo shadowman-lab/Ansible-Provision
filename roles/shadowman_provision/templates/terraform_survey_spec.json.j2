@@ -11,7 +11,7 @@
         "min": null,
         "max": null,
         "default": "",
-        "choices": "{% for build in dir_out.stdout_lines %}{{ build }}\n{% endfor %}",
+        "choices": "{% for build in dir_out.stdout_lines %}{% if build != 'README.md' %}{{ build }}\n{% endif %}{% endfor %}",
         "new_question": true
       }
     ]
