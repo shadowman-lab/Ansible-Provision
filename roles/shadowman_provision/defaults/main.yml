@@ -41,3 +41,5 @@ destination_cidr_block: '0.0.0.0/0'
 _security_group_: "ShadowmanSG"
 _key_name_: "Shadowmankey"
 _instance_type_: "t2.micro"
+tf_build: "ansible01"
+aws_terraform_working_dir: /tmp/srv/

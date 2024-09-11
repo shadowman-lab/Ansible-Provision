@@ -1,0 +1,108 @@
+---
+- name: Clone Terraform Repo
+  ansible.builtin.git:
+    repo: 'git@github.com:shadowman-lab/Ansible-Terraform.git'
+    version: main
+    accept_newhostkey: true
+    key_file: "{{ cert_key_file }}"
+    dest: "{{ aws_terraform_working_dir }}"
+
+- name: Creating Git Project
+  when: terraform_state == "present"
+  block:
+
+    - name: Create Terraform project
+      ansible.builtin.file:
+        path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: directory
+        mode: '755'
+      register: projectcreate
+
+    - name: Copy main Terraform manifest
+      ansible.builtin.template:
+        src: awsmain.tf
+        mode: '755'
+        dest: /{{ aws_terraform_working_dir }}/{{ tf_build }}/main.tf
+
+    - name: Create gitignore for Terraform working files if project did not exist
+      ansible.builtin.copy:
+        dest: "{{ aws_terraform_working_dir }}{{ tf_build }}/.gitignore"
+        mode: '755'
+        content: |
+          .terraform
+          .terraform.lock.hcl
+      when: projectcreate.changed
+
+- name: Creating Terraform IoC
+  block:
+    - name: Decrypt files if Project already exists
+      ansible.builtin.expect:
+        command: 'ansible-vault decrypt terraform.tfstate terraform.tfstate.backup'
+        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+      when: not projectcreate.changed or terraform_state == "absent"
+
+    - name: Initialize Terraform Provider
+      cloud.terraform.terraform:
+        project_path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: "{{ terraform_state }}"
+        force_init: true
+      register: terraformvms
+
+    - name: Encrypt files
+      ansible.builtin.expect:
+        command: 'ansible-vault encrypt terraform.tfstate terraform.tfstate.backup'
+        chdir: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        responses:
+          password: "{{ pah_pass }}"
+
+    - name: Remove build directory if deleting Infrastructure
+      ansible.builtin.file:
+        path: "{{ aws_terraform_working_dir }}{{ tf_build }}"
+        state: absent
+      when: terraform_state == "absent"
+
+    - name: Update git repo with terraform files
+      ansible.builtin.shell: git add -A && git commit -m "Updating Terraform Projects" && git config --global core.sshCommand 'ssh -i {{ cert_key_file }} -F /dev/null' && git push
+      args:
+        chdir: "{{ aws_terraform_working_dir }}"
+      environment:
+        GIT_COMMITTER_NAME: "{{ git_name | default(omit) }}"
+        GIT_COMMITTER_EMAIL: "{{ git_email | default(omit) }}"
+        GIT_AUTHOR_NAME: "{{ git_name | default(omit) }}"
+        GIT_AUTHOR_EMAIL: "{{ git_email | default(omit) }}"
+
+- name: Updating Terraform Build list
+  block:
+    - name: Get working directories
+      ansible.builtin.command: "ls {{ aws_terraform_working_dir }}"
+      register: dir_out
+
+    - name: Creating Survey spec
+      ansible.builtin.template:
+        src: terraform_survey_spec.json.j2
+        dest: "{{ aws_terraform_working_dir }}/remove_vm_survey.json"
+        mode: '755'
+
+    - name: Formating list
+      ansible.builtin.slurp:
+        src: "{{ aws_terraform_working_dir }}/remove_vm_survey.json"
+      register: slurpfile
+
+    - name: Creating Removal Job Template with Survey
+      ansible.controller.job_template:
+        name: Remove Terraform Manifest
+        organization: Infrastructure
+        job_type: run
+        inventory: Localhost Inventory
+        project: SSP Provision and DeProvision
+        playbook: terraform_aws_destroy.yml
+        credentials:
+          - AWS Environment Credentials
+          - Automation Controller Credentials
+          - Private Hub Credentials
+          - Alex SSH Git Credential
+        state: present
+        survey_spec: "{{ slurpfile['content'] | b64decode }}"
+        survey_enabled: true

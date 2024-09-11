@@ -1,0 +1,11 @@
+---
+- name: Update VM on AWS using Terraform
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    shadowman_provision_hypervisor: "Terraformaws"
+    terraform_state: "absent"
+
+  roles:
+    - shadowman_provision
