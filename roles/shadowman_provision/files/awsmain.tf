@@ -117,7 +117,7 @@ output "app-server" {
 
 resource "aws_network_interface" "ansible-nic2" {
   subnet_id       = aws_subnet.public.id
-  private_ips     = ["11.0.2.120"]
+  private_ips     = ["11.0.1.100"]
   security_groups = [aws_security_group.web-pub-sg.id]
   tags = {
     "Name" = "Ansible-Terraform-NI2"
