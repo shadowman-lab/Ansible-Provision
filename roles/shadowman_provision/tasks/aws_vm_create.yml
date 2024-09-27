@@ -183,7 +183,7 @@
     tags:
       Name: "{{ item }}"
       owner: "{{ owner }}"
-      environment: "{{ env }}"
+      env: "{{ env }}"
       operating_system: "Windows"
       usage: "shadowmandemos"
   loop: "{{ vm_names }}"
