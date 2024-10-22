@@ -26,6 +26,7 @@
           template: "{{ template }}"
           cluster: "{{ cluster }}"
           memory: "{{ vm_memory }}"
+          host: "arya.shadowman.dev"
           storage_domain: "{{ shadowman_storage_domain }}"
           high_availability: true
           state: "{{ vm_state }}"
@@ -59,6 +60,7 @@
           template: "{{ template }}"
           cluster: "{{ cluster }}"
           memory: "{{ vm_memory }}"
+          host: "arya.shadowman.dev"
           high_availability: true
           state: "{{ vm_state }}"
           wait: true
@@ -85,6 +87,7 @@
       template: "{{ template }}"
       cluster: "{{ cluster }}"
       memory: "{{ vm_memory }}"
+      host: "arya.shadowman.dev"
       storage_domain: "{{ shadowman_storage_domain }}"
       high_availability: true
       sysprep:
