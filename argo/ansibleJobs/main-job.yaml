@@ -1,0 +1,10 @@
+---
+apiVersion: tower.ansible.com/v1alpha1
+kind: AnsibleJob
+metadata:
+  name: main-job
+  namespace: aap
+spec:
+  connection_secret: aapaccess
+  job_template_name: Patching RHEL
+  extra_vars: exclude: ''

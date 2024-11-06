@@ -1,0 +1,14 @@
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Ansible-Provision
+  description: Patching RHEL
+  annotations:
+    backstage.io/kubernetes-id: Ansible-Provision
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: shadowman-lab/Ansible-Provision
+spec:
+  type: api
+  lifecycle: production
+  owner: Alex Dworjan
