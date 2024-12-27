@@ -29,7 +29,7 @@ terraform_state: absent
 terraformmain: ansible
 # shadowman_storage_domain: NFS_Cersei
 shadowman_storage_domain: SSD_Array
-_image_id_: ami-08b207be5fdce406f
+_image_id_: ami-05ae892102a574172
 _region_: us-east-2
 vpc_name: "Shadowman VPC"
 _vpc_cidr_block_: '11.0.0.0/16'
