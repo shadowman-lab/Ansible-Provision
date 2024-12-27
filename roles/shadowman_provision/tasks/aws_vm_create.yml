@@ -2,7 +2,7 @@
 
 - name: Change image ID if running Windows
   ansible.builtin.set_fact:
-    _image_id_: 'ami-091cb95e3a8474173'
+    _image_id_: 'ami-0c7d82870ce75cd0f'
   when: operating_system is match("Win.*")
 
 - name: Change image ID if running RHEL8
