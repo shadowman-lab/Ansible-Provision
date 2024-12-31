@@ -1,45 +1,77 @@
 ---
-- name: RHV Block
-  block:
-  - name: Login to RHV
-    redhat.rhv.ovirt_auth:
-      hostname: "{{ rhvm_fqdn }}"
-      username: "{{ rhvm_user }}"
-      password: "{{ rhvm_password }}"
-      ca_file: "{{ rhvm_cafile | default(omit) }}"
-      insecure: "{{ rhvm_insecure | default(true) }}"
+# - name: RHV Block
+#   block:
+#   - name: Login to RHV
+#     redhat.rhv.ovirt_auth:
+#       hostname: "{{ rhvm_fqdn }}"
+#       username: "{{ rhvm_user }}"
+#       password: "{{ rhvm_password }}"
+#       ca_file: "{{ rhvm_cafile | default(omit) }}"
+#       insecure: "{{ rhvm_insecure | default(true) }}"
 
-  - name: Pull snapshot ID for a VM
-    redhat.rhv.ovirt_snapshot_info:
-      auth: "{{ ovirt_auth }}"
-      vm: "{{ vm_name }}"
-      description: "{{ snapshot_desc }}"
-    register: snapshot
+#   - name: Pull snapshot ID for a VM
+#     redhat.rhv.ovirt_snapshot_info:
+#       auth: "{{ ovirt_auth }}"
+#       vm: "{{ vm_name }}"
+#       description: "{{ snapshot_desc }}"
+#     register: snapshot
 
-  - name: Stop VM
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ vm_name }}"
-      state: stopped
-      wait: true
+#   - name: Stop VM
+#     redhat.rhv.ovirt_vm:
+#       auth: "{{ ovirt_auth }}"
+#       name: "{{ vm_name }}"
+#       state: stopped
+#       wait: true
 
-  - name: Restore from Snapshot
-    redhat.rhv.ovirt_snapshot:
-      auth: "{{ ovirt_auth }}"
-      vm_name: "{{ vm_name }}"
-      snapshot_id: "{{ snapshot.ovirt_snapshots[0].id }}"
-      state: restore
-      wait: true
+#   - name: Restore from Snapshot
+#     redhat.rhv.ovirt_snapshot:
+#       auth: "{{ ovirt_auth }}"
+#       vm_name: "{{ vm_name }}"
+#       snapshot_id: "{{ snapshot.ovirt_snapshots[0].id }}"
+#       state: restore
+#       wait: true
 
-  - name: Start VM
-    redhat.rhv.ovirt_vm:
-      auth: "{{ ovirt_auth }}"
-      name: "{{ vm_name }}"
-      state: running
-      wait: true
+#   - name: Start VM
+#     redhat.rhv.ovirt_vm:
+#       auth: "{{ ovirt_auth }}"
+#       name: "{{ vm_name }}"
+#       state: running
+#       wait: true
 
-  always:
-    - name: Logout from RHV
-      redhat.rhv.ovirt_auth:
-        state: absent
-        ovirt_auth: "{{ ovirt_auth }}"
+#   always:
+#     - name: Logout from RHV
+#       redhat.rhv.ovirt_auth:
+#         state: absent
+#         ovirt_auth: "{{ ovirt_auth }}"
+
+- name: Get VM info
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names:
+      - "{{ vm_name }}"
+    vcenter_validate_certs: false
+  register: vm_info
+  delegate_to: localhost
+
+- name: Turn off VM
+  vmware.vmware_rest.vcenter_vm_power:
+    state: stop
+    vm: '{{ vm_info.value[0].vm }}'
+    vcenter_validate_certs: false
+  delegate_to: localhost
+
+- name: Revert from a snapshot
+  community.vmware.vmware_guest_snapshot:
+    datacenter: "Shadowman"
+    folder: "Discovered virtual machine"
+    name: "{{ vm_name }}"
+    state: revert
+    description: "{{ snapshot_desc }}"
+    snapshot_name: "{{ snapshot_desc }}"
+  delegate_to: localhost
+
+- name: Turn on VM
+  vmware.vmware_rest.vcenter_vm_power:
+    state: start
+    vm: '{{ vm_info.value[0].vm }}'
+    vcenter_validate_certs: false
+  delegate_to: localhost

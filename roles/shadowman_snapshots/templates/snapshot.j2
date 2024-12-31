@@ -8,16 +8,16 @@
       "question_description": "Choose the snapshot description",
       "variable": "snapshot_desc",
       "choices": [
-{% for snap in snapshot.ovirt_snapshots %}
+{% for snap in snapshot_info.guest_snapshots.snapshots %}
 {% if loop.last %}
-        "{{snap.description}}"
+        "{{snap.name}}"
 {% else %}
-        "{{snap.description}}",
+        "{{snap.name}}",
 {% endif %}
 {% endfor %}
       ],
       "required": true,
-      "default": "{{snapshot.ovirt_snapshots[0].description}}"
+      "default": "{{snapshot_info.guest_snapshots.snapshots[0].name}}"
     }
   ]
 }
