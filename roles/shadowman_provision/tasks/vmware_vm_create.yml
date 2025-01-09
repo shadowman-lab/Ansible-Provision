@@ -81,8 +81,8 @@
     state: present
     validate_certs: false
   loop:
-    - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:2f8b3120-c05f-4f72-a791-32ee96b43611:GLOBAL' }
-    - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:a5f2bce8-c9b0-4d35-a408-e804817084d4:GLOBAL' }
+    - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:4d358ccf-dbca-4fc8-8600-3e88ec1e09ff:GLOBAL' }
+    - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:1e759721-5b8c-4bc5-8550-ca042a4818b0:GLOBAL' }
 
 - name: Assign Tags
   community.vmware.vmware_tag_manager:
