@@ -9,7 +9,7 @@
     cluster: '{{ cluster_id }}'
     datastore: '{{ datastore_id }}'
     folder: '{{ folder_id }}'
-    datacenter: "Shadowman"
+    datacenter: "Shadowman-DC"
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
@@ -38,7 +38,7 @@
     cluster: '{{ cluster_id }}'
     datastore: '{{ datastore_id }}'
     folder: '{{ folder_id }}'
-    datacenter: "Shadowman"
+    datacenter: "Shadowman-DC"
     name: "{{ item }}"
     state: "{{ state }}"
     template: "{{ source_vm_id }}"

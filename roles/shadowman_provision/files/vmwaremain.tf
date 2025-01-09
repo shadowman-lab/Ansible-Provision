@@ -4,36 +4,36 @@ provider "vsphere" {
 }
 
 data "vsphere_datacenter" "dc" {
-  name = "Shadowman"
+  name = "Shadowman-DC"
 }
 
 data "vsphere_compute_cluster" "cluster" {
-  name          = "Cluster1"
+  name          = "Cluster01"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_datastore" "datastore" {
-  name          = "NFS_Cersei"
+  name          = "vsanDatastore"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_network" "network" {
-  name          = "LAN_02"
+  name          = "VM Network"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_virtual_machine" "template7" {
-  name          = "/Shadowman/vm/RHEL7_ShadowMan"
+  name          = "/Shadowman-DC/vm/RHEL7_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_virtual_machine" "template8" {
-  name          = "/Shadowman/vm/RHEL8_ShadowMan"
+  name          = "/Shadowman-DC/vm/RHEL8_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
 data "vsphere_virtual_machine" "template9" {
-  name          = "/Shadowman/vm/RHEL9_ShadowMan"
+  name          = "/Shadowman-DC/vm/RHEL9_ShadowMan"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
