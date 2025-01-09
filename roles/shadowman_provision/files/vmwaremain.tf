@@ -55,8 +55,8 @@ resource "vsphere_virtual_machine" "server1" {
 
   tags = [
     "urn:vmomi:InventoryServiceTag:008d5941-409f-42bf-af67-69e513e4f3a3:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:008d5941-409f-42bf-af67-69e513e4f3a3:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:008d5941-409f-42bf-af67-69e513e4f3a3:GLOBAL"
+    "urn:vmomi:InventoryServiceTag:4a22652c-1463-424a-9353-878197be7088:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:8921ca91-396b-4458-82b4-2221e5b9ce3c:GLOBAL"
   ]
 
   wait_for_guest_net_timeout = 10
@@ -96,9 +96,9 @@ resource "vsphere_virtual_machine" "server2" {
   }
 
   tags = [
-    "urn:vmomi:InventoryServiceTag:41497d49-f982-4ff3-8c58-b48d7c8f3814:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:4bdb57e9-2993-4157-8b17-0a8bcf98930f:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:9748f3d1-08b5-4ccf-abbe-0b6c1c24d4fc:GLOBAL"
+    "urn:vmomi:InventoryServiceTag:008d5941-409f-42bf-af67-69e513e4f3a3:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:4a22652c-1463-424a-9353-878197be7088:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:8921ca91-396b-4458-82b4-2221e5b9ce3c:GLOBAL"
   ]
 
   wait_for_guest_net_timeout = 10
@@ -138,9 +138,9 @@ resource "vsphere_virtual_machine" "server3" {
   }
 
   tags = [
-    "urn:vmomi:InventoryServiceTag:41497d49-f982-4ff3-8c58-b48d7c8f3814:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:4bdb57e9-2993-4157-8b17-0a8bcf98930f:GLOBAL",
-    "urn:vmomi:InventoryServiceTag:9748f3d1-08b5-4ccf-abbe-0b6c1c24d4fc:GLOBAL"
+    "urn:vmomi:InventoryServiceTag:008d5941-409f-42bf-af67-69e513e4f3a3:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:4a22652c-1463-424a-9353-878197be7088:GLOBAL",
+    "urn:vmomi:InventoryServiceTag:8921ca91-396b-4458-82b4-2221e5b9ce3c:GLOBAL"
   ]
 
   wait_for_guest_net_timeout = 10
