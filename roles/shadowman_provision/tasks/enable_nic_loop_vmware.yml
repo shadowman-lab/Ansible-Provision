@@ -12,7 +12,7 @@
     vm: "{{ vm_info.value[0].vm }}"
     pci_slot_number: 192
     backing:
-      network_name: "LAN_01"
+      network_name: "LAN01"
       type: "STANDARD_PORTGROUP"
       network: "network-41"
     start_connected: true

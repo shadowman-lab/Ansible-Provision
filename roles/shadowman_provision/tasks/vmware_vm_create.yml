@@ -44,7 +44,7 @@
     template: "{{ source_vm_id }}"
     validate_certs: false
     networks:
-      - name: LAN_01
+      - name: LAN01
         start_connected: true
         connected: true
     customization:
