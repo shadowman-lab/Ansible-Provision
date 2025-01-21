@@ -43,10 +43,10 @@
     state: "{{ state }}"
     template: "{{ source_vm_id }}"
     validate_certs: false
-    # networks:
-    #   - name: LAN01
-    #     start_connected: true
-    #     connected: true
+    networks:
+      - name: LAN01
+        start_connected: true
+        connected: true
     customization:
       domain: ad.shadowman.dev
       autologon: true

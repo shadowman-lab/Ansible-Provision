@@ -1,23 +1,23 @@
 ---
 
-# - name: Get VM info
-#   vmware.vmware_rest.vcenter_vm_info:
-#     filter_names:
-#       - "{{ item }}"
-#     vcenter_validate_certs: false
-#   register: vm_info
+- name: Get VM info
+  vmware.vmware_rest.vcenter_vm_info:
+    filter_names:
+      - "{{ item }}"
+    vcenter_validate_certs: false
+  register: vm_info
 
-# - name: Connect Ethernet
-#   vmware.vmware_rest.vcenter_vm_hardware_ethernet:
-#     vm: "{{ vm_info.value[0].vm }}"
-#     pci_slot_number: 192
-#     nic: "4000"
-#     backing:
-#       type: "DISTRIBUTED_PORTGROUP"
-#       network: "dvportgroup-64"
-#     start_connected: true
-#     state: connect
-#     vcenter_validate_certs: false
+- name: Connect Ethernet
+  vmware.vmware_rest.vcenter_vm_hardware_ethernet:
+    vm: "{{ vm_info.value[0].vm }}"
+    pci_slot_number: 192
+    nic: "4000"
+    backing:
+      type: "DISTRIBUTED_PORTGROUP"
+      network: "dvportgroup-64"
+    start_connected: true
+    state: connect
+    vcenter_validate_certs: false
 
 - name: Loop until hostname is set correctly
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
