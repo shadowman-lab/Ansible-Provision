@@ -93,6 +93,8 @@
         category: environment
       - tag: "{{ owner | default('shadowman') }}"
         category: owner
+      - tag: ansible_managed
+        category: purpose
     object_name: "{{ item }}"
     object_type: VirtualMachine
     state: add
