@@ -13,8 +13,8 @@
     pci_slot_number: 192
     backing:
       network_name: "LAN01"
-      type: "STANDARD_PORTGROUP"
-      network: "network-41"
+      type: "DISTRIBUTED_PORTGROUP"
+      network: "dvportgroup-64"
     start_connected: true
     state: connect
     vcenter_validate_certs: false
