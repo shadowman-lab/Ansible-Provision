@@ -24,6 +24,6 @@
     vm: "{{ vm_info.value[0].vm }}"
     vcenter_validate_certs: false
   register: vm_full_info
-  until: vm_full_info.value.host_name | default("False") == item.split('.')[0]
+  until: (vm_full_info.value.host_name | default("False") == item.split('.')[0]) or (vm_full_info.value.host_name | default("False") == item)
   retries: 120
   delay: 10
