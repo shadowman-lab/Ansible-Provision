@@ -19,10 +19,6 @@
     - operating_system == "Win2016"
     - terraformmain != "gitops"
 
-# - name: RHV VM Create
-#  ansible.builtin.include_tasks: rhv_vm_create.yml
-#  when: shadowman_provision_hypervisor == "RHV"
-
 - name: Azure VM Create
   ansible.builtin.include_tasks: azure_vm_create.yml
   when: shadowman_provision_hypervisor == "Azure"
@@ -34,14 +30,6 @@
 - name: VMWare VM Create
   ansible.builtin.include_tasks: vmware_vm_create.yml
   when: shadowman_provision_hypervisor == "VMWare"
-
-# - name: Terraform VMWare VM Create
-#   ansible.builtin.include_tasks: terraform_vm_update_vmware.yml
-#   when: shadowman_provision_hypervisor == "Terraformvmware"
-
-# - name: RHV VM Wait
-#   ansible.builtin.include_tasks: rhv_wait.yml
-#   when: shadowman_provision_hypervisor == "RHV"
 
 - name: VMWare VM Wait
   ansible.builtin.include_tasks: vmware_wait.yml
