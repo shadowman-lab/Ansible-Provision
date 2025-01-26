@@ -1,27 +1,39 @@
 ---
-- name: Use Activation Key to Register RHEL7 Machine to Satellite
-  community.general.redhat_subscription:
-    state: present
-    activationkey: "RHEL7"
-    org_id: Shadowman
-  when:
-    - ansible_distribution_version is match("7.*")
+- name: Set activation key for RHEL7
+  ansible.builtin.set_fact:
+    activation_key: RHEL7
+  when: ansible_distribution_version is match("7.*")
 
-- name: Use Activation Key to Register RHEL8 Machine to Satellite
-  community.general.redhat_subscription:
-    state: present
-    activationkey: "RHEL8"
-    org_id: Shadowman
-  when:
-    - ansible_distribution_version is match("8.*")
+- name: Set activation key for RHEL8
+  ansible.builtin.set_fact:
+    activation_key: RHEL8
+  when: ansible_distribution_version is match("8.*")
 
-- name: Use Activation Key to Register RHEL9 Machine to Satellite
-  community.general.redhat_subscription:
-    state: present
-    activationkey: "RHEL9"
-    org_id: Shadowman
-  when:
-    - ansible_distribution_version is match("9.*")
+- name: Set activation key for RHEL9
+  ansible.builtin.set_fact:
+    activation_key: RHEL9
+  when: ansible_distribution_version is match("9.*")
+
+- name: Generate registration command
+  redhat.satellite.registration_command:
+    smart_proxy: "capsule.shadowman.dev"
+    username: "{{ username }}"
+    password: "{{ password }}"
+    server_url: "{{ server_url }}"
+    insecure: true
+    setup_remote_execution: false
+    ignore_subman_errors: true
+    setup_insights: false
+    validate_certs: false
+    update_packages: false
+    setup_remote_execution_pull: false
+    activation_keys:
+      - "{{ activation_key }}"
+  register: register_command
+
+- name: Perform registration
+  ansible.builtin.shell:
+    cmd: "{{ register_command.registration_command }}"
 
 - name: Upgrade all packages (yum)
   ansible.builtin.yum:
