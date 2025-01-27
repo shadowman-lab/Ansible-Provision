@@ -47,6 +47,7 @@
     username: "{{ username }}"
     password: "{{ password }}"
     server_url: "{{ server_url }}"
+    validate_certs: false
     state: absent
   when:
     - shadowman_provision_hypervisor | default('RHV') != "Azure"
