@@ -40,6 +40,6 @@ _route_table_name_: "Shadowman Route Table"
 destination_cidr_block: '0.0.0.0/0'
 _security_group_: "ShadowmanSG"
 _key_name_: "Shadowmankey"
-_instance_type_: "t2.micro"
+_instance_type_: "t2.medium"
 tf_build: "ansible01"
 terraform_working_dir: /tmp/srv/
