@@ -12,6 +12,9 @@
     vm: "{{ vm_info.value[0].vm }}"
     vcenter_validate_certs: false
   register: vm_full_info
+  until: vm_full_info.value.ip_address is defined
+  retries: 10
+  delay: 2
 
 - name: Add Linux hosts to just_created group
   ansible.builtin.add_host:
