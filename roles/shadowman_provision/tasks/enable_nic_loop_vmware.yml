@@ -12,7 +12,6 @@
     vm: "{{ vm_info.value[0].vm }}"
     pci_slot_number: 192
     nic: "4000"
-    allow_guest_control: true
     backing:
       type: "DISTRIBUTED_PORTGROUP"
       network: "dvportgroup-64"
