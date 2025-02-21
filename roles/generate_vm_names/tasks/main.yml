@@ -39,7 +39,7 @@
 
 - name: Create all VM Names
   set_fact:
-    vm_names: "{{ vm_names | default([]) + [vm_name_prefix + '%d' | format(item + start_number | int)] }}"
+    vm_names: "{{ vm_names | default([]) + [vm_name_prefix + '%d' | format(item + start_number | int) + '.shadowman.dev'] }}"
   loop: "{{ range(0, number_of_vms) | list }}"
   loop_control:
     index_var: item
