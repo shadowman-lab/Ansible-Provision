@@ -1,0 +1,50 @@
+---
+- name: Get current schema
+  ansible.builtin.uri:
+    url: https://report.shadowman.dev/schema.html
+    return_content: true
+  register: schema
+
+- name: Establish schema
+  ansible.builtin.set_fact:
+    vm_name_prefix: >-
+      {%- if schema.content | trim == "app_type_first" -%}{{ app_type }}-{{ env }}-
+      {%- elif schema.content | trim == "env_first" -%}{{ env }}-{{ app_type }}-
+      {%- endif -%}
+
+- name: Block for VMWare
+  when: shadowman_provision_hypervisor == "VMWare"
+  block:
+
+    - name: List all VMs in the vCenter
+      community.vmware.vmware_vm_info:
+        validate_certs: false
+        show_cluster: false
+        show_datacenter: false
+        show_datastore: false
+        show_esxi_hostname: false
+        show_folder: false
+        show_mac_address: false
+        show_net: false
+        show_resource_pool: false
+      register: all_vms_info
+
+    - name: Filter VMs based on prefix and determine the maximum number
+      set_fact:
+        max_existing_vm_number: "{{ (all_vms_info.virtual_machines | selectattr('guest_name', 'match', vm_name_prefix ~ '\\d+$') | map(attribute='guest_name') | map('regex_search', '\\d+$') | map('int') | list + [0]) | max }}"
+
+- name: Increment max_existing_vm_number safely
+  set_fact:
+    start_number: "{{ (max_existing_vm_number | int) + 1 }}"
+
+- name: Create all VM Names
+  set_fact:
+    vm_names: "{{ vm_names | default([]) + [vm_name_prefix + '%d' | format(item + start_number | int)] }}"
+  loop: "{{ range(0, number_of_vms) | list }}"
+  loop_control:
+    index_var: item
+
+- name: Pass along to remainder of workflow
+  ansible.builtin.set_stats:
+    data:
+      vm_name: "{{ vm_names | join(',') }}"

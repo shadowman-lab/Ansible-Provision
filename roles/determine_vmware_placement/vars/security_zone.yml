@@ -1,0 +1,10 @@
+---
+security_zones:
+  - name: prod
+    port_group_names:
+      - LAN01
+      - LAN02
+  - name: test
+    port_group_names:
+      - LAN03
+      - LAN04

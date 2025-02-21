@@ -1,0 +1,7 @@
+---
+- name: Determine VCenter Parameters
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - determine_vmware_placement

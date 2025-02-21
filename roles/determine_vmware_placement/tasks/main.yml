@@ -1,0 +1,18 @@
+---
+- name: Get datacenter mapping
+  ansible.builtin.include_vars:
+    file: datacenter.yml
+    name: datacenters
+
+- name: Get security-zone mapping
+  ansible.builtin.include_vars:
+    file: security_zone.yml
+    name: security_zones
+
+- name: Display vcenter to use
+  ansible.builtin.set_fact:
+    vcenter_hostname: "{{ datacenters.vcenters | selectattr('datacenters', 'search', datacenter) | map(attribute='name') | join (',') }}"
+
+- name: Display port group to use
+  ansible.builtin.set_fact:
+    port_group_name: "{{ security_zones.security_zones | selectattr('name', 'equalto', security_zone) | map(attribute='port_group_names' ) | first | random }}"

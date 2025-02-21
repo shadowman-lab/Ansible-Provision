@@ -1,0 +1,10 @@
+---
+vcenters:
+  - name: vcenter.shadowman.dev
+    datacenters:
+      - datacenter1
+      - datacenter2
+  - name: west.shadowman.dev
+    datacenters:
+      - datacenter3
+      - datacenter4
