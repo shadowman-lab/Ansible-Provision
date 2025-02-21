@@ -8,3 +8,6 @@ security_zones:
     port_group_names:
       - LAN03
       - LAN04
+  - name: dev
+    port_group_names:
+      - LAN05
