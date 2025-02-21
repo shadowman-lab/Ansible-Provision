@@ -9,10 +9,13 @@
     file: security_zone.yml
     name: security_zones
 
-- name: Display vcenter to use
+- name: Set vcenter and port group to use
   ansible.builtin.set_fact:
     vcenter_hostname: "{{ datacenters.vcenters | selectattr('datacenters', 'search', datacenter) | map(attribute='name') | join (',') }}"
-
-- name: Display port group to use
-  ansible.builtin.set_fact:
     port_group_name: "{{ security_zones.security_zones | selectattr('name', 'equalto', security_zone) | map(attribute='port_group_names' ) | first | random }}"
+
+- name: Pass to workflow
+  ansible.builtin.set_stats:
+    data:
+      provision_vcenter_hostname: "{{ vcenter_hostname }}"
+      provision_port_group_name: "{{ port_group_name }}"
