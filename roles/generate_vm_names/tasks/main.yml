@@ -30,15 +30,15 @@
       register: all_vms_info
 
     - name: Filter VMs based on prefix and determine the maximum number
-      set_fact:
+      ansible.builtin.set_fact:
         max_existing_vm_number: "{{ (all_vms_info.virtual_machines | selectattr('guest_name', 'match', vm_name_prefix ~ '\\d+\\.shadowman\\.dev$') | map(attribute='guest_name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
 
 - name: Increment max_existing_vm_number safely
-  set_fact:
+  ansible.builtin.set_fact:
     start_number: "{{ (max_existing_vm_number | int) + 1 }}"
 
 - name: Create all VM Names
-  set_fact:
+  ansible.builtin.set_fact:
     vm_names: "{{ vm_names | default([]) + [vm_name_prefix + '%d' | format(item + start_number | int) + '.shadowman.dev'] }}"
   loop: "{{ range(0, number_of_vms) | list }}"
   loop_control:
