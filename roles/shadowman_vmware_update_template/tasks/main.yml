@@ -81,9 +81,15 @@
 
 - name: Clean subscription-manager
   ansible.builtin.command:
-    cmd: "subscription-manager clean && subscription-manager unregister"
+    cmd: "subscription-manager clean"
   register: cleanresult
   changed_when: cleanresult.rc == 0
+
+- name: Ensure subscription-manager unregistered
+  ansible.builtin.command:
+    cmd: "subscription-manager unregister"
+  register: unregresult
+  changed_when: unregresult.rc == 0
 
 - name: Delete hosts from Sat
   redhat.satellite.host:
