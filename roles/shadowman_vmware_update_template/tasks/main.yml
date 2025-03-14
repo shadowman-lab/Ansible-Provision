@@ -81,7 +81,7 @@
 
 - name: Clean subscription-manager
   ansible.builtin.command:
-    cmd: "subscription-manager clean"
+    cmd: "subscription-manager clean && subscription-manager unregister"
   register: cleanresult
   changed_when: cleanresult.rc == 0
 
