@@ -85,6 +85,14 @@
   register: cleanresult
   changed_when: cleanresult.rc == 0
 
+- name: Delete All Satellite Certs
+  ansible.builtin.file:
+    state: absent
+    path: "/etc/pki/consumer/{{ item }}"
+  loop:
+    - cert.pem
+    - key.pem
+
 - name: Delete hosts from Sat
   redhat.satellite.host:
     name: localhost.localdomain
