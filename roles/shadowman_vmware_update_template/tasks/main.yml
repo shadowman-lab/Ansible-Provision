@@ -60,6 +60,20 @@
   ansible.builtin.reboot:
   when: result.rc == 1
 
+- name: Remove old kernels RHEL 8 and newer
+  ansible.builtin.command: dnf remove --oldinstallonly -y
+  when: ansible_pkg_mgr == "dnf"
+  register: kerneldnfresult
+  changed_when: kerneldnfresult.rc == 0
+  failed_when: kerneldnfresult.rc > 1
+
+- name: Perform dnf clean
+  ansible.builtin.command: dnf clean all
+  when: ansible_pkg_mgr == "dnf"
+  register: dnfresult
+  changed_when: dnfresult.rc == 0
+  failed_when: dnfresult.rc > 1
+
 - name: Unregister system Satellite
   community.general.redhat_subscription:
     state: absent
