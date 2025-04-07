@@ -19,7 +19,7 @@
 
 - name: Soft Delete Host's
   ansible.builtin.uri:
-    url: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/host_metrics/{{ __host_item.json.results[0].id }}"
+    url: "https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/host_metrics/{{ __host_item.json.results[0].id }}"
     method: DELETE
     follow_redirects: all
     body_format: json
