@@ -1,0 +1,44 @@
+---
+- name: Setup authentication (block)
+  when: aap_token is not defined
+  block:
+    - name: Create a new token using gateway username/password
+      ansible.platform.token:
+        description: 'Creating token for shadowman_soft_delete'
+        scope: "write"
+        state: present
+        gateway_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+        gateway_username: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
+        gateway_password: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
+      register: __authtoken_res
+      changed_when: false
+      tags:
+        - always
+
+- name: Find the Soft Delete hosts and delete
+  when: aap_token is defined
+  block:
+
+    - name: Get hosts_metrics host list
+      ansible.builtin.include_tasks: get_host_metrics_host_list.yml
+
+    - name: Get AAP inventory host list
+      ansible.builtin.include_tasks: get_aap_inventory_host_list.yml
+
+    - name: Get hosts to soft delete (compare previous two lists)
+      ansible.builtin.include_tasks: get_hosts_to_softdelete.yml
+
+    - name: Soft delete host(s)
+      ansible.builtin.include_tasks: softdelete.yml
+      when: shadowman_soft_delete_vm_names | length > 0
+
+  always:
+
+    - name: Delete the oauth token
+      ansible.platform.token:
+        gateway_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
+        gateway_token: "{{ aap_token }}"
+        existing_token: "{{ aap_token }}"
+        state: absent
+      tags:
+        - always

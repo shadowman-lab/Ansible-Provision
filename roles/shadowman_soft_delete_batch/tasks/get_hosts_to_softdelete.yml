@@ -1,0 +1,10 @@
+---
+
+- name: Convert host arrays to lowercase
+  ansible.builtin.set_fact:
+    __host_metrics_host_list_lower: "{{ __host_metrics_host_list | map('lower') | list }}"
+    __host_inv_hosts_list_lower: "{{ __host_inv_hosts_list | map('lower') | list }}"
+
+- name: Get difference in hostnames
+  ansible.builtin.set_fact:
+    shadowman_soft_delete_vm_names: "{{ __host_metrics_host_list_lower | difference(__host_inv_hosts_list_lower) }}"
