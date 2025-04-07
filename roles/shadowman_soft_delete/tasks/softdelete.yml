@@ -32,3 +32,4 @@
     label: "{{ __host_item.__host | lower }}"
     loop_var: __host_item
   when: shadowman_soft_delete_bool | bool | default(false)
+  changed_when: true
