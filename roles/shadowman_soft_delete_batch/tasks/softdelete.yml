@@ -1,7 +1,7 @@
 ---
 - name: Show host count that will be soft deleted
   ansible.builtin.debug:
-    msg: "Number of hosts that will be soft deleted: {{ shadowman_soft_delete_vm_names | length }}"
+    msg: "Number of hosts that will be soft deleted: {{ shadowman_soft_delete_batch_vm_names | length }}"
 
 - name: Get Host ID's
   ansible.builtin.uri:
@@ -11,7 +11,7 @@
     body_format: json
     headers:
       Authorization: "Bearer {{ aap_token.token }}"
-  loop: "{{ shadowman_soft_delete_vm_names }}"
+  loop: "{{ shadowman_soft_delete_batch_vm_names }}"
   loop_control:
     label: "{{ __host | lower }}"
     loop_var: __host
@@ -30,5 +30,5 @@
   loop_control:
     label: "{{ __host_item.__host | lower }}"
     loop_var: __host_item
-  when: shadowman_soft_delete_bool | bool | default(false)
+  when: shadowman_soft_delete_batch_bool | bool | default(false)
   changed_when: true

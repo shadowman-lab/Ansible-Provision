@@ -7,4 +7,4 @@
 
 - name: Get difference in hostnames
   ansible.builtin.set_fact:
-    shadowman_soft_delete_vm_names: "{{ __host_metrics_host_list_lower | difference(__host_inv_hosts_list_lower) }}"
+    shadowman_soft_delete_batch_vm_names: "{{ __host_metrics_host_list_lower | difference(__host_inv_hosts_list_lower) }}"

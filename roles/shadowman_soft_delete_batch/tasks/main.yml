@@ -30,7 +30,7 @@
 
     - name: Soft delete host(s)
       ansible.builtin.include_tasks: softdelete.yml
-      when: shadowman_soft_delete_vm_names | length > 0
+      when: shadowman_soft_delete_batch_vm_names | length > 0
 
   always:
 

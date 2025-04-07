@@ -1,0 +1,7 @@
+galaxy_info:
+  author: Lenny Shirley
+  description: Batch Soft Delete hosts no longer in the inventory from the Controller's host metrics.
+  license: Apache-2.0
+  min_ansible_version: !!str 2.16
+  galaxy_tags: []
+dependencies: []

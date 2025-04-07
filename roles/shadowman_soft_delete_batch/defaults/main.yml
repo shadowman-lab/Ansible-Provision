@@ -1,2 +1,2 @@
 ---
-shadowman_soft_delete_bool: true # Set this to false to disable the ACTUAL soft delete
+shadowman_soft_delete_batch_bool: true # Set this to false to disable the ACTUAL soft delete
