@@ -1,7 +1,6 @@
 ---
 # tasks file for shadowman_soft_delete
 
-
 - name: "Setup authentication (block)"
   when: aap_token is not defined
   block:
