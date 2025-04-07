@@ -2,7 +2,7 @@
 
 - name: Set base URL for hosts
   ansible.builtin.set_fact:
-    __base_url: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/hosts?page_size=200"
+    __base_url: "https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/hosts?page_size=200"
 
 - name: "Get hosts total count"
   ansible.builtin.uri:
