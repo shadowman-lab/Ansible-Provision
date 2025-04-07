@@ -1,0 +1,69 @@
+---
+
+
+- name: Set base URL for host_metrics (already deleted = false)
+  ansible.builtin.set_fact:
+    __base_url: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/host_metrics?page_size=200&deleted=false"
+
+- name: "Get host_metrics total count of non-deleted hosts"
+  ansible.builtin.uri:
+    url: "{{ __base_url }}"
+    method: GET
+    return_content: true
+    status_code: 200
+    body_format: json
+    headers:
+      Authorization: "Bearer {{ aap_token.token }}"
+  register: __host_metrics_hosts_count
+
+- name: Set expected number of pages
+  ansible.builtin.set_fact:
+    __pages: "{{ (__host_metrics_hosts_count.json.count // 200) + 1 }}"
+
+- name: Show expected number of hosts and pages
+  ansible.builtin.debug:
+    msg: "Expecting {{ __host_metrics_hosts_count.json.count }} hosts across {{ __pages }} pages"
+
+- name: Create a list of host_metrics URLs
+  ansible.builtin.set_fact:
+    __host_metrics_url_list: "{{ range(1, __pages | int + 1) | map('regex_replace', '^', __base_url2) | list }}"
+  vars:
+    __base_url2: "{{ __base_url }}&page="
+
+- name: "Get host_metrics hosts"
+  ansible.builtin.uri:
+    url: "{{ item }}"
+    method: GET
+    return_content: true
+    status_code: 200
+    body_format: json
+    headers:
+      Authorization: "Bearer {{ aap_token.token }}"
+  loop: "{{ __host_metrics_url_list }}"
+  loop_control:
+    label: "{{ item }}"
+  until: __host_metrics_hosts.status == 200
+  retries: 1
+  delay: 3
+  register: __host_metrics_hosts
+
+- name: Update host_metrics host list
+  ansible.builtin.set_fact:
+    __host_metrics_host_list: >-
+      {{
+        __host_metrics_host_list | default([]) +
+        item.json.results |
+        map(attribute='hostname') |
+        flatten |
+        list
+      }}
+  loop: "{{ __host_metrics_hosts.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Assert host count matches
+  ansible.builtin.assert:
+    that:
+      - __host_metrics_hosts_count.json.count == __host_metrics_host_list | length
+    success_msg: "Host count matches: {{ __host_metrics_hosts_count.json.count }} == {{ __host_metrics_host_list | length }}"
+    fail_msg: "Host count mismatch: {{ __host_metrics_hosts_count.json.count }} != {{ __host_metrics_host_list | length }}"
