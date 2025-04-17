@@ -65,6 +65,8 @@
               password: "{{ ocp_password }}"
               ssh_pwauth: True
               chpasswd: { expire: False }
+              fqdn: {{ item }}
+              hostname: {{ item }}
           name: cloudinitdisk
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
