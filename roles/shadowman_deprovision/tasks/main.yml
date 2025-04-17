@@ -15,3 +15,7 @@
 - name: Remove AWS VM
   ansible.builtin.include_tasks: aws_vm_remove.yml
   when: shadowman_provision_hypervisor == "AWS"
+
+- name: Remove OCP VM
+  ansible.builtin.include_tasks: ocpv_vm_remove.yml
+  when: shadowman_provision_hypervisor == "OCPV"

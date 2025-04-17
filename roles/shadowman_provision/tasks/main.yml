@@ -34,3 +34,7 @@
 - name: VMWare VM Wait
   ansible.builtin.include_tasks: vmware_wait.yml
   when: shadowman_provision_hypervisor == "VMWare"
+
+- name: OCPV VM Create
+  ansible.builtin.include_tasks: ocpv_vm_create.yml
+  when: shadowman_provision_hypervisor == "OCPV"

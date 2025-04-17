@@ -1,0 +1,9 @@
+---
+- name: Remove instance
+  redhat.openshift_virtualization.kubevirt_vm:
+    state: absent
+    wait: true
+    validate_certs: false
+    name: "{{ inventory_hostname }}"
+    namespace: openshiftvms
+  delegate_to: localhost
