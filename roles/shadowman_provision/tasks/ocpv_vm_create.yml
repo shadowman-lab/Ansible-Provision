@@ -135,3 +135,16 @@
 #           name: cloudinitdisk
 #   loop: "{{ vm_names }}"
 #   when: operating_system is match("Win.*")
+
+- name: Get VMI Info and ensure OS and IP are defined
+  redhat.openshift_virtualization.kubevirt_vmi_info:
+    validate_certs: false
+    name: "{{ item }}"
+    namespace: openshiftvms
+  register: vmi
+  retries: 60
+  delay: 10
+  until:
+    - vmi.resources[0].status.guestOSInfo.prettyName is defined
+    - vmi.resources[0].status.interfaces[0].ipAddress is defined
+  loop: "{{ vm_names }}"
