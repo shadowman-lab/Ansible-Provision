@@ -11,6 +11,7 @@
     validate_certs: false
     name: "{{ item }}"
     namespace: openshiftvms
+    running: true
     labels:
       app: "{{ item }}"
       environment: "{{ env }}"
@@ -31,7 +32,6 @@
               requests:
                 storage: 50Gi
     spec:
-      running: true
       architecture: amd64
       domain:
         devices:
@@ -78,6 +78,7 @@
 #     validate_certs: false
 #     name: "{{ item }}"
 #     namespace: openshiftvms
+#     running: true
 #     labels:
 #       app: "{{ item }}"
 #       environment: "{{ env }}"
@@ -98,7 +99,6 @@
 #               requests:
 #                 storage: 50Gi
 #     spec:
-#       running: true
 #       architecture: amd64
 #       domain:
 #         devices:
