@@ -7,9 +7,9 @@
   roles:
     - shadowman_provision
 
-# - name: Get IP and set hostname if needed
-#   hosts: just_created
-#   gather_facts: false
+- name: Get IP and set hostname if needed
+  hosts: just_created
+  gather_facts: false
 
-#   roles:
-#     - shadowman_hostnameset
+  roles:
+    - shadowman_hostnameset
