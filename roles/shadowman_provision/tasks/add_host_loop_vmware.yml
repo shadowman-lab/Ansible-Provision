@@ -7,7 +7,7 @@
     vcenter_validate_certs: false
   register: vm_info
 
-- name: Guest identity
+- name: Ensure IP is defined
   vmware.vmware_rest.vcenter_vm_guest_identity_info:
     vm: "{{ vm_info.value[0].vm }}"
     vcenter_validate_certs: false
@@ -15,9 +15,3 @@
   until: vm_full_info.value.ip_address is defined
   retries: 10
   delay: 2
-
-- name: Add Linux hosts to just_created group
-  ansible.builtin.add_host:
-    hostname: "{{ item }}"
-    ansible_host: "{{ vm_full_info.value.ip_address }}"
-    groups: just_created
