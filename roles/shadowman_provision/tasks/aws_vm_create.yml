@@ -1,18 +1,13 @@
 # Create EC2 VPC & EC2 Internet Gateway & EC2 VPC Subnet & Create VPC Public Subnet Route Table & AWS Create EC2 Security Group & Create EC2 Key & Create EC2 instance with public IP
 
-- name: Change image ID if running Windows
+- name: Set Image loookup if running RHEL8
   ansible.builtin.set_fact:
-    _image_id_: 'ami-0c7d82870ce75cd0f'
-  when: operating_system is match("Win.*")
-
-- name: Change image ID if running RHEL8
-  ansible.builtin.set_fact:
-    _image_id_: 'ami-06142a3457991a4a8'
+    image_lookup: 'RHEL-8.10'
   when: operating_system == "RHEL8"
 
-- name: Change image ID if running RHEL9
+- name: Set Image loookup if running RHEL9
   ansible.builtin.set_fact:
-    _image_id_: 'ami-04f8d0dc7c0ac7a0e'
+    image_lookup: 'RHEL-9.5'
   when: operating_system == "RHEL9"
 
 - name: Create VPC over AWS Cloud
@@ -60,6 +55,35 @@
       - dest: "{{ destination_cidr_block }}"
         gateway_id: "{{ igw_result.gateway_id }}"
   register: public_route_table
+
+- name: Find AMI if RHEL Host
+  amazon.aws.ec2_ami_info:
+    owners: 309956199498
+    region: "{{ _region_ }}"
+    filters:
+      name: '{{ image_lookup }}*HVM-*Access2*'
+      architecture: x86_64
+  register: rhelamis
+  when: operating_system is match("RHEL.*")
+
+- name: Get most recent AMI for RHEL
+  ansible.builtin.set_fact:
+    node_ami_rhel: >
+      {{ amis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
+  when: operating_system is match("RHEL.*")
+
+- name: Find AMI for Windows 2016 Host
+  amazon.aws.ec2_ami_info:
+    region: "{{ _region_ }}"
+    filters:
+      name: 'Windows_Server-2016-English-Full-Base-*'
+  register: windowsamis
+  when: operating_system is match("Win.*")
+
+- name: Get most recent AMI for Windows
+  ansible.builtin.set_fact:
+    node_ami_windows: >
+      {{ windowsamis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
 
 - name: AWS Create EC2 Security Group for RHEL
   amazon.aws.ec2_security_group:
@@ -140,7 +164,7 @@
     wait: true
     network:
       assign_public_ip: true
-    image_id: "{{ _image_id_ }}"
+    image_id: "{{ node_ami_rhel.image_id }}"
     region: "{{ _region_ }}"
     tags:
       Name: "{{ item }}"
@@ -177,7 +201,7 @@
     wait: true
     network:
       assign_public_ip: true
-    image_id: "{{ _image_id_ }}"
+    image_id: "{{ node_ami_windows.image_id }}"
     region: "{{ _region_ }}"
     user_data: "{{ lookup('template', 'userdata.txt.j2') }}"
     tags:
