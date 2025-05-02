@@ -84,6 +84,7 @@
   ansible.builtin.set_fact:
     node_ami_windows: >
       {{ windowsamis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
+  when: operating_system is match("Win.*")
 
 - name: AWS Create EC2 Security Group for RHEL
   amazon.aws.ec2_security_group:
