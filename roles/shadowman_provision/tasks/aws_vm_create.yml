@@ -69,7 +69,7 @@
 - name: Get most recent AMI for RHEL
   ansible.builtin.set_fact:
     node_ami_rhel: >
-      {{ amis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
+      {{ rhelamis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
   when: operating_system is match("RHEL.*")
 
 - name: Find AMI for Windows 2016 Host
