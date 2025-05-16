@@ -18,7 +18,7 @@
       operating_system: "{{ operating_system_tag }}"
       owner: "{{ owner.split('@')[0] }}"
     instancetype:
-      name: cx1.xlarge
+      name: u1.mediumlarge
     data_volume_templates:
       - metadata:
           name: "{{ item }}"
