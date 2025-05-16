@@ -43,7 +43,7 @@
                 bus: virtio
               name: cloudinitdisk
           interfaces:
-            - masquerade: {}
+            - bridge: {}
               model: virtio
               name: default
           rng: {}
@@ -51,8 +51,9 @@
           type: pc-q35-rhel9.4.0
         resources: {}
       networks:
-        - name: default
-          pod: {}
+        - multus:
+            networkName: default/ovs-ens35
+          name: default
       terminationGracePeriodSeconds: 180
       volumes:
         - dataVolume:
