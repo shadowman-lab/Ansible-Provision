@@ -1,11 +1,9 @@
 ---
-
 - name: Establish schema
   ansible.builtin.set_fact:
     vm_name_prefix: "{{ owner.split('@')[0] }}-{{ env }}-"
 
 - name: Block for VMWare
-  when: shadowman_provision_hypervisor == "VMWare"
   block:
 
     - name: List all VMs in the vCenter
@@ -23,10 +21,9 @@
 
     - name: Filter VMs based on prefix and determine the maximum number
       ansible.builtin.set_fact:
-        max_existing_vm_number: "{{ (all_vms_info.virtual_machines | selectattr('guest_name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='guest_name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
+        max_existing_vm_number_vsphere: "{{ (all_vms_info.virtual_machines | selectattr('guest_name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='guest_name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
 
 - name: Block for Azure
-  when: shadowman_provision_hypervisor == "Azure"
   block:
 
     - name: List all VMs in Azure
@@ -34,11 +31,10 @@
       register: all_vms_info
 
     - name: Filter VMs based on prefix and determine the maximum number
-      set_fact:
-        max_existing_vm_number: "{{ (all_vms_info.vms | selectattr('name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
+      ansible.builtin.set_fact:
+        max_existing_vm_number_azure: "{{ (all_vms_info.vms | selectattr('name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
 
 - name: Block for AWS
-  when: shadowman_provision_hypervisor == "AWS"
   block:
 
     - name: List all VMs in AWS region
@@ -47,8 +43,12 @@
       register: all_vms_info
 
     - name: Filter VMs based on prefix and determine the maximum number
-      set_fact:
-        max_existing_vm_number: "{{ (all_vms_info.instances | selectattr('tags.Name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='tags.Name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
+      ansible.builtin.set_fact:
+        max_existing_vm_number_aws: "{{ (all_vms_info.instances | selectattr('tags.Name', 'match', vm_name_prefix ~ '\\d+(\\.ad)*\\.shadowman\\.dev$') | map(attribute='tags.Name') | map('regex_search', '\\d+') | map('int') | list + [0]) | max }}"
+
+- name: Set max_existing_vm_number
+  ansible.builtin.set_fact:
+    max_existing_vm_number: "{{ [max_existing_vm_number_vsphere, max_existing_vm_number_azure, max_existing_vm_number_aws] | max }}"
 
 - name: Increment max_existing_vm_number safely
   ansible.builtin.set_fact:
