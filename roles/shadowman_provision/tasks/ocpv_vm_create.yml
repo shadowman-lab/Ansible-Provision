@@ -11,7 +11,7 @@
     validate_certs: false
     name: "{{ item }}"
     namespace: openshiftvms
-    running: true
+    run_strategy: Always
     labels:
       app: "{{ item }}"
       environment: "{{ env }}"
@@ -50,6 +50,7 @@
         machine:
           type: pc-q35-rhel9.4.0
         resources: {}
+      evictionStrategy: None
       networks:
         - multus:
             networkName: default/ovs-ens35
