@@ -7,8 +7,13 @@
 
 - name: Set Image loookup if running RHEL9
   ansible.builtin.set_fact:
-    image_lookup: 'RHEL-9.5'
+    image_lookup: 'RHEL-9.6'
   when: operating_system == "RHEL9"
+
+- name: Set Image loookup if running RHEL10
+  ansible.builtin.set_fact:
+    image_lookup: 'RHEL-10.0'
+  when: operating_system == "RHEL10"
 
 - name: Create VPC over AWS Cloud
   amazon.aws.ec2_vpc_net:
@@ -61,7 +66,7 @@
     owners: 309956199498
     region: "{{ _region_ }}"
     filters:
-      name: '{{ image_lookup }}*HVM-*Access2*'
+      name: '{{ image_lookup }}*HVM*-*Access2*'
       architecture: x86_64
   register: rhelamis
   when: operating_system is match("RHEL.*")
@@ -69,7 +74,7 @@
 - name: Get most recent AMI for RHEL
   ansible.builtin.set_fact:
     node_ami_rhel: >
-      {{ rhelamis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
+      {{ rhelamis.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}
   when: operating_system is match("RHEL.*")
 
 - name: Find AMI for Windows 2016 Host
@@ -83,7 +88,7 @@
 - name: Get most recent AMI for Windows
   ansible.builtin.set_fact:
     node_ami_windows: >
-      {{ windowsamis.images | selectattr('name', 'defined') | sort(attribute='name') | last }}
+      {{ windowsamis.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}
   when: operating_system is match("Win.*")
 
 - name: AWS Create EC2 Security Group for RHEL
