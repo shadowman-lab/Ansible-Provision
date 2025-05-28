@@ -73,70 +73,73 @@
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
 
-# - name: Create and run Windows VM this needs to be updated for Windows
-#   redhat.openshift_virtualization.kubevirt_vm:
-#     state: present
-#     wait: true
-#     validate_certs: false
-#     name: "{{ item }}"
-#     namespace: openshiftvms
-#     running: true
-#     labels:
-#       app: "{{ item }}"
-#       environment: "{{ env }}"
-#       operating_system: "{{ operating_system_tag }}"
-#       owner: "{{ owner.split('@')[0] }}"
-#     instancetype:
-#       name: u1.medium
-#     data_volume_templates:
-#       - metadata:
-#           name: "{{ item }}"
-#         spec:
-#           sourceRef:
-#             kind: DataSource
-#             name: "{{ operating_system | lower }}"
-#             namespace: openshift-virtualization-os-images
-#           storage:
-#             resources:
-#               requests:
-#                 storage: 50Gi
-#     spec:
-#       architecture: amd64
-#       domain:
-#         devices:
-#           disks:
-#             - disk:
-#                 bus: virtio
-#               name: rootdisk
-#             - disk:
-#                 bus: virtio
-#               name: cloudinitdisk
-#           interfaces:
-#             - masquerade: {}
-#               model: virtio
-#               name: default
-#           rng: {}
-#         machine:
-#           type: pc-q35-rhel9.4.0
-#         resources: {}
-#       networks:
-#         - name: default
-#           pod: {}
-#       terminationGracePeriodSeconds: 180
-#       volumes:
-#         - dataVolume:
-#             name: "{{ item }}"
-#           name: rootdisk
-#         - cloudInitNoCloud:
-#             userData: |-
-#               #cloud-config
-#               user: "{{ ocp_user }}"
-#               password: "{{ ocp_password }}"
-#               ssh_pwauth: True
-#               chpasswd: { expire: False }
-#           name: cloudinitdisk
-#   loop: "{{ vm_names }}"
-#   when: operating_system is match("Win.*")
+- name: Create Windows virtual machine
+  redhat.openshift_virtualization.kubevirt_vm:
+    state: present
+    wait: true
+    validate_certs: false
+    name: "{{ item }}"
+    namespace: openshiftvms
+    run_strategy: Always
+    labels:
+      app: "{{ item }}"
+      environment: "{{ env }}"
+      operating_system: "{{ operating_system_tag }}"
+      owner: "{{ owner.split('@')[0] }}"
+    instancetype:
+      name: u1.mediumlarge
+    data_volume_templates:
+      - metadata:
+          name: "{{ item }}"
+        spec:
+          sourceRef:
+            kind: DataSource
+            name: "{{ operating_system | lower }}"
+            namespace: openshift-virtualization-os-images
+          storage:
+            resources:
+              requests:
+                storage: 50Gi
+    spec:
+      architecture: amd64
+      domain:
+        devices:
+          disks:
+            - disk:
+                bus: sata
+              name: rootdisk
+            - cdrom:
+                bus: sata
+              name: sysprep
+            - cdrom:
+                bus: sata
+              name: winrm
+          interfaces:
+            - bridge: {}
+              model: e1000e
+              name: default
+        machine:
+          type: pc-q35-rhel9.4.0
+        resources: {}
+      evictionStrategy: None
+      networks:
+        - multus:
+            networkName: default/ovs-ens35
+          name: default
+      terminationGracePeriodSeconds: 3600
+      volumes:
+        - dataVolume:
+            name: "{{ item }}"
+          name: rootdisk
+        - name: sysprep
+          sysprep:
+            configMap:
+              name: sysprep-win2016
+        - name: winrm
+          configMap:
+            name: winrm
+  loop: "{{ vm_names }}"
+  when: operating_system is match("Win.*")
 
 - name: Get VMI Info and ensure OS and IP are defined
   redhat.openshift_virtualization.kubevirt_vmi_info:
