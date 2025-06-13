@@ -5,7 +5,7 @@
 
 - name: Get Host ID's
   ansible.builtin.uri:
-    url: "https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/host_metrics?hostname={{ __host | lower | trim }}"
+    url: "https://{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}/api/controller/v2/host_metrics?hostname={{ __host | lower | trim | urlencode }}"
     method: GET
     status_code: 200
     body_format: json
