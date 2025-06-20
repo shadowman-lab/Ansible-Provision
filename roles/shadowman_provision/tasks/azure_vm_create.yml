@@ -9,13 +9,18 @@
 
 - name: Change sku if running RHEL8
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm810'
+    sku: '8-LVM'
   when: operating_system == "RHEL8"
 
 - name: Change sku if running RHEL9
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm95'
+    sku: '9-LVM'
   when: operating_system == "RHEL9"
+
+- name: Change sku if running RHEL10
+  ansible.builtin.set_fact:
+    sku: '10-LVM'
+  when: operating_system == "RHEL10"
 
 - name: Provision Resource Group
   azure.azcollection.azure_rm_resourcegroup:
@@ -41,6 +46,7 @@
       - 80
       - 443
     accept_terms: true
+    license_type: RHEL_BYOS
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
