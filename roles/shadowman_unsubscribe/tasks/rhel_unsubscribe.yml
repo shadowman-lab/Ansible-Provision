@@ -28,6 +28,7 @@
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
   register: output
   ignore_errors: true
+  ignore_unreachable: true
 
 - name: Ensure host and its DNS record is absent for RHEL
   community.general.ipa_host:
