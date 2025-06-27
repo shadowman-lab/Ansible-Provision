@@ -15,6 +15,7 @@
     state: absent
     org_id: "13247185"
   become: true
+  ignore_unreachable: true
   when:
     - ansible_host != ''
     - shadowman_provision_hypervisor | default('RHV') == "Azure"
@@ -53,6 +54,41 @@
     validate_certs: false
     state: absent
   when:
-    - shadowman_provision_hypervisor | default('RHV') != "Azure"
+    - ansible_host != ''
+    - shadowman_provision_hypervisor | default('RHV') == "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
+  delegate_to: localhost
+  run_once: true
+
+- name: Get Red Hat API Token if using an Azure VM
+  ansible.builtin.uri:
+    url: 'https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token'
+    method: POST
+    body:
+      grant_type: client_credentials
+      scope: api.console
+      client_id: "{{ insights_client_id }}"
+      client_secret: "{{ insights_client_secret }}"
+    body_format: form-urlencoded
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+  register: token
+  when:
+    - shadowman_provision_hypervisor | default('RHV') == "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "AWS"
+  delegate_to: localhost
+
+- name: Delete host from Insights Inventory
+  ansible.builtin.uri:
+    url: "https://console.redhat.com/api/inventory/v1/hosts?display_name={{ inventory_hostname | trim | urlencode }}"
+    method: DELETE
+    headers:
+      Authorization: Bearer {{ token.json.access_token }}
+    body_format: json
+    status_code:
+      - 202
+  register: inventory
+  when:
+    - shadowman_provision_hypervisor | default('RHV') == "Azure"
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
   delegate_to: localhost
