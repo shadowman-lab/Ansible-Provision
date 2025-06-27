@@ -54,8 +54,7 @@
     validate_certs: false
     state: absent
   when:
-    - ansible_host != ''
-    - shadowman_provision_hypervisor | default('RHV') == "Azure"
+    - shadowman_provision_hypervisor | default('RHV') != "Azure"
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
   delegate_to: localhost
 
