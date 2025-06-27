@@ -4,6 +4,7 @@
     state: absent
     org_id: Shadowman
   become: true
+  ignore_unreachable: true
   when:
     - ansible_host != ''
     - shadowman_provision_hypervisor | default('RHV') != "Azure"
@@ -40,6 +41,7 @@
     - ansible_host != ''
     - ansible_host != ip_addr
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
+  delegate_to: localhost
 
 - name: Delete hosts from Sat if RHEL onprem
   redhat.satellite.host:
