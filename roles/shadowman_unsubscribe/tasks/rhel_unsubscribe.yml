@@ -67,8 +67,8 @@
     body:
       grant_type: client_credentials
       scope: api.console
-      client_id: "{{ insights_client_id }}"
-      client_secret: "{{ insights_client_secret }}"
+      client_id: "{{ redhat_api_client_id }}"
+      client_secret: "{{ redhat_api_secret_id }}"
     body_format: form-urlencoded
     headers:
       Content-Type: application/x-www-form-urlencoded
