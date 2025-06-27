@@ -58,7 +58,6 @@
     - shadowman_provision_hypervisor | default('RHV') == "Azure"
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
   delegate_to: localhost
-  run_once: true
 
 - name: Get Red Hat API Token if using an Azure VM
   ansible.builtin.uri:
@@ -77,6 +76,7 @@
     - shadowman_provision_hypervisor | default('RHV') == "Azure"
     - shadowman_provision_hypervisor | default('RHV') != "AWS"
   delegate_to: localhost
+  run_once: true
 
 - name: Delete host from Insights Inventory
   ansible.builtin.uri:
