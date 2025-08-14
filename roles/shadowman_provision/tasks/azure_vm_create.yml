@@ -36,6 +36,7 @@
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
+    managed_disk_type: Standard_LRS
     license_type: RHEL_BYOS
     open_ports:
       - 22
