@@ -41,7 +41,7 @@
       - 22
       - 80
       - 443
-    accept_terms: true
+    # accept_terms: true
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
