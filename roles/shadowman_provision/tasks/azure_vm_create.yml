@@ -47,10 +47,10 @@
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
-    # plan:
-    #   name: "{{ sku | lower }}"
-    #   product: "{{ offer | lower }}"
-    #   publisher: "{{ publisher | lower }}"
+    plan:
+      name: "{{ sku }}"
+      product: "{{ offer }}"
+      publisher: "{{ publisher }}"
     tags:
       environment: "{{ env | default(omit) }}"
       owner: "{{ owner | default(omit) }}"
