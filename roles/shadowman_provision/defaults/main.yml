@@ -18,7 +18,7 @@ shadowman_provision_hypervisor: "RHV"
 azure_location: eastus
 state: poweredon
 publisher: RedHat
-offer: rhel-byos
+offer: RHEL
 version: "latest"
 sku: 'rhel-lvm79'
 vm_size: Standard_B2s

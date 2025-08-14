@@ -14,7 +14,7 @@
 
 - name: Change sku if running RHEL9
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm95'
+    sku: '9-lvm-gen2'
   when: operating_system == "RHEL9"
 
 - name: Provision Resource Group
@@ -36,6 +36,7 @@
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
+    license_type: RHEL_BYOS
     open_ports:
       - 22
       - 80
