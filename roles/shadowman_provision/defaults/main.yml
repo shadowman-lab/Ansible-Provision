@@ -20,7 +20,7 @@ state: poweredon
 publisher: RedHat
 offer: RHEL
 version: "latest"
-sku: 'rhel-lvm79'
+sku: '7-LVM'
 vm_size: Standard_B2s
 resource_group_name: Demo
 storage_account_name: demorh

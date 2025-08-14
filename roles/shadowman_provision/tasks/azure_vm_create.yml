@@ -9,13 +9,18 @@
 
 - name: Change sku if running RHEL8
   ansible.builtin.set_fact:
-    sku: 'rhel-lvm810'
+    sku: '8-lvm-gen2'
   when: operating_system == "RHEL8"
 
 - name: Change sku if running RHEL9
   ansible.builtin.set_fact:
     sku: '9-lvm-gen2'
   when: operating_system == "RHEL9"
+
+- name: Change sku if running RHEL10
+  ansible.builtin.set_fact:
+    sku: '10-lvm-gen2'
+  when: operating_system == "RHEL10"
 
 - name: Provision Resource Group
   azure.azcollection.azure_rm_resourcegroup:
@@ -42,16 +47,11 @@
       - 22
       - 80
       - 443
-    # accept_terms: true
     image:
       publisher: "{{ publisher }}"
       offer: "{{ offer }}"
       version: "{{ version }}"
       sku: "{{ sku }}"
-    # plan:
-    #   name: "{{ sku }}"
-    #   product: "{{ offer }}"
-    #   publisher: "{{ publisher }}"
     tags:
       environment: "{{ env | default(omit) }}"
       owner: "{{ owner | default(omit) }}"
