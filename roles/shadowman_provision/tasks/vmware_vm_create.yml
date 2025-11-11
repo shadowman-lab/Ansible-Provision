@@ -87,6 +87,7 @@
   vmware.vmware.tag_associations:
     object_type: VirtualMachine
     object_moid: "{{ lookup('vmware.vmware.moid_from_path', '/Shadowman-DC/vm/Lab virtual machine/' + item) }}"
+    validate_certs: false
     tags:
       - name: ansible_managed
         category_name: purpose
@@ -97,7 +98,6 @@
       - name: "{{ owner | default('shadowman') }}"
         category_name: owner
     state: present
-    validate_certs: false
   loop: "{{ vm_names }}"
 
 - name: Verify IP is assigned
