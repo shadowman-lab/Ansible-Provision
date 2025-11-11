@@ -86,7 +86,7 @@
 - name: Assign Tags
   vmware.vmware.tag_associations:
     object_type: VirtualMachine
-    object_moid: "{{ lookup('vmware.vmware.moid_from_path', '/Shadowman-DC/vm/Lab virtual machine/' + item,  validate_certs=false) }}"
+    object_moid: "{{ lookup('vmware.vmware.moid_from_path', '/Shadowman-DC/vm/Lab virtual machine/' + item, validate_certs=false) }}"
     validate_certs: false
     tags:
       - name: ansible_managed
