@@ -5,15 +5,14 @@
   when: operating_system is match("Win.*")
 
 - name: Create and run Linux VM
-  community.vmware.vmware_guest:
-    cluster: '{{ cluster_id }}'
-    datastore: '{{ datastore_id }}'
-    folder: '{{ folder_id }}'
+  vmware.vmware.deploy_folder_template:
     datacenter: "Shadowman-DC"
-    name: "{{ item }}"
-    state: "{{ state }}"
-    template: "{{ source_vm_id }}"
-    wait_for_ip_address: true
+    datastore: '{{ datastore_id }}'
+    cluster: '{{ cluster_id }}'
+    vm_name: "{{ item }}"
+    template_name: "{{ operating_system }}_ShadowMan"
+    power_on_after_deploy: true
+    vm_folder: '{{ folder_id }}'
     validate_certs: false
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
@@ -75,28 +74,39 @@
   delay: 10
 
 - name: Ensure Tags are created
-  community.vmware.vmware_tag:
-    category_id: "{{ item.category_id }}"
-    tag_name: "{{ item.name }}"
+  vmware.vmware.tags:
     state: present
     validate_certs: false
-  loop:
-    - { name: "{{ env | default('dev') }}", category_id: 'urn:vmomi:InventoryServiceCategory:4d358ccf-dbca-4fc8-8600-3e88ec1e09ff:GLOBAL' }
-    - { name: "{{ owner | default('shadowman') }}", category_id: 'urn:vmomi:InventoryServiceCategory:1e759721-5b8c-4bc5-8550-ca042a4818b0:GLOBAL' }
+    tags:
+      - name: "{{ env }}"
+        category_id: 'urn:vmomi:InventoryServiceCategory:4d358ccf-dbca-4fc8-8600-3e88ec1e09ff:GLOBAL'
+      - name: "{{ owner }}"
+        category_id: 'urn:vmomi:InventoryServiceCategory:1e759721-5b8c-4bc5-8550-ca042a4818b0:GLOBAL'
 
 - name: Assign Tags
-  community.vmware.vmware_tag_manager:
-    tag_names:
-      - tag: "{{ operating_system_tag }}"
-        category: operating_system
-      - tag: "{{ env | default('dev') }}"
-        category: environment
-      - tag: "{{ owner | default('shadowman') }}"
-        category: owner
-      - tag: ansible_managed
-        category: purpose
-    object_name: "{{ item }}"
+  vmware.vmware.tag_associations:
     object_type: VirtualMachine
-    state: add
+    object_moid: "{{ lookup('vmware.vmware.moid_from_path', '/Shadowman-DC/vm/Lab virtual machine/' + item) }}"
+    tags:
+      - name: ansible_managed
+        category_name: purpose
+      - name: "{{ operating_system_tag }}"
+        category_name: operating_system
+      - name: "{{ env | default('dev') }}"
+        category_name: environment
+      - name: "{{ owner | default('shadowman') }}"
+        category_name: owner
+    state: present
     validate_certs: false
   loop: "{{ vm_names }}"
+
+- name: Verify IP is assigned
+  vmware.vmware.guest_info:
+    datacenter: "Shadowman-DC"
+    name: "{{ item }}"
+    validate_certs: false
+  register: vminfo
+  loop: "{{ vm_names }}"
+  retries: 10
+  delay: 5
+  until: vminfo.guests[0].ip_address is defined
