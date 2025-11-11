@@ -100,13 +100,14 @@
     state: present
   loop: "{{ vm_names }}"
 
-- name: Verify IP is assigned
+- name: Verify RHEL IP is assigned
   vmware.vmware.guest_info:
     datacenter: "Shadowman-DC"
     name: "{{ item }}"
     validate_certs: false
   register: vminfo
   loop: "{{ vm_names }}"
+  when: operating_system is match("RHEL.*")
   retries: 10
   delay: 5
   until: vminfo.guests[0].ip_address is defined
