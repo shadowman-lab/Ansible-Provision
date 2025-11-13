@@ -7,12 +7,12 @@
 
 - name: Set Image loookup if running RHEL9
   ansible.builtin.set_fact:
-    image_lookup: 'RHEL-9.6'
+    image_lookup: 'RHEL-9.7'
   when: operating_system == "RHEL9"
 
 - name: Set Image loookup if running RHEL10
   ansible.builtin.set_fact:
-    image_lookup: 'RHEL-10.0'
+    image_lookup: 'RHEL-10.1'
   when: operating_system == "RHEL10"
 
 - name: Create VPC over AWS Cloud
