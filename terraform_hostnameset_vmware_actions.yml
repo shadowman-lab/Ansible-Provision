@@ -3,9 +3,6 @@
   hosts: localhost
   gather_facts: false
 
-  vars:
-    operating_system: RHEL9
-
   tasks:
     - name: Add hosts to to be able to set hostname
       ansible.builtin.include_role:
