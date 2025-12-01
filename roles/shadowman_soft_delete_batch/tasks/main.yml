@@ -1,9 +1,6 @@
 ---
-- name: Debug aap_token
-  ansible.builtin.debug:
-    msg: "{{ aap_token }}"
 - name: Setup authentication (block)
-  when: aap_token is not defined
+  when: aap_token is not defined or aap_token == ''
   block:
     - name: Create a new token using gateway username/password
       ansible.platform.token:
@@ -19,7 +16,7 @@
         - always
 
 - name: Find the Soft Delete hosts and delete
-  when: aap_token is defined
+  when: aap_token is !=  '' or __authtoken_res.ansible_facts.aap_token is defined
   block:
 
     - name: Get hosts_metrics host list
@@ -40,8 +37,8 @@
     - name: Delete the oauth token
       ansible.platform.token:
         gateway_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
-        gateway_token: "{{ aap_token }}"
-        existing_token: "{{ aap_token }}"
+        gateway_token: "{{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
+        existing_token: "{{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
         state: absent
       tags:
         - always

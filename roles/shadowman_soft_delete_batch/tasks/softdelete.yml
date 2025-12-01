@@ -10,7 +10,7 @@
     status_code: 200
     body_format: json
     headers:
-      Authorization: "Bearer {{ aap_token.token }}"
+      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
   loop: "{{ shadowman_soft_delete_batch_vm_names }}"
   loop_control:
     label: "{{ __host | lower }}"
@@ -24,7 +24,7 @@
     follow_redirects: all
     body_format: json
     headers:
-      Authorization: "Bearer {{ aap_token.token }}"
+      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
     status_code: 204
   loop: "{{ __host_metric.results }}"
   loop_control:
