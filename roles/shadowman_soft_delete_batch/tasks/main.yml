@@ -38,7 +38,7 @@
       ansible.platform.token:
         gateway_hostname: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
         gateway_token: "{{ aap_token | default(__authtoken_res.ansible_facts.aap_token.token, true) }}"
-        existing_token: "{{ aap_token | default(__authtoken_res.ansible_facts.aap_token.token, true) }}"
+        existing_token: "{{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
         state: absent
       tags:
         - always
