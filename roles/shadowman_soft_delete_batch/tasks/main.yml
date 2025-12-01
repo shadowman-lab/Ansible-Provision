@@ -15,9 +15,10 @@
       tags:
         - always
 
-    - name: Debug aap_token
-      ansible.builtin.debug:
-        msg: "{{ aap_token | default('Not Defined') }}"
+    - name: Set fact if aap_token is blank
+      ansible.builtin.set_fact:
+        aap_token: "{{ __authtoken_res.ansible_facts.aap_token }}"
+      when: aap_token == ''
 
 - name: Find the Soft Delete hosts and delete
   when: aap_token is defined
