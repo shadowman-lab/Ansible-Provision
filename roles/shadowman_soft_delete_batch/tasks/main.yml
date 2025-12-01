@@ -16,7 +16,7 @@
         - always
 
 - name: Find the Soft Delete hosts and delete
-  when: aap_token is !=  '' or __authtoken_res.ansible_facts.aap_token is defined
+  when: aap_token is != '' or __authtoken_res.ansible_facts.aap_token is defined
   block:
 
     - name: Get hosts_metrics host list
