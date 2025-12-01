@@ -1,6 +1,6 @@
 ---
 - name: Setup authentication (block)
-  when: aap_token is not defined or aap_token == ''
+  when: aap_token is not defined
   block:
     - name: Create a new token using gateway username/password
       ansible.platform.token:
@@ -14,14 +14,6 @@
       changed_when: false
       tags:
         - always
-
-    - name: Set fact if aap_token is blank
-      ansible.builtin.set_fact:
-        aap_token: "{{ __authtoken_res.ansible_facts.aap_token }}"
-
-    - name: Display
-      ansible.builtin.debug:
-        msg: "{{ aap_token | default('Not Defined') }}"
 
 - name: Find the Soft Delete hosts and delete
   when: aap_token is defined
