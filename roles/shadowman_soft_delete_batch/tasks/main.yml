@@ -1,10 +1,6 @@
 ---
-- name: Debug aap_token
-  ansible.builtin.debug:
-    msg: "{{ aap_token | default('Not Defined') }}"
-
 - name: Setup authentication (block)
-  when: aap_token is not defined
+  when: aap_token is not defined or aap_token == ''
   block:
     - name: Create a new token using gateway username/password
       ansible.platform.token:
