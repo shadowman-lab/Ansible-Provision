@@ -12,7 +12,7 @@
     status_code: 200
     body_format: json
     headers:
-      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
+      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token.token, true) }}"
   register: __host_inv_hosts_count
 
 - name: Set expected number of pages
@@ -37,7 +37,7 @@
     status_code: 200
     body_format: json
     headers:
-      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token, true) }}"
+      Authorization: "Bearer {{ aap_token | default(__authtoken_res.ansible_facts.aap_token.token, true) }}"
   loop: "{{ __host_inv_hosts_url_list }}"
   loop_control:
     label: "{{ item }}"
