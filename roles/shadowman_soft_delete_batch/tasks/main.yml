@@ -1,4 +1,7 @@
 ---
+- name: Debug aap_token
+  ansible.builtin.debug:
+    msg: "{{ aap_token }}"
 - name: Setup authentication (block)
   when: aap_token is not defined
   block:
