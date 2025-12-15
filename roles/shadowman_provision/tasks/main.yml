@@ -7,7 +7,7 @@
     fail_msg: "On Premise and AWS VM Name must include FQDN of .shadowman.dev for RHEL"
   when:
     - shadowman_provision_hypervisor != "Azure"
-    - operating_system != "Win2016"
+    - operating_system != "Win2016" or operating_system != "Win2025"
     - terraformmain != "gitops"
 
 - name: Check for proper on prem VM name Windows
@@ -16,7 +16,7 @@
     fail_msg: "On Premise and AWS VM Name must include FQDN of .ad.shadowman.dev for Windows"
   when:
     - shadowman_provision_hypervisor != "Azure"
-    - operating_system == "Win2016"
+    - operating_system == "Win2016" or operating_system == "Win2025"
     - terraformmain != "gitops"
 
 - name: Azure VM Create
