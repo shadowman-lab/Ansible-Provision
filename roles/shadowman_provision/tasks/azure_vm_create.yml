@@ -1,11 +1,18 @@
 ---
 # Change sku to 2022-Datacenter for Windows 2022
-- name: Change facts if running Windows
+- name: Change facts if running Windows 2016
   ansible.builtin.set_fact:
     sku: '2016-Datacenter'
     publisher: "MicrosoftWindowsServer"
     offer: "WindowsServer"
-  when: operating_system is match("Win.*")
+  when: operating_system is match("Win2016")
+
+- name: Change facts if running Windows 2025
+  ansible.builtin.set_fact:
+    sku: '2025-Datacenter'
+    publisher: "MicrosoftWindowsServer"
+    offer: "WindowsServer"
+  when: operating_system is match("Win2025")
 
 - name: Change sku if running RHEL8
   ansible.builtin.set_fact:

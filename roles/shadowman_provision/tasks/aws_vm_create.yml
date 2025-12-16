@@ -15,6 +15,16 @@
     image_lookup: 'RHEL-10.1'
   when: operating_system == "RHEL10"
 
+- name: Set Image loookup if running Win2016
+  ansible.builtin.set_fact:
+    win_image_lookup: 'Windows_Server-2016'
+  when: operating_system == "Win2016"
+
+- name: Set Image loookup if running Win2025
+  ansible.builtin.set_fact:
+    win_image_lookup: 'Windows_Server-2025'
+  when: operating_system == "Win2025"
+
 - name: Create VPC over AWS Cloud
   amazon.aws.ec2_vpc_net:
     name: "{{ vpc_name }}"
@@ -77,11 +87,11 @@
       {{ rhelamis.images | selectattr('name', 'defined') | sort(attribute='creation_date') | last }}
   when: operating_system is match("RHEL.*")
 
-- name: Find AMI for Windows 2016 Host
+- name: Find AMI for Windows Host
   amazon.aws.ec2_ami_info:
     region: "{{ _region_ }}"
     filters:
-      name: 'Windows_Server-2016-English-Full-Base-*'
+      name: '{{ win_image_lookup }}-English-Full-Base-*'
   register: windowsamis
   when: operating_system is match("Win.*")
 
