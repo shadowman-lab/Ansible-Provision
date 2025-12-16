@@ -15,14 +15,15 @@
     image_lookup: 'RHEL-10.1'
   when: operating_system == "RHEL10"
 
-- name: Set Image loookup if running Win2016
+- name: Set Image lookup if running Win2016
   ansible.builtin.set_fact:
     win_image_lookup: 'Windows_Server-2016'
   when: operating_system == "Win2016"
 
-- name: Set Image loookup if running Win2025
+- name: Set Image lookup and instance type if running Win2025
   ansible.builtin.set_fact:
     win_image_lookup: 'Windows_Server-2025'
+    _instance_type_: "t3.micro"
   when: operating_system == "Win2025"
 
 - name: Create VPC over AWS Cloud
