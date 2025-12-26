@@ -1,11 +1,11 @@
 <powershell>
 $logfilepath="C:\agent.log"
 $fqdn="$env:computername"
-$port=5986 
+$port=5986
 
 
 $username = 'ansible'
-$password = ConvertTo-SecureString '{{ windowspassword }}' -AsPlainText -Force 
+$password = ConvertTo-SecureString '{{ windowspassword }}' -AsPlainText -Force
 
 
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force -ErrorAction Ignore
@@ -37,7 +37,7 @@ function Create-LocalAdmin {
         Write-Log -message "$username added to the Administrators group"
 
     }catch{ Write-log -message $_.Exception.message -level "ERROR"}
-    }    
+    }
 }
 
 
@@ -59,13 +59,13 @@ function Delete-WinRMListener {
 
 
 function Configure-WinRMHttpsListener {
-    
+
     Delete-WinRMListener
-    
+
     try {
         Write-Log -message "creating self-signed certificate"
         $Cert = (New-SelfSignedCertificate -CertstoreLocation Cert:\LocalMachine\My -dnsname $fqdn -NotAfter (Get-Date).AddMonths(36)).Thumbprint
-        
+
         if(-not $Cert) {
             throw "Failed to create the test certificate."
             Write-Log -message "failed to create certificate" -level "ERROR"
@@ -74,12 +74,12 @@ function Configure-WinRMHttpsListener {
         invoke-expression $WinrmCreate
         winrm set winrm/config/service/auth '@{Basic="true"}'
     } catch { Write-log -message "Create certificate - "+ $_.Exception.message -level "ERROR"}
-    
+
 }
 
 
 function Add-FirewallRule {
-    
+
     try {
         # Delete an exisitng rule
         Write-Log -message "Deleting the existing firewall rule for port $port"
@@ -89,7 +89,7 @@ function Add-FirewallRule {
         Write-Log -message "Adding the firewall rule for port $port"
         netsh advfirewall firewall add rule name="Windows Remote Management (HTTPS-In)" dir=in action=allow protocol=TCP localport=$port | Out-Null
     } catch { Write-log -message "Add/Remove firewall rule - "+ $_.Exception.message -level "ERROR"}
-    
+
 }
 
 
@@ -110,7 +110,7 @@ function Configure-WinRMService {
 }
 
 # Create local admin user
-Create-LocalAdmin 
+Create-LocalAdmin
 
 # Configure WinRM service
 Configure-WinRMService
@@ -120,6 +120,31 @@ Configure-WinRMHttpsListener
 
 # Add Firewall rules
 Add-FirewallRule
+
+Get-WindowsCapability -Name OpenSSH.Server* -Online |
+    Add-WindowsCapability -Online
+Set-Service -Name sshd -StartupType Automatic -Status Running
+
+$firewallParams = @{
+    Name        = 'sshd-Server-In-TCP'
+    DisplayName = 'Inbound rule for OpenSSH Server (sshd) on TCP port 22'
+    Action      = 'Allow'
+    Direction   = 'Inbound'
+    Enabled     = 'True'  # This is not a boolean but an enum
+    Profile     = 'Any'
+    Protocol    = 'TCP'
+    LocalPort   = 22
+}
+New-NetFirewallRule @firewallParams
+
+$shellParams = @{
+    Path         = 'HKLM:\SOFTWARE\OpenSSH'
+    Name         = 'DefaultShell'
+    Value        = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe'
+    PropertyType = 'String'
+    Force        = $true
+}
+New-ItemProperty @shellParams
 
 # List the listeners
 Write-Verbose -Verbose "Listing the WinRM listeners:"
