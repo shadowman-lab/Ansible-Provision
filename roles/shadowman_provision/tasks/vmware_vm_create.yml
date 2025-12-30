@@ -33,46 +33,46 @@
   retries: 100
   delay: 10
 
-- name: Create and run Windows VM 2016
-  community.vmware.vmware_guest:
-    cluster: '{{ cluster_id }}'
-    datastore: '{{ datastore_id }}'
-    folder: '{{ folder_id }}'
-    datacenter: "Shadowman-DC"
-    name: "{{ item }}"
-    state: "{{ state }}"
-    template: "{{ source_vm_id }}"
-    validate_certs: false
-    networks:
-      - name: LAN01
-        start_connected: true
-        connected: true
-    customization:
-      domain: ad.shadowman.dev
-      autologon: true
-      autologoncount: 1
-      hostname: "{{ item.split('.')[0] }}"
-      productid: "{{ productid }}"
-      password: "{{ windowspassword }}"
-      runonce:
-        - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
-  loop: "{{ vm_names }}"
-  when: operating_system is match("Win2016")
-  register: async_results
-  async: 1000
-  poll: 0
+# - name: Create and run Windows VM 2016
+#   community.vmware.vmware_guest:
+#     cluster: '{{ cluster_id }}'
+#     datastore: '{{ datastore_id }}'
+#     folder: '{{ folder_id }}'
+#     datacenter: "Shadowman-DC"
+#     name: "{{ item }}"
+#     state: "{{ state }}"
+#     template: "{{ source_vm_id }}"
+#     validate_certs: false
+#     networks:
+#       - name: LAN01
+#         start_connected: true
+#         connected: true
+#     customization:
+#       domain: ad.shadowman.dev
+#       autologon: true
+#       autologoncount: 1
+#       hostname: "{{ item.split('.')[0] }}"
+#       productid: "{{ productid }}"
+#       password: "{{ windowspassword }}"
+#       runonce:
+#         - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
+#   loop: "{{ vm_names }}"
+#   when: operating_system is match("Win2016")
+#   register: async_results
+#   async: 1000
+#   poll: 0
 
-- name: Check Windows VM Creation status
-  ansible.builtin.async_status:
-    jid: "{{ async_result_item.ansible_job_id }}"
-  loop: "{{ async_results.results }}"
-  loop_control:
-    loop_var: "async_result_item"
-  when: operating_system is match("Win2016")
-  register: async_poll_results
-  until: async_poll_results.finished
-  retries: 100
-  delay: 10
+# - name: Check Windows VM Creation status
+#   ansible.builtin.async_status:
+#     jid: "{{ async_result_item.ansible_job_id }}"
+#   loop: "{{ async_results.results }}"
+#   loop_control:
+#     loop_var: "async_result_item"
+#   when: operating_system is match("Win2016")
+#   register: async_poll_results
+#   until: async_poll_results.finished
+#   retries: 100
+#   delay: 10
 
 - name: Create and run Windows VM 2025
   community.vmware.vmware_guest:

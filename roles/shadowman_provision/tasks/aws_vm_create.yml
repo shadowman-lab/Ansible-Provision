@@ -1,9 +1,9 @@
 # Create EC2 VPC & EC2 Internet Gateway & EC2 VPC Subnet & Create VPC Public Subnet Route Table & AWS Create EC2 Security Group & Create EC2 Key & Create EC2 instance with public IP
 
-- name: Set Image loookup if running RHEL8
-  ansible.builtin.set_fact:
-    image_lookup: 'RHEL-8.10'
-  when: operating_system == "RHEL8"
+# - name: Set Image loookup if running RHEL8
+#   ansible.builtin.set_fact:
+#     image_lookup: 'RHEL-8.10'
+#   when: operating_system == "RHEL8"
 
 - name: Set Image loookup if running RHEL9
   ansible.builtin.set_fact:
@@ -15,10 +15,10 @@
     image_lookup: 'RHEL-10.1'
   when: operating_system == "RHEL10"
 
-- name: Set Image lookup if running Win2016
-  ansible.builtin.set_fact:
-    win_image_lookup: 'Windows_Server-2016'
-  when: operating_system == "Win2016"
+# - name: Set Image lookup if running Win2016
+#   ansible.builtin.set_fact:
+#     win_image_lookup: 'Windows_Server-2016'
+#   when: operating_system == "Win2016"
 
 - name: Set Image lookup and instance type if running Win2025
   ansible.builtin.set_fact:
