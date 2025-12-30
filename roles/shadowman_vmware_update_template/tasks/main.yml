@@ -1,13 +1,13 @@
 ---
-- name: Set activation key for RHEL7
-  ansible.builtin.set_fact:
-    activation_key: RHEL7
-  when: ansible_distribution_version is match("7.*")
+# - name: Set activation key for RHEL7
+#   ansible.builtin.set_fact:
+#     activation_key: RHEL7
+#   when: ansible_distribution_version is match("7.*")
 
-- name: Set activation key for RHEL8
-  ansible.builtin.set_fact:
-    activation_key: RHEL8
-  when: ansible_distribution_version is match("8.*")
+# - name: Set activation key for RHEL8
+#   ansible.builtin.set_fact:
+#     activation_key: RHEL8
+#   when: ansible_distribution_version is match("8.*")
 
 - name: Set activation key for RHEL9
   ansible.builtin.set_fact:
@@ -49,12 +49,12 @@
     state: present
   when: ansible_pkg_mgr == "dnf"
 
-- name: Upgrade all packages (yum)
-  ansible.builtin.yum:
-    name: '*'
-    state: latest
-    update_only: true
-  when: ansible_pkg_mgr == "yum"
+# - name: Upgrade all packages (yum)
+#   ansible.builtin.yum:
+#     name: '*'
+#     state: latest
+#     update_only: true
+#   when: ansible_pkg_mgr == "yum"
 
 - name: Upgrade all packages (dnf)
   ansible.builtin.dnf:
