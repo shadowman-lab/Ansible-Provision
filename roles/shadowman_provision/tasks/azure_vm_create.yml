@@ -83,8 +83,6 @@
     storage_account: "{{ storage_account_name }}"
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
-    winrm:
-      - protocol: https
     vm_size: "{{ vm_size }}"
     os_type: Windows
     open_ports:
