@@ -144,7 +144,7 @@
   loop: "{{ vm_names }}"
   when: publisher == "MicrosoftWindowsServer"
 
-- name: Loop to verify WinRM
-  ansible.builtin.include_tasks: enable_winrm_loop_azure.yml
-  loop: "{{ vm_names }}"
-  when: publisher == "MicrosoftWindowsServer"
+# - name: Loop to verify WinRM
+#   ansible.builtin.include_tasks: enable_winrm_loop_azure.yml
+#   loop: "{{ vm_names }}"
+#   when: publisher == "MicrosoftWindowsServer"
