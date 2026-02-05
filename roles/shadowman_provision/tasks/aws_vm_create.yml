@@ -7,7 +7,7 @@
 
 - name: Set Image loookup if running RHEL9
   ansible.builtin.set_fact:
-    image_lookup: 'RHEL-9.6'
+    image_lookup: 'RHEL-9.7'
   when: operating_system == "RHEL9"
 
 - name: Set Image loookup if running RHEL10
