@@ -85,6 +85,7 @@
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
     os_type: Windows
+    short_hostname: "{{ item.split('.')[0] }}"
     open_ports:
       - 22
       - 5985
