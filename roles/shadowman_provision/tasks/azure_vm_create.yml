@@ -12,6 +12,7 @@
     sku: '2025-Datacenter'
     publisher: "MicrosoftWindowsServer"
     offer: "WindowsServer"
+    vm_size: Standard_D4als_v6
   when: operating_system is match("Win2025")
 
 # - name: Change sku if running RHEL8
