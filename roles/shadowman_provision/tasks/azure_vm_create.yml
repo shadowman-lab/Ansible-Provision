@@ -12,7 +12,6 @@
     sku: '2025-datacenter-core-g2'
     publisher: "MicrosoftWindowsServer"
     offer: "WindowsServer"
-    # vm_size: Standard_D4als_v6
   when: operating_system is match("Win2025")
 
 # - name: Change sku if running RHEL8
@@ -40,7 +39,6 @@
   azure.azcollection.azure_rm_virtualmachine:
     resource_group: "{{ resource_group_name }}"
     name: "{{ item }}"
-    # storage_account: "{{ storage_account_name }}"
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
     vm_size: "{{ vm_size }}"
@@ -81,7 +79,6 @@
   azure.azcollection.azure_rm_virtualmachine:
     resource_group: "{{ resource_group_name }}"
     name: "{{ item }}"
-    # storage_account: "{{ storage_account_name }}"
     managed_disk_type: Standard_LRS
     admin_username: "{{ azureuser }}"
     admin_password: "{{ azurepassword }}"
