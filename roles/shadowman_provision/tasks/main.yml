@@ -4,7 +4,8 @@
     that:
       - "'.shadowman.dev' in vm_name"
       - "'.ad.shadowman.dev' not in vm_name"
-    fail_msg: "On Premise and AWS VM Name must include FQDN of .shadowman.dev for RHEL"
+      - "'_' not in vm_name"
+    fail_msg: "On Premise and AWS VM Name must include FQDN of .shadowman.dev for RHEL and no underscore"
   when:
     - shadowman_provision_hypervisor != "Azure"
     - operating_system != "Win2016" and operating_system != "Win2025"
@@ -12,8 +13,10 @@
 
 - name: Check for proper on prem VM name Windows
   ansible.builtin.assert:
-    that: "'.ad.shadowman.dev' in vm_name"
-    fail_msg: "On Premise and AWS VM Name must include FQDN of .ad.shadowman.dev for Windows"
+    that:
+      - "'.ad.shadowman.dev' in vm_name"
+      - "'_' not in vm_name"
+    fail_msg: "On Premise and AWS VM Name must include FQDN of .ad.shadowman.dev for Windows and no underscore"
   when:
     - shadowman_provision_hypervisor != "Azure"
     - operating_system == "Win2016" or operating_system == "Win2025"
