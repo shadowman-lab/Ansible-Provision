@@ -45,3 +45,4 @@ _instance_type_: "t2.micro"
 tf_build: "ansible01"
 terraform_working_dir: /tmp/srv/
 ocp_preference: rhel.10
+awsusage: "shadowmandemos"

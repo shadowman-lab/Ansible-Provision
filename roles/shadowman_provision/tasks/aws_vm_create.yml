@@ -193,7 +193,7 @@
       owner: "{{ owner }}"
       env: "{{ env }}"
       operating_system: "RHEL"
-      usage: "shadowmandemos"
+      usage: "{{ awsusage }}"
   loop: "{{ vm_names }}"
   when: operating_system is match("RHEL.*")
   register: async_results
@@ -231,7 +231,7 @@
       owner: "{{ owner }}"
       env: "{{ env }}"
       operating_system: "Windows"
-      usage: "shadowmandemos"
+      usage: "{{ awsusage }}"
   loop: "{{ vm_names }}"
   when: operating_system is match("Win.*")
   register: async_results
