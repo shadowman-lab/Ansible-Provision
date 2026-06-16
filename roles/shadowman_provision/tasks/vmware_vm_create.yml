@@ -74,28 +74,17 @@
 #   retries: 100
 #   delay: 10
 
-- name: Create and run Windows VM 2025
-  community.vmware.vmware_guest:
-    cluster: '{{ cluster_id }}'
-    datastore: '{{ datastore_id }}'
-    folder: '{{ folder_id }}'
+- name: Create and run Windows VM
+  vmware.vmware.deploy_folder_template:
     datacenter: "Shadowman-DC"
-    name: "{{ item }}"
-    state: "{{ state }}"
-    template: "{{ source_vm_id }}"
+    datastore: '{{ datastore_id }}'
+    cluster: '{{ cluster_id }}'
+    vm_name: "{{ item }}"
+    template_name: "{{ operating_system }}_ShadowMan"
+    template_folder_id: "vm"
+    power_on_after_deploy: false
+    vm_folder: '{{ folder_id }}'
     validate_certs: false
-    networks:
-      - name: LAN01
-        start_connected: true
-        connected: true
-    customization:
-      domain: ad.shadowman.dev
-      autologon: true
-      autologoncount: 1
-      hostname: "{{ item.split('.')[0] }}"
-      password: "{{ windowspassword }}"
-      runonce:
-        - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
   loop: "{{ vm_names }}"
   when: operating_system is match("Win2025")
   register: async_results
@@ -113,6 +102,52 @@
   until: async_poll_results.finished
   retries: 100
   delay: 10
+
+- name: Set VM customization spec for Windows VMs
+  vmware.vmware.vm_apply_customization:
+    moid: "{{ async_result_item.vm.moid }}"
+    datacenter: "Shadowman-DC"
+    use_dhcpv4_for_all_nics: true
+    global_dns:
+      resolution_suffixes:
+        - ad.shadowman.dev
+    windows_sysprep:
+      domain:
+        name: ad.shadowman.dev
+      auto_logon: true
+      auto_logon_count: 1
+      hostname: "{{ async_result_item.vm.name.split('.')[0] }}"
+      product_id: ""
+      password: "{{ windowspassword }}"
+      users_full_name: "Administrator"
+      users_org_name: "Shadowman"
+      gui_run_once_commands:
+        - powershell.exe -ExecutionPolicy ByPass -File C:\Windows\Temp\ConfigureRemotingForAnsible.ps1 -ForceNewSSLCert
+  when: operating_system is match("Win2025")
+  loop: "{{ async_poll_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+
+- name: Power on Windows VMs post customization
+  vmware.vmware.vm_powerstate:
+    moid: "{{ async_result_item.vm.moid }}"
+    datacenter: "Shadowman-DC"
+    state: powered-on
+  when: operating_system is match("Win2025")
+  loop: "{{ async_poll_results.results }}"
+  loop_control:
+    loop_var: "async_result_item"
+
+- name: Check if Windows VM has completed reboot and created fqdn
+  vmware.vmware.guest_info:
+    name: "{{ item }}"
+    datacenter: "Shadowman-DC"
+  register: result
+  until: result.guests[0].identity.host_name | default("No") == item or result.guests[0].identity.host_name | default("No") == item.split('.')[0]
+  retries: 60
+  delay: 10
+  loop: "{{ vm_names }}"
+  when: operating_system is match("Win2025")
 
 - name: Ensure Tags are created
   vmware.vmware.tags:
