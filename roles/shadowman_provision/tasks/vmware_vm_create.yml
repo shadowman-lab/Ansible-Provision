@@ -106,6 +106,7 @@
 - name: Set VM customization spec for Windows VMs
   vmware.vmware.vm_apply_customization:
     moid: "{{ async_result_item.vm.moid }}"
+    validate_certs: false
     datacenter: "Shadowman-DC"
     use_dhcpv4_for_all_nics: true
     global_dns:
@@ -133,6 +134,7 @@
     moid: "{{ async_result_item.vm.moid }}"
     datacenter: "Shadowman-DC"
     state: powered-on
+    validate_certs: false
   when: operating_system is match("Win2025")
   loop: "{{ async_poll_results.results }}"
   loop_control:
@@ -142,6 +144,7 @@
   vmware.vmware.guest_info:
     name: "{{ item }}"
     datacenter: "Shadowman-DC"
+    validate_certs: false
   register: result
   until: result.guests[0].identity.host_name | default("No") == item or result.guests[0].identity.host_name | default("No") == item.split('.')[0]
   retries: 60
