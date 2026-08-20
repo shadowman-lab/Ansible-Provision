@@ -1,6 +1,7 @@
 ---
 - name: Find Snapshot for AWS EC2
   amazon.aws.ec2_snapshot_info:
+    region: "{{ placement.region }}"
     filters:
       "tag:Name": "{{ name_of_snapshot }}"
   register: shadowman_vm_snapshots_aws_snapshot_info
@@ -8,6 +9,7 @@
 
 - name: Delete Snapshot for AWS EC2
   amazon.aws.ec2_snapshot:
+    region: "{{ placement.region }}"
     snapshot_id: "{{ item.snapshot_id }}"
     state: absent
   loop: "{{ shadowman_vm_snapshots_aws_snapshot_info.snapshots }}"

@@ -1,6 +1,7 @@
 ---
 - name: Get AWS EC2 instance info
   amazon.aws.ec2_instance_info:
+    region: "{{ placement.region }}"
     filters:
       "tag:Name": "{{ inventory_hostname }}"
   register: shadowman_vm_snapshots_aws_instance_info
@@ -8,6 +9,7 @@
 
 - name: Create Snapshot for AWS EC2
   amazon.aws.ec2_snapshot:
+    region: "{{ placement.region }}"
     volume_id: "{{ shadowman_vm_snapshots_aws_instance_info.instances[0].block_device_mappings[0].ebs.volume_id }}"
     snapshot_tags:
       Name: "{{ name_of_snapshot }}"
