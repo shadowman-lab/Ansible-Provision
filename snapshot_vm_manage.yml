@@ -1,0 +1,7 @@
+---
+- name: Manage Snapshots on VMs
+  hosts: all
+  gather_facts: false
+
+  roles:
+    - shadowman_vm_snapshots

@@ -1,0 +1,10 @@
+---
+- name: Create Snapshot for VMWare
+  vmware.vmware.vm_snapshot:
+    datacenter: "Shadowman-DC"
+    name: "{{ inventory_hostname }}"
+    folder: "{{ path | regex_replace('^Datacenters/', '') }}"
+    snapshot_name: "{{ name_of_snapshot }}"
+    description: "{{ snapshot_description }}"
+    validate_certs: false
+  delegate_to: localhost

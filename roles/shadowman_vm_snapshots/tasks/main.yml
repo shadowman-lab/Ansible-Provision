@@ -1,0 +1,12 @@
+---
+- name: Snapshot Create VMWare
+  ansible.builtin.include_tasks: shadowman_vmware_snapshot_create.yml
+  when:
+    - shadowman_snapshot == "create"
+    - shadowman_provision_hypervisor == "VMWare"
+
+- name: Snapshot Delete VMWare
+  ansible.builtin.include_tasks: shadowman_vmware_snapshot_delete.yml
+  when:
+    - shadowman_snapshot == "delete"
+    - shadowman_provision_hypervisor == "VMWare"
