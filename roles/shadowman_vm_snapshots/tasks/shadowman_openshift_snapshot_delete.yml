@@ -5,5 +5,5 @@
     api_version: snapshot.kubevirt.io/v1beta1
     kind: VirtualMachineSnapshot
     name: "{{ name_of_snapshot }}"
-    namespace: "{{ namespace }}"
+    namespace: "{{ vm_namespace }}"
   delegate_to: localhost

@@ -7,7 +7,7 @@
       kind: VirtualMachineSnapshot
       metadata:
         name: "{{ name_of_snapshot }}"
-        namespace: "{{ namespace }}"
+        namespace: "{{ vm_namespace }}"
         labels:
           description: "{{ snapshot_description }}"
       spec:
@@ -22,7 +22,7 @@
     api_version: snapshot.kubevirt.io/v1beta1
     kind: VirtualMachineSnapshot
     name: "{{ name_of_snapshot }}"
-    namespace: "{{ namespace }}"
+    namespace: "{{ vm_namespace }}"
   register: shadowman_vm_snapshots_ocpvirt_snapshot_info
   until: shadowman_vm_snapshots_ocpvirt_snapshot_info.resources[0].status.readyToUse | default(false)
   retries: 30
