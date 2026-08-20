@@ -1,4 +1,4 @@
 ---
 name_of_snapshot: "{{ inventory_hostname }}-{{ now(fmt='%Y-%m-%d') }}"
-snapshot_description: "Pre-patch snapshot"
+snapshot_description: "Pre-patch-snapshot"
 shadowman_snapshot: "create"
