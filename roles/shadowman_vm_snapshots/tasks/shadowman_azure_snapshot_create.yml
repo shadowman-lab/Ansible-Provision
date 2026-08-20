@@ -13,7 +13,7 @@
     location: "{{ shadowman_vm_snapshots_azure_vm_info.vms[0].location }}"
     creation_data:
       create_option: Copy
-      source_uri: "{{ shadowman_vm_snapshots_azure_vm_info.vms[0].storage_profile.os_disk.managed_disk.id }}"
+      source_uri: "{{ shadowman_vm_snapshots_azure_vm_info.vms[0].os_disk.managed_disk.id }}"
     tags:
       description: "{{ snapshot_description }}"
   delegate_to: localhost
