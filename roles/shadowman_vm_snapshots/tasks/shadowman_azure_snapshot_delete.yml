@@ -1,0 +1,7 @@
+---
+- name: Delete Snapshot for Azure VM
+  azure.azcollection.azure_rm_snapshot:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ name_of_snapshot }}"
+    state: absent
+  delegate_to: localhost

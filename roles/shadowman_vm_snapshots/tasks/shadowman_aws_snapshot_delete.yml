@@ -1,0 +1,14 @@
+---
+- name: Find Snapshot for AWS EC2
+  amazon.aws.ec2_snapshot_info:
+    filters:
+      "tag:Name": "{{ name_of_snapshot }}"
+  register: shadowman_vm_snapshots_aws_snapshot_info
+  delegate_to: localhost
+
+- name: Delete Snapshot for AWS EC2
+  amazon.aws.ec2_snapshot:
+    snapshot_id: "{{ item.snapshot_id }}"
+    state: absent
+  loop: "{{ shadowman_vm_snapshots_aws_snapshot_info.snapshots }}"
+  delegate_to: localhost
