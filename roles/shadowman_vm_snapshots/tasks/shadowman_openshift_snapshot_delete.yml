@@ -1,0 +1,9 @@
+---
+- name: Delete Snapshot for OpenShift Virtualization VM
+  kubernetes.core.k8s:
+    state: absent
+    api_version: snapshot.kubevirt.io/v1beta1
+    kind: VirtualMachineSnapshot
+    name: "{{ name_of_snapshot }}"
+    namespace: "{{ namespace }}"
+  delegate_to: localhost

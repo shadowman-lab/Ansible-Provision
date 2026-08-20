@@ -34,3 +34,15 @@
   when:
     - shadowman_snapshot == "delete"
     - shadowman_provision_hypervisor == "AWS"
+
+- name: Snapshot Create OpenShift Virtualization
+  ansible.builtin.include_tasks: shadowman_openshift_snapshot_create.yml
+  when:
+    - shadowman_snapshot == "create"
+    - shadowman_provision_hypervisor == "OCPV"
+
+- name: Snapshot Delete OpenShift Virtualization
+  ansible.builtin.include_tasks: shadowman_openshift_snapshot_delete.yml
+  when:
+    - shadowman_snapshot == "delete"
+    - shadowman_provision_hypervisor == "OCPV"

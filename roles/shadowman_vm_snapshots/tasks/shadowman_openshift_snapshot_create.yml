@@ -1,0 +1,30 @@
+---
+- name: Create Snapshot for OpenShift Virtualization VM
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: snapshot.kubevirt.io/v1beta1
+      kind: VirtualMachineSnapshot
+      metadata:
+        name: "{{ name_of_snapshot }}"
+        namespace: "{{ namespace }}"
+        labels:
+          description: "{{ snapshot_description }}"
+      spec:
+        source:
+          apiGroup: kubevirt.io
+          kind: VirtualMachine
+          name: "{{ inventory_hostname }}"
+  delegate_to: localhost
+
+- name: Wait for Snapshot to be ready
+  kubernetes.core.k8s_info:
+    api_version: snapshot.kubevirt.io/v1beta1
+    kind: VirtualMachineSnapshot
+    name: "{{ name_of_snapshot }}"
+    namespace: "{{ namespace }}"
+  register: shadowman_vm_snapshots_ocpvirt_snapshot_info
+  until: shadowman_vm_snapshots_ocpvirt_snapshot_info.resources[0].status.readyToUse | default(false)
+  retries: 30
+  delay: 10
+  delegate_to: localhost
