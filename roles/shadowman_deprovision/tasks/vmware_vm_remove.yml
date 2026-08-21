@@ -8,15 +8,16 @@
   delegate_to: localhost
 
 - name: Turn off VM
-  vmware.vmware_rest.vcenter_vm_power:
-    state: stop
-    vm: '{{ search_result.value[0].vm }}'
-    vcenter_validate_certs: false
+  vmware.vmware.vm_powerstate:
+    moid: '{{ search_result.value[0].vm }}'
+    datacenter: "Shadowman-DC"
+    state: powered-off
+    validate_certs: false
   delegate_to: localhost
 
 - name: Delete some VM
-  vmware.vmware_rest.vcenter_vm:
+  vmware.vmware.vm:
     state: absent
-    vm: '{{ search_result.value[0].vm }}'
-    vcenter_validate_certs: false
+    moid: '{{ search_result.value[0].vm }}'
+    validate_certs: false
   delegate_to: localhost
