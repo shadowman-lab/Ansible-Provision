@@ -1,15 +1,15 @@
 ---
 - name: Look up the VM in the inventory
-  vmware.vmware_rest.vcenter_vm_info:
-    filter_names:
-      - "{{ inventory_hostname }}"
-    vcenter_validate_certs: false
+  vmware.vmware.guest_info:
+    name: "{{ inventory_hostname }}"
+    datacenter: "Shadowman-DC"
+    validate_certs: false
   register: search_result
   delegate_to: localhost
 
 - name: Turn off VM
   vmware.vmware.vm_powerstate:
-    moid: '{{ search_result.value[0].vm }}'
+    moid: '{{ search_result.guests[0].moid }}'
     datacenter: "Shadowman-DC"
     state: powered-off
     validate_certs: false
@@ -18,6 +18,6 @@
 - name: Delete some VM
   vmware.vmware.vm:
     state: absent
-    moid: '{{ search_result.value[0].vm }}'
+    moid: '{{ search_result.guests[0].moid }}'
     validate_certs: false
   delegate_to: localhost

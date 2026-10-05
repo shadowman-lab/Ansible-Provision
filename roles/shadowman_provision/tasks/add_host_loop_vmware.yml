@@ -1,23 +1,17 @@
 ---
 
 - name: Get VM info
-  vmware.vmware_rest.vcenter_vm_info:
-    filter_names:
-      - "{{ item }}"
-    vcenter_validate_certs: false
+  vmware.vmware.guest_info:
+    name: "{{ item }}"
+    datacenter: "Shadowman-DC"
+    validate_certs: false
   register: vm_info
-
-- name: Guest identity
-  vmware.vmware_rest.vcenter_vm_guest_identity_info:
-    vm: "{{ vm_info.value[0].vm }}"
-    vcenter_validate_certs: false
-  register: vm_full_info
-  until: vm_full_info.value.ip_address is defined
+  until: vm_info.guests[0].identity.ip_address is defined
   retries: 10
   delay: 2
 
 - name: Add Linux hosts to just_created group
   ansible.builtin.add_host:
     hostname: "{{ item }}"
-    ansible_host: "{{ vm_full_info.value.ip_address }}"
+    ansible_host: "{{ vm_info.guests[0].identity.ip_address }}"
     groups: just_created
