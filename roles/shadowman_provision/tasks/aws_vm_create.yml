@@ -208,7 +208,7 @@
     loop_var: "async_result_item"
   when: operating_system is match("RHEL.*")
   register: async_poll_results
-  until: async_poll_results.finished
+  until: async_poll_results.finished | bool
   retries: 100
   delay: 10
 
@@ -246,6 +246,6 @@
     loop_var: "async_result_item"
   when: operating_system is match("Win.*")
   register: async_poll_results
-  until: async_poll_results.finished
+  until: async_poll_results.finished | bool
   retries: 100
   delay: 10
