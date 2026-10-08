@@ -71,7 +71,7 @@
     loop_var: "async_result_item"
   when: publisher == "RedHat"
   register: async_poll_results
-  until: async_poll_results.finished | bool
+  until: async_poll_results is finished
   retries: 100
   delay: 10
 
@@ -114,7 +114,7 @@
     loop_var: "async_result_item"
   when: publisher == "MicrosoftWindowsServer"
   register: async_poll_results
-  until: async_poll_results.finished | bool
+  until: async_poll_results is finished
   retries: 100
   delay: 10
 
