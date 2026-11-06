@@ -1,0 +1,7 @@
+---
+- name: Remove VM Teardown Schedule
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - shadowman_unschedule_teardown

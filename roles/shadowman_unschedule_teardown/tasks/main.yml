@@ -1,0 +1,6 @@
+---
+- name: Remove the one-time teardown schedule
+  ansible.controller.schedule:
+    name: "Teardown {{ vm_name }}"
+    unified_job_template: "{{ demo_teardown_workflow }}"
+    state: absent

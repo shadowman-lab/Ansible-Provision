@@ -1,0 +1,7 @@
+---
+- name: Create VM Teardown Schedule
+  hosts: localhost
+  gather_facts: false
+
+  roles:
+    - shadowman_schedule_teardown

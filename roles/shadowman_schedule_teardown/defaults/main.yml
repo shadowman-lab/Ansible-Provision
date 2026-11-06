@@ -1,0 +1,4 @@
+---
+demo_teardown_workflow: "Unsubscribe and remove VMs from Multi Citrix"
+demo_teardown_time: "06:00:00"
+demo_timezone: America/New_York

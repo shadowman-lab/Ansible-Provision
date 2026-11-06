@@ -1,0 +1,22 @@
+---
+- name: Work out the teardown time (the morning after the demo)
+  ansible.builtin.set_fact:
+    demo_teardown_start: >-
+      {{ '%Y-%m-%d' | strftime(((demo_date | to_datetime('%Y-%m-%d')).timestamp() + 86400) | int) }} {{ demo_teardown_time }}
+  when:
+    - demo_date is defined
+    - demo_date != "noenddate"
+
+- name: Create the one-time teardown schedule
+  ansible.controller.schedule:
+    name: "Teardown {{ vm_name }}"
+    description: "Demo lane v2: removes {{ vm_name }} the morning after its demo ({{ demo_date }})."
+    unified_job_template: "{{ demo_teardown_workflow }}"
+    rrule: "{{ lookup('ansible.controller.schedule_rrule', 'none', start_date=demo_teardown_start, timezone=demo_timezone) }}"
+    extra_data:
+      vm_name: "{{ vm_name }}"
+    enabled: true
+    state: present
+  when:
+    - demo_date is defined
+    - demo_date != "noenddate"
