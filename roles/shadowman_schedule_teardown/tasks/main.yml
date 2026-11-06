@@ -1,5 +1,5 @@
 ---
-- name: Work out the teardown time (the morning after the demo)
+- name: Work out the teardown time (the morning after the demo) if not provisioning via demo flow and if a date was entered
   ansible.builtin.set_fact:
     demo_teardown_start: >-
       {{ '%Y-%m-%d' | strftime(((demo_date | to_datetime('%Y-%m-%d')).timestamp() + 86400) | int) }} {{ demo_teardown_time }}
@@ -8,7 +8,7 @@
     - demo_date != "noenddates"
     - demo_flow is not defined
 
-- name: Create the one-time teardown schedule
+- name: Create the one-time teardown schedule if not provisioning via demo flow and if a date was entered
   ansible.controller.schedule:
     name: "Teardown {{ vm_name }}"
     description: "Demo lane v2: removes {{ vm_name }} the morning after its demo ({{ demo_date }})."
