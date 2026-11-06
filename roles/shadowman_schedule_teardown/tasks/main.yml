@@ -5,7 +5,7 @@
       {{ '%Y-%m-%d' | strftime(((demo_date | to_datetime('%Y-%m-%d')).timestamp() + 86400) | int) }} {{ demo_teardown_time }}
   when:
     - demo_date is defined
-    - demo_date != "noenddate"
+    - demo_date != "noenddates"
 
 - name: Create the one-time teardown schedule
   ansible.controller.schedule:
@@ -19,4 +19,4 @@
     state: present
   when:
     - demo_date is defined
-    - demo_date != "noenddate"
+    - demo_date != "noenddates"
