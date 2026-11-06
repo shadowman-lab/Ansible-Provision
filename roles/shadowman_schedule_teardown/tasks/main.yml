@@ -6,6 +6,7 @@
   when:
     - demo_date is defined
     - demo_date != "noenddates"
+    - demo_flow is not defined
 
 - name: Create the one-time teardown schedule
   ansible.controller.schedule:
@@ -20,3 +21,4 @@
   when:
     - demo_date is defined
     - demo_date != "noenddates"
+    - demo_flow is not defined
